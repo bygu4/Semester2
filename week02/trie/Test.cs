@@ -80,7 +80,7 @@ namespace Test
         static public void Test()
         {
             TestForTrie.CaseForAdd(["aba", "abc", "a", "abac", "", "aba", ""], 
-            [true, true, true, true, true, false, false], 5, 1);
+                [true, true, true, true, true, false, false], 5, 1);
             TestForTrie.CaseForAdd([], [], 0, 2);
 
             TestForTrie.CaseForContains(

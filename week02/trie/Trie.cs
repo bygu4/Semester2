@@ -41,7 +41,7 @@
             {
                 current.edges.Add(element[index], new Vertex());
             }
-            bool elementAdded = AddRecursion(current.edges[element[index]], element, index +1);
+            bool elementAdded = AddRecursion(current.edges[element[index]], element, index + 1);
             if (elementAdded)
             {
                 ++current.numberOfDescendants;
