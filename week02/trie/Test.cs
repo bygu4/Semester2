@@ -86,19 +86,19 @@ namespace Test
             TestForTrie.CaseForContains(
                 ["матмех", "матрас", "мастер", "массив", "молоко", "макака", "матме"],
                 ["мат", "массивы", "матмех", "", "eweqwewq", "матме"], 
-                [false, false, true, false, false, true], 1);
+                [false, false, true, false, false, true], 3);
 
             TestForTrie.CaseForRemove(
                 ["матмех", "матрас", "мастер", "массив", "молоко", "макака", "матме"],
                 ["макака", "макака", "мат", "матме", "матмех", "матрас"],
-                [true, false, false, true, true, true], 3, 1);
+                [true, false, false, true, true, true], 3, 4);
             TestForTrie.CaseForRemove([], ["fsafa", "321321", "weqeqe", "wwwwwwww"],
-                new bool[4], 0, 2);
+                new bool[4], 0, 5);
 
             TestForTrie.CaseForHowManyStartsWithPrefix(
                 ["матмех", "матрас", "мастер", "массив", "молоко", "макака", "матме"],
                 ["матме", "матмех", "мат", "", "мо", "ма", "wqwqwq"],
-                [2, 1, 3, 7, 1, 6, 0], 1);
+                [2, 1, 3, 7, 1, 6, 0], 6);
         }
     }
 }
