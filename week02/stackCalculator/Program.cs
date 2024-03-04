@@ -10,7 +10,8 @@ namespace Solution
         {
             TestForCalculator.Test();
 
-            Console.WriteLine("Enter an expression in postfix form: ");
+            Console.WriteLine("-----Stack calculator-----");
+            Console.WriteLine("\nEnter an expression in postfix form: ");
             try
             {
                 string? inputString = Console.ReadLine();

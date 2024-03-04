@@ -16,10 +16,6 @@
             public Type? value;
             public Element? next;
 
-            public Element()
-            {
-            }
-
             public Element(Type? value, Element? next)
             {
                 this.value = value;
@@ -29,7 +25,6 @@
 
         public StackOnPointers()
         {
-            this.head = new Element();
         }
 
         public void Push(Type? value)
