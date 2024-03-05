@@ -1,13 +1,13 @@
-﻿using Test;
+﻿using Tests;
 using System;
 
-namespace Solution
+namespace Trie
 {
-    class Program
+    static class Program
     {
         static void Main()
         {
-            Test.TestForTrie.Test();
+            Tests.TestForTrie.Test();
             Console.WriteLine("All tests are passed");
         }
     }

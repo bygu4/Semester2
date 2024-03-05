@@ -1,6 +1,6 @@
 ﻿using Trie;
 
-namespace Test
+namespace Tests
 {
     class TestForTrie
     {
