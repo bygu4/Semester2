@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Immutable;
-using System.Linq.Expressions;
 
 namespace BurrowsWheeler
 {
-    class Program
+    static class Program
     {
-        static int CompareRotations(string inputString, int shift1, int shift2)
+        private static int CompareRotations(string inputString, int shift1, int shift2)
         {
             for (int i = 0; i < inputString.Length; ++i)
             {
@@ -24,7 +22,7 @@ namespace BurrowsWheeler
             return 0;
         }
 
-        static string GetResultString(string inputString, int[] shifts)
+        private static string GetResultString(string inputString, int[] shifts)
         {
             char[] result = new char[inputString.Length];
             for (int i = 0; i < inputString.Length; ++i)
@@ -39,7 +37,7 @@ namespace BurrowsWheeler
         {
             int position = 0;
             int[] shifts = Enumerable.Range(0, inputString.Length).ToArray();
-            for (int i = 0; i < inputString.Length - 1; ++i)
+            for (int i = 0; i < inputString.Length; ++i)
             {
                 int min = i;
                 for (int j = i + 1; j < inputString.Length; ++j)
@@ -58,7 +56,7 @@ namespace BurrowsWheeler
             return (GetResultString(inputString, shifts), position);
         }
 
-        static int[] GetShiftsArray(string inputString)
+        private static int[] GetShiftsArray(string inputString)
         {
             int[] result = new int[inputString.Length];
             char[] sortedInput = inputString.ToArray();
@@ -92,18 +90,51 @@ namespace BurrowsWheeler
             return new string(result);
         }
 
-        static void Main(string[] args)
+        private static string GetInputString()
+        {
+            string? inputString = Console.ReadLine();
+            if (inputString is null)
+            {
+                throw new Exception("Failed to read a string from console");
+            }
+            return inputString;
+        }
+
+        private static int GetCommand()
+        {
+            try
+            {
+                return int.Parse(GetInputString());
+            }
+            catch (FormatException)
+            {
+                return -1;
+            }
+        }
+
+        private static int GetReverseBWTPosition(int length)
+        {
+            int position = int.Parse(GetInputString());
+            if (0 <= position && position < length)
+            {
+                return position;
+            }
+            throw new IndexOutOfRangeException();
+        }
+
+        static void Main()
         {
             if (!Test.TestIsPassed())
             {
                 throw new Exception("Test failed");
             }
-            Console.WriteLine("0 - Exit\n" +
-                "1 - Burrows-Wheeler Transformation\n" +
-                "2 - Reverse Transformation");
-            Console.WriteLine("\nEnter a command: ");
-            int command = int.Parse(Console.ReadLine());
+            Console.WriteLine("----- Burrows-Wheeler -----");
+            Console.WriteLine("\n0 - Exit" +
+                "\n1 - Burrows-Wheeler Transformation" +
+                "\n2 - Reverse Transformation");
 
+            Console.WriteLine("\nEnter a command: ");
+            int command = GetCommand();
             while (command != 0)
             {
                 switch (command)
@@ -111,48 +142,60 @@ namespace BurrowsWheeler
                     case 0:
                         continue;
                     case 1:
-                        Console.WriteLine("\nEnter a string: ");
-                        var inputString = Console.ReadLine();
+                        Console.WriteLine("\nEnter a string to transform: ");
+                        string inputString = GetInputString();
                         (string, int) result = Transform(inputString);
-                        Console.WriteLine("\nResult: {0}\nPosition: {1}", result.Item1, result.Item2);
+                        Console.WriteLine($"\nResult: {result.Item1}" +
+                            $"\nPosition: {result.Item2}");
                         break;
                     case 2:
-                        Console.WriteLine("\nEnter a string: ");
-                        inputString = Console.ReadLine();
-                        Console.WriteLine("\nEnter a result position: ");
-                        int position = int.Parse(Console.ReadLine());
-                        Console.WriteLine("\nResult: {0}", ReverseTransform(inputString, position));
+                        Console.WriteLine("\nEnter a string to transform: ");
+                        inputString = GetInputString();
+                        Console.WriteLine("\nEnter the result position (integer): ");
+                        try
+                        {
+                            int position = GetReverseBWTPosition(inputString.Length);
+                            Console.WriteLine($"\nResult: {ReverseTransform(inputString, position)}");
+                        }
+                        catch (IndexOutOfRangeException)
+                        {
+                            Console.WriteLine("\nIndex out of range");
+                        }
+                        catch (FormatException)
+                        {
+                            Console.WriteLine("\nWrong format");
+                        }
                         break;
                     default:
                         Console.WriteLine("\nUnknown command");
                         break;
                 }
                 Console.WriteLine("\nEnter a command: ");
-                command = int.Parse(Console.ReadLine());
+                command = GetCommand();
             }
         }
     }
 
-    class Test
+    static class Test
     {
-        static bool CaseForTransformation(string inputString, (string, int) expectedOutput, 
+        private static bool CaseForTransformation(string inputString, (string, int) expectedOutput, 
             int numberOfTest)
         {
             bool passed = Program.Transform(inputString) == expectedOutput;
             if (!passed)
             {
-                Console.WriteLine("Test {0} has failed", numberOfTest);
+                Console.WriteLine($"Test {numberOfTest} has failed");
             }
             return passed;
         }
 
-        static bool CaseForReverseTransformation(string inputString, int position, 
+        private static bool CaseForReverseTransformation(string inputString, int position, 
             string expectedOutput, int numberOfTest)
         {
             bool passed = Program.ReverseTransform(inputString, position) == expectedOutput;
             if (!passed)
             {
-                Console.WriteLine("Test {0} has failed", numberOfTest);
+                Console.WriteLine($"Test {numberOfTest} has failed", numberOfTest);
             }
             return passed;
         }
@@ -161,10 +204,12 @@ namespace BurrowsWheeler
         {
             return CaseForTransformation("BANANA", ("NNBAAA", 3), 1) &&
                 CaseForTransformation("abcd ww ee", ("wdeabce w ", 2), 2) &&
-                CaseForTransformation("", ("", 0), 3) &&
-                CaseForReverseTransformation("NNBAAA", 3, "BANANA", 4) &&
-                CaseForReverseTransformation("wdeabce w ", 2, "abcd ww ee", 5) &&
-                CaseForReverseTransformation("", 454, "", 6);
+                CaseForTransformation("111111", ("111111", 0), 3) &&
+                CaseForTransformation("", ("", 0), 4) &&
+                CaseForReverseTransformation("NNBAAA", 3, "BANANA", 5) &&
+                CaseForReverseTransformation("wdeabce w ", 2, "abcd ww ee", 6) &&
+                CaseForReverseTransformation("111111", 4, "111111", 7) &&
+                CaseForReverseTransformation("", 454, "", 8);
         }
     }
 }
