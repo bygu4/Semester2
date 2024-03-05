@@ -1,7 +1,7 @@
 ﻿using Stack;
 using System;
 
-namespace Calc
+namespace StackCalculator
 {
     static public class Calculator
     {

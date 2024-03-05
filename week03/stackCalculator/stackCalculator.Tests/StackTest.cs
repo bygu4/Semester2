@@ -1,5 +1,4 @@
 ﻿using Stack;
-using System.Runtime.CompilerServices;
 
 namespace stackCalculator.Tests
 {

@@ -1,7 +1,6 @@
-﻿using Calc;
-using System;
+﻿using System;
 
-namespace Solution
+namespace StackCalculator
 {
     static class Program
     {
@@ -16,7 +15,7 @@ namespace Solution
                 {
                     throw new ArgumentNullException();
                 }
-                Console.WriteLine("\nResult: {0}", Calculator.Compute(inputString));
+                Console.WriteLine($"\nResult: {Calculator.Compute(inputString)}");
             }
             catch (Exception)
             {
