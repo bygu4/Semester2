@@ -1,4 +1,4 @@
-﻿using Calc;
+﻿using StackCalculator;
 using System;
 
 namespace Tests
