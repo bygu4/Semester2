@@ -52,42 +52,6 @@ public class Trie<Type>
         return Add(character.ToString(), value);
     }
 
-    private (bool, bool) RemoveRecursion(Vertex current, string element, int index)
-    {
-        bool elementFound = false;
-        bool toRemove = false;
-        if (index == element.Length)
-        {
-            if (current.isTerminal)
-            {
-                elementFound = true;
-                current.isTerminal = false;
-                --this.Size;
-            }
-            toRemove = !current.isTerminal && current.edges.Count == 0;
-            return (elementFound, toRemove);
-        }
-        try
-        {
-            (elementFound, toRemove) = RemoveRecursion(current.edges[element[index]], element, index + 1);
-            if (toRemove)
-            {
-                current.edges.Remove(element[index]);
-                toRemove = !current.isTerminal && current.edges.Count == 0;
-            }
-            return (elementFound, toRemove);
-        }
-        catch (KeyNotFoundException)
-        {
-            return (false, false);
-        }
-    }
-
-    public bool Remove(string element)
-    {
-        return RemoveRecursion(this.root, element, 0).Item1;
-    }
-
     private Vertex? GetVertex(string element)
     {
         Vertex current = this.root;
@@ -114,7 +78,7 @@ public class Trie<Type>
     public Type? Value(string element)
     {
         Vertex? foundVertex = GetVertex(element);
-        if (foundVertex is null)
+        if (foundVertex is null || !foundVertex.isTerminal)
         {
             throw new KeyNotFoundException();
         }

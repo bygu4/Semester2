@@ -78,6 +78,10 @@ public static class BWT
 
     public static string ReverseTransform(string inputString, int position)
     {
+        if (inputString.Length != 0 && (position < 0 || position >= inputString.Length))
+        {
+            throw new IndexOutOfRangeException();
+        }
         char[] result = new char[inputString.Length];
         int[] shifts = GetShiftsArray(inputString);
         for (int i = 0; i < inputString.Length; ++i)

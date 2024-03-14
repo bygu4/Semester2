@@ -22,11 +22,11 @@ try
         Console.WriteLine("File was decompressed");
     }
 }
-catch (Exception e) when (e is FileNotFoundException || e is DirectoryNotFoundException)
+catch (IOException e) when (e is FileNotFoundException || e is DirectoryNotFoundException)
 {
     Console.WriteLine("Error: file not found");
 }
-catch
+catch (InvalidDataException)
 {
-    Console.WriteLine("An error occured");
+    Console.WriteLine("Error: invalid file format");
 }
