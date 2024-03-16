@@ -6,8 +6,8 @@ public class ByteWriter
 
     private FileStream stream;
     private int buffer;
+    private int shift;
 
-    public int Shift { get; private set; }
     public int LengthOfCode { get; set; }
 
     public ByteWriter(FileStream stream, int lenghtOfCode)
@@ -35,17 +35,17 @@ public class ByteWriter
         int numberOfUnwrittenBits = LengthOfCode;
         while (numberOfUnwrittenBits > 0)
         {
-            int bitsToAdd = LeftBitShift(code, lengthOfByte - numberOfUnwrittenBits - Shift);
+            int bitsToAdd = LeftBitShift(code, lengthOfByte - numberOfUnwrittenBits - shift);
             int sum = buffer | bitsToAdd;
-            int addedBits = RightBitShift(sum - buffer, lengthOfByte - numberOfUnwrittenBits - Shift);
+            int addedBits = RightBitShift(sum - buffer, lengthOfByte - numberOfUnwrittenBits - shift);
             buffer = sum;
-            Shift += numberOfUnwrittenBits;
-            numberOfUnwrittenBits = Shift - lengthOfByte;
+            shift += numberOfUnwrittenBits;
+            numberOfUnwrittenBits = shift - lengthOfByte;
             if (numberOfUnwrittenBits >= 0)
             {
                 stream.WriteByte(Convert.ToByte(buffer));
                 buffer = 0;
-                Shift = 0;
+                shift = 0;
             }
             code -= addedBits;
         }
@@ -53,7 +53,7 @@ public class ByteWriter
 
     public void EmptyBuffer()
     {
-        if (Shift > 0)
+        if (shift > 0)
         {
             stream.WriteByte(Convert.ToByte(buffer));
         }
@@ -62,22 +62,21 @@ public class ByteWriter
     public void GetBytesAndWrite(string data, bool cutOffLastByte)
     {
         int lengthAtStart = LengthOfCode;
-        for (int i = 0; i < data.Length; ++i)
+        for (int i = 0; i < data.Length - 1; ++i)
         {
-            int code = data[i];
-            if (i == data.Length - 1 && cutOffLastByte)
+            WriteCode(data[i]);
+        }
+        if (data.Length > 0)
+        {
+            int code = data[data.Length - 1];
+            if (cutOffLastByte)
             {
-                LengthOfCode = lengthOfByte - Shift;
+                LengthOfCode = lengthOfByte - shift;
                 code >>= (lengthAtStart - LengthOfCode);
             }
             WriteCode(code);
         }
         EmptyBuffer();
-    }
-
-    public void WriteByte(byte value)
-    {
-        stream.WriteByte(value);
     }
 
     public void WriteNumber(int value)

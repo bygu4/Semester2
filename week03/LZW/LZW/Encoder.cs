@@ -10,18 +10,19 @@ public static class Encoder
 {
     private const int numberOfEncodingBits = 12;
 
-    private const int lastByteIndexOffset = 10;
-    private const int lastByteInfoOffset = 9;
-    private const int BWTPositionOffset = 8;
-    private const int numberOfUniqueCharactersOffset = 4;
+    private enum Offsets
+    {
+        BWTPositionOffset = 12,
+        NumberOfUniqueCharactersOffset = 8,
+        LengthOfEncodedDataOffset = 4
+    }
 
     private class CompressionInfo
     {
-        public int lastByteIndex;
-        public int lastByteShift;
         public bool lastByteCutOff;
         public int BWTPosition;
         public int numberOfUniqueCharacters;
+        public int lengthOfEncodedData;
 
         public CompressionInfo()
         {
@@ -29,21 +30,33 @@ public static class Encoder
 
         public void Write(ByteWriter writer)
         {
-            int lastByteInfo = (lastByteShift << 1) + (lastByteCutOff ? 1 : 0);
-            writer.WriteByte(Convert.ToByte(lastByteInfo));
+            writer.LengthOfCode = 1;
+            writer.WriteCode(lastByteCutOff ? 1 : 0);
+            writer.EmptyBuffer();
+
             writer.WriteNumber(BWTPosition);
             writer.WriteNumber(numberOfUniqueCharacters);
+            writer.WriteNumber(lengthOfEncodedData);
         }
 
         public void Read(byte[] bytes)
         {
+            lengthOfEncodedData = BitConverter.ToInt32(bytes, 
+                bytes.Length - (int)Offsets.LengthOfEncodedDataOffset);
             numberOfUniqueCharacters = BitConverter.ToInt32(bytes,
-                bytes.Length - numberOfUniqueCharactersOffset);
-            BWTPosition = BitConverter.ToInt32(bytes, bytes.Length - BWTPositionOffset);
-            int lastByteInfo = bytes[bytes.Length - lastByteInfoOffset];
-            lastByteShift = lastByteInfo >> 1;
-            lastByteCutOff = (lastByteInfo & 1) == 1;
-            lastByteIndex = bytes.Length - lastByteIndexOffset;
+                bytes.Length - (int)Offsets.NumberOfUniqueCharactersOffset);
+            BWTPosition = BitConverter.ToInt32(bytes, bytes.Length - (int)Offsets.BWTPositionOffset);
+
+            if (lengthOfEncodedData < 0 || numberOfEncodingBits < 0 || BWTPosition < 0)
+            {
+                throw new InvalidDataException("Invalid file format");
+            }
+        }
+
+        public void ReadLastByteCutOffInfo(ByteReader reader)
+        {
+            reader.LengthOfCode = 1;
+            lastByteCutOff = reader.ReadCode() == 1;
         }
     }
 
@@ -93,6 +106,7 @@ public static class Encoder
         string inputData = reader.GetString();
         CompressionInfo info = new CompressionInfo();
         info.lastByteCutOff = reader.LastByteCutOff;
+        info.lengthOfEncodedData = inputData.Length;
         (inputData, info.BWTPosition) = BWT.Transform(inputData);
 
         ByteWriter writer = new ByteWriter(resultStream, numberOfEncodingBits);
@@ -129,8 +143,6 @@ public static class Encoder
         {
             writer.WriteCode(words.Value(currentWord));
         }
-        writer.EmptyBuffer();
-        compressionInfo.lastByteShift = writer.Shift;
         compressionInfo.Write(writer);
 
         long resultFileLength = writer.GetLengthOfStream();
@@ -151,6 +163,10 @@ public static class Encoder
 
     private static (CompressionInfo, ByteReader, Dictionary<int, string>) Decompress_Setup(string filePath)
     {
+        if (Path.GetExtension(filePath) != ".zipped")
+        {
+            throw new InvalidDataException("Incorrect file extension. Expected: '.zipped'");
+        }
         try
         {
             FileStream inputStream = File.OpenRead(filePath);
@@ -165,7 +181,7 @@ public static class Encoder
         }
         catch (ArgumentOutOfRangeException e)
         {
-            throw new InvalidDataException(null, e);
+            throw new InvalidDataException("Invalid file format", e);
         }
     }
 
@@ -178,9 +194,11 @@ public static class Encoder
         int currentCode = reader.ReadCode();
         try
         {
-            string encodedData = words[currentCode];
-            while (reader.CurrentIndex < compressionInfo.lastByteIndex || 
-                reader.Shift < compressionInfo.lastByteShift)
+            char[] encodedData = new char[compressionInfo.lengthOfEncodedData];
+            int encodedDataIndex = 0;
+            words[currentCode].CopyTo(encodedData);
+            encodedDataIndex += words[currentCode].Length;
+            while (encodedDataIndex < compressionInfo.lengthOfEncodedData)
             {
                 reader.LengthOfCode = int.Max(reader.LengthOfCode, GetLengthOfCode(words.Count + 1));
                 int next = reader.ReadCode();
@@ -196,11 +214,14 @@ public static class Encoder
                     output = words[currentCode] + words[currentCode][0];
                     wordToAdd = output;
                 }
-                encodedData += output;
+                output.CopyTo(0, encodedData, encodedDataIndex, output.Length);
+                encodedDataIndex += output.Length;
                 words.Add(words.Count, wordToAdd);
                 currentCode = next;
             }
-            string result = BWT.ReverseTransform(encodedData, compressionInfo.BWTPosition);
+            compressionInfo.ReadLastByteCutOffInfo(reader);
+            string encodedString = new string(encodedData);
+            string result = BWT.ReverseTransform(encodedString, compressionInfo.BWTPosition);
 
             FileStream resultStream = File.OpenWrite(
                 Path.Join(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)));
@@ -210,7 +231,7 @@ public static class Encoder
         }
         catch (Exception e) when (e is KeyNotFoundException || e is IndexOutOfRangeException)
         {
-            throw new InvalidDataException(null, e);
+            throw new InvalidDataException("Invalid file format", e);
         }
     }
 }

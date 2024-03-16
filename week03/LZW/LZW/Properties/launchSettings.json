@@ -1,8 +1,7 @@
 {
   "profiles": {
     "LZW": {
-      "commandName": "Project",
-      "commandLineArgs": "LZWCompression\\test.txt.zipped -u"
+      "commandName": "Project"
     }
   }
 }

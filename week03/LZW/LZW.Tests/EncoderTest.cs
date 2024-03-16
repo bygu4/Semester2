@@ -67,8 +67,30 @@ class EncoderTest
         AssertThatFileHasNotChangedAfterDecompression(fileName);
     }
 
-    [TestCase("EmptyFile.txt")]
-    [TestCase("InvalidData.txt")]
+    [Test]
+    public void TestForEncoder_TryToCompressUnexistingFile_ThrowException()
+    {
+        Assert.Throws<FileNotFoundException>(
+            delegate { Encoder.Compress("ololo.txt"); });
+    }
+
+    [Test]
+    public void TestForEncoder_TryToDecompressUnexistingFile_ThrowException()
+    {
+        Assert.Throws<FileNotFoundException>(
+            delegate { Encoder.Decompress("ololo.txt.zipped"); });
+    }
+
+    [TestCase("Executable.exe")]
+    [TestCase("LargeTextFile.txt")]
+    public void TestForEncoder_TryToDecompressUnzippedFile_ThrowException(string fileName)
+    {
+        Assert.Throws<InvalidDataException>(
+            delegate { Encoder.Decompress(GetOriginalFilePath(fileName)); });
+    }
+
+    [TestCase("EmptyFile.txt.zipped")]
+    [TestCase("InvalidData.txt.zipped")]
     public void TestForEncoder_TryToDecompressInvalidData_ThrowException(string fileName)
     {
         Assert.Throws<InvalidDataException>(
@@ -86,7 +108,7 @@ class EncoderTest
         AssertThatFileHasNotChangedAfterDecompression(fileName);
     }
 
-    [Test, MaxTime(10000)]
+    [Test, MaxTime(5000)]
     public void TestForEncoder_Image_FileHasNotChanged()
     {
         string fileName = "Image.jpg";
@@ -96,7 +118,7 @@ class EncoderTest
         AssertThatFileHasNotChangedAfterDecompression(fileName);
     }
 
-    [Test, MaxTime(60000)]
+    [Test, MaxTime(40000)]
     public void TestForEncoder_BigBinaryFile_MediumCompressionAndFileHasNotChanged()
     {
         string fileName = "Executable.exe";
@@ -107,7 +129,7 @@ class EncoderTest
         AssertThatFileHasNotChangedAfterDecompression(fileName);
     }
 
-    [Test, MaxTime(90000)]
+    [Test, MaxTime(40000)]
     public void TestForEncoder_LargeTextFile_MediumCompressionAndFileHasNotChanged()
     {
         string fileName = "LargeTextFile.txt";

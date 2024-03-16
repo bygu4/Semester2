@@ -25,9 +25,9 @@ try
 }
 catch (IOException e) when (e is FileNotFoundException || e is DirectoryNotFoundException)
 {
-    Console.WriteLine("Error: file not found");
+    Console.WriteLine("Error: File not found");
 }
-catch (InvalidDataException)
+catch (InvalidDataException e)
 {
-    Console.WriteLine("Error: invalid file format");
+    Console.WriteLine("Error: " + e.Message);
 }
