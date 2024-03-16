@@ -118,7 +118,7 @@ class EncoderTest
         AssertThatFileHasNotChangedAfterDecompression(fileName);
     }
 
-    [Test, MaxTime(40000)]
+    [Test, MaxTime(20000)]
     public void TestForEncoder_BigBinaryFile_MediumCompressionAndFileHasNotChanged()
     {
         string fileName = "Executable.exe";
@@ -129,7 +129,7 @@ class EncoderTest
         AssertThatFileHasNotChangedAfterDecompression(fileName);
     }
 
-    [Test, MaxTime(40000)]
+    [Test, MaxTime(20000)]
     public void TestForEncoder_LargeTextFile_MediumCompressionAndFileHasNotChanged()
     {
         string fileName = "LargeTextFile.txt";

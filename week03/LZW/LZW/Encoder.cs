@@ -8,7 +8,7 @@ using System;
 
 public static class Encoder
 {
-    private const int numberOfEncodingBits = 12;
+    private const int numberOfEncodingBits = 16;
 
     private enum Offsets
     {
