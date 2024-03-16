@@ -1,4 +1,5 @@
 ﻿using LZWEncoder;
+
 using System;
 
 if (args.Length != 2 || args[1] != "-c" && args[1] != "-u")

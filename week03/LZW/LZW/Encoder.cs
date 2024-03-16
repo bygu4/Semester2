@@ -2,19 +2,50 @@
 
 using Trie;
 using BurrowsWheeler;
+using ByteIO;
 
 using System;
-using System.Text;
 
 public static class Encoder
 {
+    private const int numberOfEncodingBits = 12;
+
     private const int lastByteIndexOffset = 10;
-    private const int lastByteShiftOffset = 9;
+    private const int lastByteInfoOffset = 9;
     private const int BWTPositionOffset = 8;
     private const int numberOfUniqueCharactersOffset = 4;
 
-    private static readonly Encoding compressionEncoding = Encoding.UTF8;
-    private const int lengthOfByte = 8;
+    private class CompressionInfo
+    {
+        public int lastByteIndex;
+        public int lastByteShift;
+        public bool lastByteCutOff;
+        public int BWTPosition;
+        public int numberOfUniqueCharacters;
+
+        public CompressionInfo()
+        {
+        }
+
+        public void Write(ByteWriter writer)
+        {
+            int lastByteInfo = (lastByteShift << 1) + (lastByteCutOff ? 1 : 0);
+            writer.WriteByte(Convert.ToByte(lastByteInfo));
+            writer.WriteNumber(BWTPosition);
+            writer.WriteNumber(numberOfUniqueCharacters);
+        }
+
+        public void Read(byte[] bytes)
+        {
+            numberOfUniqueCharacters = BitConverter.ToInt32(bytes,
+                bytes.Length - numberOfUniqueCharactersOffset);
+            BWTPosition = BitConverter.ToInt32(bytes, bytes.Length - BWTPositionOffset);
+            int lastByteInfo = bytes[bytes.Length - lastByteInfoOffset];
+            lastByteShift = lastByteInfo >> 1;
+            lastByteCutOff = (lastByteInfo & 1) == 1;
+            lastByteIndex = bytes.Length - lastByteIndexOffset;
+        }
+    }
 
     private static byte[] GetBytes(FileStream stream)
     {
@@ -22,20 +53,6 @@ public static class Encoder
         stream.Read(buffer, 0, buffer.Length);
         stream.Close();
         return buffer;
-    }
-
-    private static int LeftBitShift(int number, int shift)
-    {
-        if (shift < 0)
-        {
-            return number >> -shift;
-        }
-        return number << shift;
-    }
-
-    private static int RightBitShift(int number, int shift)
-    {
-        return LeftBitShift(number, -shift);
     }
 
     private static int GetLengthOfCode(int sizeOfDictionary)
@@ -51,50 +68,18 @@ public static class Encoder
         return (int)Math.Ceiling(Math.Log2(sizeOfDictionary));
     }
 
-    private static void WriteCode(FileStream stream, 
-        int code, int lengthOfCode, ref int buffer, ref int shift)
+    private static void WriteAndAddUniqueCharacters(ByteWriter writer, Trie<int> dictionary, string data)
     {
-        while (lengthOfCode > 0)
+        foreach (char character in data)
         {
-            int bitsToAdd = LeftBitShift(code, lengthOfByte - lengthOfCode - shift);
-            int sum = buffer | bitsToAdd;
-            int addedBits = RightBitShift(sum - buffer, lengthOfByte - lengthOfCode - shift);
-            buffer = sum;
-            shift += lengthOfCode;
-            lengthOfCode = shift - lengthOfByte;
-            if (lengthOfCode >= 0)
+            if (dictionary.Add(character, dictionary.Size))
             {
-                stream.WriteByte(Convert.ToByte(buffer));
-                buffer = 0;
-                shift = 0;
+                writer.WriteCode(character);
             }
-            code -= addedBits;
         }
     }
 
-    private static int ReadCode(byte[] inputBytes, int lengthOfCode,
-    ref int currentIndex, ref int shift)
-    {
-        int code = 0;
-        while (lengthOfCode > 0)
-        {
-            int currentByte = inputBytes[currentIndex];
-            int bitsToAdd = (currentByte & (byte.MaxValue >> shift)) -
-                (currentByte & (byte.MaxValue >> (shift + lengthOfCode)));
-            int addedBits = RightBitShift(bitsToAdd, lengthOfByte - lengthOfCode - shift);
-            shift += lengthOfCode;
-            lengthOfCode = shift - lengthOfByte;
-            if (lengthOfCode >= 0)
-            {
-                ++currentIndex;
-                shift = 0;
-            }
-            code += addedBits;
-        }
-        return code;
-    }
-
-    private static (string, long, int, Trie<int>, FileStream) Compress_Setup(string filePath)
+    private static (string, long, CompressionInfo, ByteWriter, Trie<int>) Compress_Setup(string filePath)
     {
         FileStream inputStream = File.OpenRead(filePath);
         string resultDirectory = Path.Join(Path.GetDirectoryName(filePath), "LZWCompression");
@@ -104,30 +89,25 @@ public static class Encoder
 
         long inputFileLength = inputStream.Length;
         byte[] inputBytes = GetBytes(inputStream);
-        string inputData = compressionEncoding.GetString(inputBytes);
-        (inputData, int BWTPosition) = BWT.Transform(inputData);
+        ByteReader reader = new ByteReader(inputBytes, numberOfEncodingBits);
+        string inputData = reader.GetString();
+        CompressionInfo info = new CompressionInfo();
+        info.lastByteCutOff = reader.LastByteCutOff;
+        (inputData, info.BWTPosition) = BWT.Transform(inputData);
 
+        ByteWriter writer = new ByteWriter(resultStream, numberOfEncodingBits);
         Trie<int> dictionary = new Trie<int>();
-        foreach (char character in inputData)
-        {
-            if (dictionary.Add(character, dictionary.Size))
-            {
-                resultStream.Write(BitConverter.GetBytes(character));
-            }
-        }
-        return (inputData, inputFileLength, BWTPosition, dictionary, resultStream);
+        WriteAndAddUniqueCharacters(writer, dictionary, inputData);
+        return (inputData, inputFileLength, info, writer, dictionary);
     }
 
     public static float Compress(string filePath)
     {
-        var (inputData, inputFileLength, BWTPosition, words, resultStream) =
+        var (inputData, inputFileLength, compressionInfo, writer, words) =
             Compress_Setup(filePath);
+        compressionInfo.numberOfUniqueCharacters = words.Size;
 
-        int numberOfUniqueCharacters = words.Size;
-        int lengthOfCode = GetLengthOfCode(numberOfUniqueCharacters);
-        int buffer = 0;
-        int shift = 0;
-
+        writer.LengthOfCode = GetLengthOfCode(words.Size);
         string currentWord = "";
         for (int i = 0; i < inputData.Length; ++i)
         {
@@ -139,51 +119,49 @@ public static class Encoder
             }
             else
             {
-                int code = words.Value(currentWord);
-                WriteCode(resultStream, code, lengthOfCode, ref buffer, ref shift);
+                writer.WriteCode(words.Value(currentWord));
                 words.Add(temp, words.Size);
-                lengthOfCode = int.Max(lengthOfCode, GetLengthOfCode(words.Size));
+                writer.LengthOfCode = int.Max(writer.LengthOfCode, GetLengthOfCode(words.Size));
                 currentWord = next;
             }
         }
-        if (lengthOfCode > 0)
+        if (words.Size > 0)
         {
-            WriteCode(resultStream, words.Value(currentWord), lengthOfCode, ref buffer, ref shift);
+            writer.WriteCode(words.Value(currentWord));
         }
-        if (shift > 0)
-        {
-            resultStream.WriteByte(Convert.ToByte(buffer));
-        }
-        resultStream.WriteByte(Convert.ToByte(shift));
-        resultStream.Write(BitConverter.GetBytes(BWTPosition));
-        resultStream.Write(BitConverter.GetBytes(numberOfUniqueCharacters));
+        writer.EmptyBuffer();
+        compressionInfo.lastByteShift = writer.Shift;
+        compressionInfo.Write(writer);
 
-        long resultFileLength = resultStream.Length;
-        resultStream.Close();
+        long resultFileLength = writer.GetLengthOfStream();
+        writer.CloseStream();
         return (float)inputFileLength / resultFileLength;
     }
 
-    private static (byte[], int, int, Dictionary<int, string>, FileStream) Decompress_Setup(string filePath)
+    private static void ReadAndAddUniqueCharacters(ByteReader reader, 
+        Dictionary<int, string> dictionary, int numberOfUniqueCharacters)
+    {
+        for (int i = 0; i < numberOfUniqueCharacters; ++i)
+        {
+            char character = (char)reader.ReadCode();
+            dictionary.Add(dictionary.Count, character.ToString());
+        }
+        dictionary.TryAdd(0, "");
+    }
+
+    private static (CompressionInfo, ByteReader, Dictionary<int, string>) Decompress_Setup(string filePath)
     {
         try
         {
             FileStream inputStream = File.OpenRead(filePath);
-            FileStream resultStream = File.OpenWrite(
-                Path.Join(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)));
-
             byte[] inputBytes = GetBytes(inputStream);
-            int numberOfUniqueCharacters = BitConverter.ToInt32(inputBytes,
-                inputBytes.Length - numberOfUniqueCharactersOffset);
-            int BWTPosition = BitConverter.ToInt32(inputBytes, inputBytes.Length - BWTPositionOffset);
-            int lastByteShift = inputBytes[inputBytes.Length - lastByteShiftOffset];
+            CompressionInfo info = new CompressionInfo();
+            info.Read(inputBytes);
 
+            ByteReader reader = new ByteReader(inputBytes, numberOfEncodingBits);
             Dictionary<int, string> dictionary = new Dictionary<int, string>();
-            for (int i = 0; i < numberOfUniqueCharacters; ++i)
-            {
-                dictionary.Add(dictionary.Count, BitConverter.ToChar(inputBytes, i * 2).ToString());
-            }
-            dictionary.TryAdd(0, "");
-            return (inputBytes, BWTPosition, lastByteShift, dictionary, resultStream);
+            ReadAndAddUniqueCharacters(reader, dictionary, info.numberOfUniqueCharacters);
+            return (info, reader, dictionary);
         }
         catch (ArgumentOutOfRangeException e)
         {
@@ -193,21 +171,19 @@ public static class Encoder
 
     public static void Decompress(string filePath)
     {
-        var (inputBytes, BWTPosition, lastByteShift, words, resultStream) = 
+        var (compressionInfo, reader, words) = 
             Decompress_Setup(filePath);
 
-        int lengthOfCode = GetLengthOfCode(words.Count);
-        int currentIndex = words.Count * 2;
-        int shift = 0;
-        int currentCode = ReadCode(inputBytes, lengthOfCode, ref currentIndex, ref shift);
-
+        reader.LengthOfCode = GetLengthOfCode(words.Count);
+        int currentCode = reader.ReadCode();
         try
         {
             string encodedData = words[currentCode];
-            while (currentIndex <= inputBytes.Length - lastByteIndexOffset)
+            while (reader.CurrentIndex < compressionInfo.lastByteIndex || 
+                reader.Shift < compressionInfo.lastByteShift)
             {
-                lengthOfCode = int.Max(lengthOfCode, GetLengthOfCode(words.Count + 1));
-                int next = ReadCode(inputBytes, lengthOfCode, ref currentIndex, ref shift);
+                reader.LengthOfCode = int.Max(reader.LengthOfCode, GetLengthOfCode(words.Count + 1));
+                int next = reader.ReadCode();
                 string output;
                 string wordToAdd;
                 if (words.ContainsKey(next))
@@ -223,14 +199,14 @@ public static class Encoder
                 encodedData += output;
                 words.Add(words.Count, wordToAdd);
                 currentCode = next;
-                if (currentIndex == inputBytes.Length - lastByteIndexOffset && shift >= lastByteShift)
-                {
-                    break;
-                }
             }
-            string result = BWT.ReverseTransform(encodedData, BWTPosition);
-            resultStream.Write(compressionEncoding.GetBytes(result));
-            resultStream.Close();
+            string result = BWT.ReverseTransform(encodedData, compressionInfo.BWTPosition);
+
+            FileStream resultStream = File.OpenWrite(
+                Path.Join(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)));
+            ByteWriter writer = new ByteWriter(resultStream, numberOfEncodingBits);
+            writer.GetBytesAndWrite(result, compressionInfo.lastByteCutOff);
+            writer.CloseStream();
         }
         catch (Exception e) when (e is KeyNotFoundException || e is IndexOutOfRangeException)
         {

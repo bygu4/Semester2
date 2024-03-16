@@ -22,29 +22,25 @@ public class Trie<Type>
         this.root = new Vertex();
     }
 
-    private bool AddRecursion(Vertex current, string element, int index, Type? value)
-    {
-        if (index == element.Length)
-        {
-            if (!current.isTerminal)
-            {
-                current.isTerminal = true;
-                current.value = value;
-                ++this.Size;
-                return true;
-            }
-            return false;
-        }
-        if (!current.edges.ContainsKey(element[index]))
-        {
-            current.edges.Add(element[index], new Vertex());
-        }
-        return AddRecursion(current.edges[element[index]], element, index + 1, value);
-    }
-
     public bool Add(string element, Type? value)
     {
-        return AddRecursion(this.root, element, 0, value);
+        Vertex current = this.root;
+        foreach (char character in element)
+        {
+            if (!current.edges.ContainsKey(character))
+            {
+                current.edges.Add(character, new Vertex());
+            }
+            current = current.edges[character];
+        }
+        if (!current.isTerminal)
+        {
+            current.isTerminal = true;
+            current.value = value;
+            ++Size;
+            return true;
+        }
+        return false;
     }
 
     public bool Add(char character, Type? value)

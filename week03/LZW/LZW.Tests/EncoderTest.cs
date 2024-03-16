@@ -57,40 +57,9 @@ class EncoderTest
     }
 
     [TestCase("EmptyFile.txt")]
+    [TestCase("SingleCharacter.txt")]
     [TestCase("SmallTextFile.txt")]
-    public void TestForEncoder_SmallFiles_LowCompressionAndFilesHaveNotChanged(string fileName)
-    {
-        float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
-        AssertThatCompressionRatioIsValid(fileName, compressionRatio);
-        Encoder.Decompress(GetCompressedFilePath(fileName));
-        AssertThatFileHasNotChangedAfterDecompression(fileName);
-    }
-
-    [Test]
-    public void TestForEncoder_FileWithRepeatingSequence_HighCompressionAndFileHasNotChanged()
-    {
-        string fileName = "TextFileWithRepeatingSequence.txt";
-        float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
-        AssertThatCompressionRatioIsValid(fileName, compressionRatio);
-        Assert.That(compressionRatio, Is.GreaterThan(10));
-        Encoder.Decompress(GetCompressedFilePath(fileName));
-        AssertThatFileHasNotChangedAfterDecompression(fileName);
-    }
-
-    [Test]
-    public void TestForEncoder_LargeFile_MediumComprassionAndFileHasNotChanged()
-    {
-        string fileName = "LargeTextFile.txt";
-        float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
-        AssertThatCompressionRatioIsValid(fileName, compressionRatio);
-        Assert.That(compressionRatio, Is.GreaterThan(3));
-        Encoder.Decompress(GetCompressedFilePath(fileName));
-        AssertThatFileHasNotChangedAfterDecompression(fileName);
-    }
-
-    [TestCase("Executable.exe")]
-    [TestCase("Image.jpg")]
-    public void TestForEncoder_NonTextFiles_FilesHaveNotChanged(string fileName)
+    public void TestForEncoder_SmallTextFiles_FilesHaveNotChanged(string fileName)
     {
         float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
         AssertThatCompressionRatioIsValid(fileName, compressionRatio);
@@ -104,5 +73,48 @@ class EncoderTest
     {
         Assert.Throws<InvalidDataException>(
             delegate { Encoder.Decompress(GetOriginalFilePath(fileName)); });
+    }
+
+    [Test, MaxTime(1000)]
+    public void TestForEncoder_TextFileWithRepeatingSequence_HighCompressionAndFileHasNotChanged()
+    {
+        string fileName = "TextFileWithRepeatingSequence.txt";
+        float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
+        AssertThatCompressionRatioIsValid(fileName, compressionRatio);
+        Assert.That(compressionRatio, Is.GreaterThan(10));
+        Encoder.Decompress(GetCompressedFilePath(fileName));
+        AssertThatFileHasNotChangedAfterDecompression(fileName);
+    }
+
+    [Test, MaxTime(10000)]
+    public void TestForEncoder_Image_FileHasNotChanged()
+    {
+        string fileName = "Image.jpg";
+        float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
+        AssertThatCompressionRatioIsValid(fileName, compressionRatio);
+        Encoder.Decompress(GetCompressedFilePath(fileName));
+        AssertThatFileHasNotChangedAfterDecompression(fileName);
+    }
+
+    [Test, MaxTime(60000)]
+    public void TestForEncoder_BigBinaryFile_MediumCompressionAndFileHasNotChanged()
+    {
+        string fileName = "Executable.exe";
+        float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
+        AssertThatCompressionRatioIsValid(fileName, compressionRatio);
+        Assert.That(compressionRatio, Is.GreaterThan(2));
+        Encoder.Decompress(GetCompressedFilePath(fileName));
+        AssertThatFileHasNotChangedAfterDecompression(fileName);
+    }
+
+    [Test, MaxTime(90000)]
+    public void TestForEncoder_LargeTextFile_MediumCompressionAndFileHasNotChanged()
+    {
+        string fileName = "LargeTextFile.txt";
+        float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
+        AssertThatCompressionRatioIsValid(fileName, compressionRatio);
+        Assert.That(compressionRatio, Is.GreaterThan(3));
+        Encoder.Decompress(GetCompressedFilePath(fileName));
+        AssertThatFileHasNotChangedAfterDecompression(fileName);
     }
 }
