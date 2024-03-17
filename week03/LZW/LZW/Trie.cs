@@ -53,11 +53,11 @@ public class Trie<Type>
         Vertex current = this.root;
         foreach (char character in element)
         {
-            try
+            if (current.edges.ContainsKey(character))
             {
                 current = current.edges[character];
             }
-            catch (KeyNotFoundException)
+            else
             {
                 return null;
             }
