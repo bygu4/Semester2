@@ -1,4 +1,4 @@
-namespace LZW.Tests;
+п»їnamespace LZW.Tests;
 
 using Trie;
 
@@ -43,20 +43,20 @@ public class TrieTest
     {
         testTrie = new Trie();
         AddElements(testTrie,
-            ["матмех", "матрас", "мастер", "массив", "молоко", "мамбет", "матме"]);
+            ["РјР°С‚РјРµС…", "РјР°С‚СЂР°СЃ", "РјР°СЃС‚РµСЂ", "РјР°СЃСЃРёРІ", "РјРѕР»РѕРєРѕ", "РјР°РјР±РµС‚", "РјР°С‚РјРµ"]);
     }
 
     [Test]
     public void TestForAdd_TryToAddElementThatIsInTrie_ReturnFalseAndSizeHasNotChanged()
     {
-        Assert.That(testTrie.Add("массив"), Is.False);
+        Assert.That(testTrie.Add("РјР°СЃСЃРёРІ"), Is.False);
         Assert.That(testTrie.Size, Is.EqualTo(7));
     }
 
     [Test]
     public void TestForAdd_AddElementThatIsNotInTrie_ReturnTrueAndSizeHasChanged()
     {
-        Assert.That(testTrie.Add("маска"), Is.True);
+        Assert.That(testTrie.Add("РјР°СЃРєР°"), Is.True);
         Assert.That(testTrie.Size, Is.EqualTo(8));
     }
 
@@ -64,7 +64,7 @@ public class TrieTest
     public void TestForContains_SearchForSomeElements_FindElementsThatWereAdded()
     {
         TestContainment(testTrie,
-            ["мат", "массивы", "матмех", "", "wqewqsd", "матме", "a"],
+            ["РјР°С‚", "РјР°СЃСЃРёРІС‹", "РјР°С‚РјРµС…", "", "wqewqsd", "РјР°С‚РјРµ", "a"],
             [false, false, true, false, false, true, false]);
     }
 
@@ -72,10 +72,10 @@ public class TrieTest
     public void TestForRemove_TryToRemoveSomeElements_ElementsThatWereInTrieAreRemoved()
     {
         RemoveKeysAndCheckOutput(testTrie,
-            ["мамбет", "мамбет", "мат", "матме", "матмех", "матрас"],
+            ["РјР°РјР±РµС‚", "РјР°РјР±РµС‚", "РјР°С‚", "РјР°С‚РјРµ", "РјР°С‚РјРµС…", "РјР°С‚СЂР°СЃ"],
             [true, false, false, true, true, true]);
         TestContainment(testTrie,
-            ["мамбет", "матмех", "мастер", "мат"],
+            ["РјР°РјР±РµС‚", "РјР°С‚РјРµС…", "РјР°СЃС‚РµСЂ", "РјР°С‚"],
             [false, false, true, false]);
         Assert.That(testTrie.Size, Is.EqualTo(3));
     }
@@ -84,7 +84,7 @@ public class TrieTest
     public void TestForHowManyStartsWithPrefix_UseMethod_GetValues()
     {
         GetHowManyStartsWithPrefixAndCheckOutputs(testTrie,
-            ["матме", "матмех", "мат", "", "мо", "ма", "wqwqwq"],
+            ["РјР°С‚РјРµ", "РјР°С‚РјРµС…", "РјР°С‚", "", "РјРѕ", "РјР°", "wqwqwq"],
             [2, 1, 3, 7, 1, 6, 0]);
     }
 }
