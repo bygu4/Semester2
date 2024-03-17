@@ -84,6 +84,7 @@ public static class Encoder
         byte[] inputBytes = Utility.GetBytes(inputStream);
         CodeReader reader = new CodeReader(inputBytes, lengthOfEncoding);
         string inputData = reader.GetString();
+
         CompressionInfo info = new CompressionInfo();
         info.lastByteCutOff = reader.LastByteCutOff;
         info.lengthOfEncodedData = inputData.Length;
@@ -106,15 +107,15 @@ public static class Encoder
         for (int i = 0; i < inputData.Length; ++i)
         {
             string next = inputData[i].ToString();
-            string temp = currentWord + next;
-            if (words.Contains(temp))
+            string newWord = currentWord + next;
+            if (words.Contains(newWord))
             {
-                currentWord = temp;
+                currentWord = newWord;
             }
             else
             {
                 writer.WriteCode(words.Value(currentWord));
-                words.Add(temp, words.Size);
+                words.Add(newWord, words.Size);
                 writer.LengthOfCode = int.Max(
                     writer.LengthOfCode, Utility.GetLengthOfCode(words.Size));
                 currentWord = next;

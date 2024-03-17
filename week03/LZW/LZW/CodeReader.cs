@@ -26,7 +26,7 @@ public class CodeReader
             if (currentIndex >= bytes.Length)
             {
                 LastByteCutOff = true;
-                return code;
+                return code >> numberOfUnreadBits;
             }
             int currentByte = bytes[currentIndex];
             int unreadBitsShift = int.Min(numberOfUnreadBits, Utility.lengthOfByte);

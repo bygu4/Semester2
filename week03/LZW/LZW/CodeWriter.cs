@@ -56,13 +56,11 @@ public class CodeWriter
         }
         if (data.Length > 0)
         {
-            int code = data[data.Length - 1];
             if (cutOffLastByte)
             {
                 LengthOfCode = Utility.lengthOfByte - shift;
-                code >>= (lengthAtStart - LengthOfCode);
             }
-            WriteCode(code);
+            WriteCode(data[data.Length - 1]);
         }
         EmptyBuffer();
     }
