@@ -97,13 +97,13 @@ class EncoderTest
             delegate { Encoder.Decompress(GetOriginalFilePath(fileName)); });
     }
 
-    [Test, MaxTime(1000)]
+    [Test, MaxTime(100)]
     public void TestForEncoder_TextFileWithRepeatingSequence_HighCompressionAndFileHasNotChanged()
     {
         string fileName = "TextFileWithRepeatingSequence.txt";
         float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
         AssertThatCompressionRatioIsValid(fileName, compressionRatio);
-        Assert.That(compressionRatio, Is.GreaterThan(10));
+        Assert.That(compressionRatio, Is.GreaterThan(15));
         Encoder.Decompress(GetCompressedFilePath(fileName));
         AssertThatFileHasNotChangedAfterDecompression(fileName);
     }
@@ -124,7 +124,7 @@ class EncoderTest
         string fileName = "Executable.exe";
         float compressionRatio = Encoder.Compress(GetOriginalFilePath(fileName));
         AssertThatCompressionRatioIsValid(fileName, compressionRatio);
-        Assert.That(compressionRatio, Is.GreaterThan(2));
+        Assert.That(compressionRatio, Is.GreaterThan(3));
         Encoder.Decompress(GetCompressedFilePath(fileName));
         AssertThatFileHasNotChangedAfterDecompression(fileName);
     }

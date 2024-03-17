@@ -1,33 +1,19 @@
-﻿namespace ByteIO;
+﻿namespace CodeIO;
 
-public class ByteWriter
+using Utility;
+
+public class CodeWriter
 {
-    private const int lengthOfByte = 8;
-
     private FileStream stream;
     private int buffer;
     private int shift;
 
     public int LengthOfCode { get; set; }
 
-    public ByteWriter(FileStream stream, int lenghtOfCode)
+    public CodeWriter(FileStream stream, int lenghtOfCode)
     {
         this.stream = stream;
         LengthOfCode = lenghtOfCode;
-    }
-
-    private static int LeftBitShift(int number, int shift)
-    {
-        if (shift < 0)
-        {
-            return number >> -shift;
-        }
-        return number << shift;
-    }
-
-    private static int RightBitShift(int number, int shift)
-    {
-        return LeftBitShift(number, -shift);
     }
 
     public void WriteCode(int code)
@@ -35,12 +21,14 @@ public class ByteWriter
         int numberOfUnwrittenBits = LengthOfCode;
         while (numberOfUnwrittenBits > 0)
         {
-            int bitsToAdd = LeftBitShift(code, lengthOfByte - numberOfUnwrittenBits - shift);
+            int bitsToAdd = Utility.LeftBitShift(code, 
+                Utility.lengthOfByte - numberOfUnwrittenBits - shift);
             int sum = buffer | bitsToAdd;
-            int addedBits = RightBitShift(sum - buffer, lengthOfByte - numberOfUnwrittenBits - shift);
+            int addedBits = Utility.RightBitShift(sum - buffer, 
+                Utility.lengthOfByte - numberOfUnwrittenBits - shift);
             buffer = sum;
             shift += numberOfUnwrittenBits;
-            numberOfUnwrittenBits = shift - lengthOfByte;
+            numberOfUnwrittenBits = shift - Utility.lengthOfByte;
             if (numberOfUnwrittenBits >= 0)
             {
                 stream.WriteByte(Convert.ToByte(buffer));
@@ -71,7 +59,7 @@ public class ByteWriter
             int code = data[data.Length - 1];
             if (cutOffLastByte)
             {
-                LengthOfCode = lengthOfByte - shift;
+                LengthOfCode = Utility.lengthOfByte - shift;
                 code >>= (lengthAtStart - LengthOfCode);
             }
             WriteCode(code);

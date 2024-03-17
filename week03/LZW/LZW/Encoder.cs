@@ -2,13 +2,14 @@
 
 using Trie;
 using BurrowsWheeler;
-using ByteIO;
+using CodeIO;
+using Utility;
 
 using System;
 
 public static class Encoder
 {
-    private const int numberOfEncodingBits = 16;
+    private const int lengthOfEncoding = 16;
 
     private enum Offsets
     {
@@ -28,7 +29,7 @@ public static class Encoder
         {
         }
 
-        public void Write(ByteWriter writer)
+        public void Write(CodeWriter writer)
         {
             writer.LengthOfCode = 1;
             writer.WriteCode(lastByteCutOff ? 1 : 0);
@@ -47,41 +48,20 @@ public static class Encoder
                 bytes.Length - (int)Offsets.NumberOfUniqueCharactersOffset);
             BWTPosition = BitConverter.ToInt32(bytes, bytes.Length - (int)Offsets.BWTPositionOffset);
 
-            if (lengthOfEncodedData < 0 || numberOfEncodingBits < 0 || BWTPosition < 0)
+            if (lengthOfEncodedData < 0 || lengthOfEncoding < 0 || BWTPosition < 0)
             {
                 throw new InvalidDataException("Invalid file format");
             }
         }
 
-        public void ReadLastByteCutOffInfo(ByteReader reader)
+        public void ReadLastByteCutOffInfo(CodeReader reader)
         {
             reader.LengthOfCode = 1;
             lastByteCutOff = reader.ReadCode() == 1;
         }
     }
 
-    private static byte[] GetBytes(FileStream stream)
-    {
-        byte[] buffer = new byte[stream.Length];
-        stream.Read(buffer, 0, buffer.Length);
-        stream.Close();
-        return buffer;
-    }
-
-    private static int GetLengthOfCode(int sizeOfDictionary)
-    {
-        if (sizeOfDictionary < 1)
-        {
-            return 0;
-        }
-        if (sizeOfDictionary == 1)
-        {
-            return 1;
-        }
-        return (int)Math.Ceiling(Math.Log2(sizeOfDictionary));
-    }
-
-    private static void WriteAndAddUniqueCharacters(ByteWriter writer, Trie<int> dictionary, string data)
+    private static void WriteAndAddUniqueCharacters(CodeWriter writer, Trie<int> dictionary, string data)
     {
         foreach (char character in data)
         {
@@ -92,7 +72,7 @@ public static class Encoder
         }
     }
 
-    private static (string, long, CompressionInfo, ByteWriter, Trie<int>) Compress_Setup(string filePath)
+    private static (string, long, CompressionInfo, CodeWriter, Trie<int>) Compress_Setup(string filePath)
     {
         FileStream inputStream = File.OpenRead(filePath);
         string resultDirectory = Path.Join(Path.GetDirectoryName(filePath), "LZWCompression");
@@ -101,15 +81,15 @@ public static class Encoder
             Path.Join(resultDirectory, Path.GetFileName(filePath)) + ".zipped");
 
         long inputFileLength = inputStream.Length;
-        byte[] inputBytes = GetBytes(inputStream);
-        ByteReader reader = new ByteReader(inputBytes, numberOfEncodingBits);
+        byte[] inputBytes = Utility.GetBytes(inputStream);
+        CodeReader reader = new CodeReader(inputBytes, lengthOfEncoding);
         string inputData = reader.GetString();
         CompressionInfo info = new CompressionInfo();
         info.lastByteCutOff = reader.LastByteCutOff;
         info.lengthOfEncodedData = inputData.Length;
         (inputData, info.BWTPosition) = BWT.Transform(inputData);
 
-        ByteWriter writer = new ByteWriter(resultStream, numberOfEncodingBits);
+        CodeWriter writer = new CodeWriter(resultStream, lengthOfEncoding);
         Trie<int> dictionary = new Trie<int>();
         WriteAndAddUniqueCharacters(writer, dictionary, inputData);
         return (inputData, inputFileLength, info, writer, dictionary);
@@ -121,7 +101,7 @@ public static class Encoder
             Compress_Setup(filePath);
         compressionInfo.numberOfUniqueCharacters = words.Size;
 
-        writer.LengthOfCode = GetLengthOfCode(words.Size);
+        writer.LengthOfCode = Utility.GetLengthOfCode(words.Size);
         string currentWord = "";
         for (int i = 0; i < inputData.Length; ++i)
         {
@@ -135,7 +115,8 @@ public static class Encoder
             {
                 writer.WriteCode(words.Value(currentWord));
                 words.Add(temp, words.Size);
-                writer.LengthOfCode = int.Max(writer.LengthOfCode, GetLengthOfCode(words.Size));
+                writer.LengthOfCode = int.Max(
+                    writer.LengthOfCode, Utility.GetLengthOfCode(words.Size));
                 currentWord = next;
             }
         }
@@ -150,7 +131,7 @@ public static class Encoder
         return (float)inputFileLength / resultFileLength;
     }
 
-    private static void ReadAndAddUniqueCharacters(ByteReader reader, 
+    private static void ReadAndAddUniqueCharacters(CodeReader reader, 
         Dictionary<int, string> dictionary, int numberOfUniqueCharacters)
     {
         for (int i = 0; i < numberOfUniqueCharacters; ++i)
@@ -161,7 +142,7 @@ public static class Encoder
         dictionary.TryAdd(0, "");
     }
 
-    private static (CompressionInfo, ByteReader, Dictionary<int, string>) Decompress_Setup(string filePath)
+    private static (CompressionInfo, CodeReader, Dictionary<int, string>) Decompress_Setup(string filePath)
     {
         if (Path.GetExtension(filePath) != ".zipped")
         {
@@ -170,11 +151,11 @@ public static class Encoder
         try
         {
             FileStream inputStream = File.OpenRead(filePath);
-            byte[] inputBytes = GetBytes(inputStream);
+            byte[] inputBytes = Utility.GetBytes(inputStream);
             CompressionInfo info = new CompressionInfo();
             info.Read(inputBytes);
 
-            ByteReader reader = new ByteReader(inputBytes, numberOfEncodingBits);
+            CodeReader reader = new CodeReader(inputBytes, lengthOfEncoding);
             Dictionary<int, string> dictionary = new Dictionary<int, string>();
             ReadAndAddUniqueCharacters(reader, dictionary, info.numberOfUniqueCharacters);
             return (info, reader, dictionary);
@@ -190,7 +171,7 @@ public static class Encoder
         var (compressionInfo, reader, words) = 
             Decompress_Setup(filePath);
 
-        reader.LengthOfCode = GetLengthOfCode(words.Count);
+        reader.LengthOfCode = Utility.GetLengthOfCode(words.Count);
         int currentCode = reader.ReadCode();
         try
         {
@@ -200,7 +181,8 @@ public static class Encoder
             encodedDataIndex += words[currentCode].Length;
             while (encodedDataIndex < compressionInfo.lengthOfEncodedData)
             {
-                reader.LengthOfCode = int.Max(reader.LengthOfCode, GetLengthOfCode(words.Count + 1));
+                reader.LengthOfCode = int.Max(
+                    reader.LengthOfCode, Utility.GetLengthOfCode(words.Count + 1));
                 int next = reader.ReadCode();
                 string output;
                 string wordToAdd;
@@ -225,7 +207,7 @@ public static class Encoder
 
             FileStream resultStream = File.OpenWrite(
                 Path.Join(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)));
-            ByteWriter writer = new ByteWriter(resultStream, numberOfEncodingBits);
+            CodeWriter writer = new CodeWriter(resultStream, lengthOfEncoding);
             writer.GetBytesAndWrite(result, compressionInfo.lastByteCutOff);
             writer.CloseStream();
         }
