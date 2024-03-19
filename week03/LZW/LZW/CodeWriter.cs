@@ -16,6 +16,13 @@ public class CodeWriter
         LengthOfCode = lenghtOfCode;
     }
 
+    private void WriteCurrentBuffer()
+    {
+        stream.WriteByte(Convert.ToByte(buffer));
+        buffer = 0;
+        shift = 0;
+    }
+
     public void WriteCode(int code)
     {
         int numberOfUnwrittenBits = LengthOfCode;
@@ -31,9 +38,7 @@ public class CodeWriter
             numberOfUnwrittenBits = shift - Utility.lengthOfByte;
             if (numberOfUnwrittenBits >= 0)
             {
-                stream.WriteByte(Convert.ToByte(buffer));
-                buffer = 0;
-                shift = 0;
+                WriteCurrentBuffer();
             }
             code -= addedBits;
         }
@@ -43,7 +48,7 @@ public class CodeWriter
     {
         if (shift > 0)
         {
-            stream.WriteByte(Convert.ToByte(buffer));
+            WriteCurrentBuffer();
         }
     }
 
