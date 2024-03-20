@@ -54,7 +54,6 @@ public class CodeWriter
 
     public void GetBytesAndWrite(string data, bool cutOffLastByte)
     {
-        int lengthAtStart = LengthOfCode;
         for (int i = 0; i < data.Length - 1; ++i)
         {
             WriteCode(data[i]);
