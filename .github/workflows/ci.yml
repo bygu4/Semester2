@@ -9,7 +9,7 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Build and run tests
-        run: ./scripts/windowsBuild.ps1
+        run: ./scripts/windowsBuild.bat
   build-Ubuntu:
     runs-on: ubuntu-latest
     steps:
