@@ -1,4 +1,4 @@
-# Saint-Petersburg State University, Programming Technologies, 2023-2027
+## Saint-Petersburg State University, Programming Technologies, 2023-2027
 
 ![ci-status](https://github.com/bygu4/Semester2/actions/workflows/ci.yml/badge.svg?event=push)
 
