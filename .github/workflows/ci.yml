@@ -18,7 +18,7 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: build
-        run: scripts/linuxBuild.bash
+        run: bash scripts/linuxBuild.bash
   build-Fedora:
     runs-on: fedora-latest
     steps:
@@ -27,4 +27,4 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: build
-        run: scripts/linuxBuild.bash
+        run: bash scripts/linuxBuild.bash
