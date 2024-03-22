@@ -5,7 +5,7 @@ using System;
 
 class EncoderTest
 {
-    private static string testFilesDirectory = Path.Join("..\\..\\..", "TestFiles");
+    private static string testFilesDirectory = Path.Join("../../..", "TestFiles");
 
     private static string GetOriginalFilePath(string fileName)
     {
