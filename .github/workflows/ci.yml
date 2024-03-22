@@ -8,8 +8,8 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-      - name: build
-        run: scripts/windowsBuild.ps1
+      - name: Build and run tests
+        run: ./scripts/windowsBuild.ps1
   build-Ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -17,14 +17,5 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '8.x'
-      - name: build
-        run: bash scripts/linuxBuild.bash
-  build-Fedora:
-    runs-on: fedora-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.x'
-      - name: build
+      - name: Build and run tests
         run: bash scripts/linuxBuild.bash
