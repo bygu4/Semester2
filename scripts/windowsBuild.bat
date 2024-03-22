@@ -4,16 +4,16 @@ cd ..
 
 for /r %%i in (*.sln) do (
     dotnet build %%i --nologo -clp:NoSummary -v:q
-    if %errorlevel% EQU 0 (
-        dotnet test %%i --no-build --nologo -v:q
-        if %errorlevel% EQU 0 (
-            echo - %%~nxi: test passed
-        ) else (
-            echo - %%~nxi: test failed
-            exit 1
-        )
-    ) else (
+    if errorlevel 1 (
         echo - %%~nxi: build failed
         exit 1
+    ) else (
+        dotnet test %%i --no-build --nologo -v:q
+        if errorlevel 1 (
+            echo - %%~nxi: test failed
+            exit 1
+        ) else (
+            echo - %%~nxi: test passed
+        )
     )
 )
