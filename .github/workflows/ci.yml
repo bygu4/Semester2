@@ -9,18 +9,7 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Build and run tests
-        run: for /r %%i in (*.sln) do (
-          dotnet build %%i --nologo -clp:NoSummary -v:q
-          if errorlevel 0 (
-            dotnet test %%i --no-build --nologo -clp:NoSummary -v:q
-            if errorlevel 0 (
-              echo - %%~nxi: test passed
-            ) else (
-              echo - %%~nxi: test failed
-            )
-          ) else (
-            echo - %%~nxi: build failed
-          )
+        run: ./scripts/windowsBuild.bat
   build-Ubuntu:
     runs-on: ubuntu-latest
     steps:
@@ -29,16 +18,4 @@ jobs:
         with:
           dotnet-version: '8.x'
       - name: Build and run tests
-        run: for f in $(find . -name "*.sln"); do (
-          dotnet build $f --nologo -clp:NoSummary  -v:q
-          if [ $? -eq 0 ]; then
-            dotnet test $f --no-build --nologo -clp:NoSummary -v:q
-            if [ $? -eq 0 ]; then
-              echo - ${f##*/}: test passed
-            else
-              echo - ${f##*/}: test failed
-            fi
-          else
-            echo - ${f##*/}: build failed
-          fi
-        ) done
+        run: bash scripts/linuxBuild.bash
