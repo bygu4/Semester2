@@ -1,0 +1,5 @@
+ <Project>
+    <ItemGroup>
+        <AdditionalFiles Include="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props'))/../.config/stylecop.json" />
+    </ItemGroup>
+</Project>
