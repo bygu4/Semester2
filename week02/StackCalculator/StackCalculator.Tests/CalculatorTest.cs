@@ -1,3 +1,9 @@
+// Copyright 2024 Alexander Bugaev
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
 namespace stackCalculator.Tests;
 
 using StackCalculator;
@@ -12,7 +18,7 @@ public class CalculatorTest
     [Test]
     public void TestForCompute_EmptyString_GetZero()
     {
-        Assert.That(Calculator.Compute(""), Is.EqualTo(0));
+        Assert.That(Calculator.Compute(string.Empty), Is.EqualTo(0));
     }
 
     [Test]
@@ -36,31 +42,31 @@ public class CalculatorTest
     [Test]
     public void TestForCompute_DivisionByZero_ThrowException()
     {
-        Assert.Throws<DivideByZeroException>(delegate { Calculator.Compute("532 0 /"); });
+        Assert.Throws<DivideByZeroException>(() => { Calculator.Compute("532 0 /"); });
     }
 
     [Test]
     public void TestForCompute_UnexpectedSymbol_ThrowException()
     {
-        Assert.Throws<InvalidDataException>(delegate { Calculator.Compute("54 a -"); });
+        Assert.Throws<InvalidDataException>(() => { Calculator.Compute("54 a -"); });
     }
 
     [Test]
     public void TestForCompute_OperationWithoutNumbers_ThrowException()
     {
-        Assert.Throws<InvalidDataException>(delegate { Calculator.Compute("*"); });
+        Assert.Throws<InvalidDataException>(() => { Calculator.Compute("*"); });
     }
 
     [Test]
     public void TestForCompute_OperationWithOneNumber_ThrowException()
     {
-        Assert.Throws<InvalidDataException>(delegate { Calculator.Compute("77 +"); });
+        Assert.Throws<InvalidDataException>(() => { Calculator.Compute("77 +"); });
     }
 
     [Test]
     public void TestForCompute_FloatNumberInput_ThrowException()
     {
-        Assert.Throws<InvalidDataException>(delegate { Calculator.Compute("11.5 12 -"); });
+        Assert.Throws<InvalidDataException>(() => { Calculator.Compute("11.5 12 -"); });
     }
 
     [Test]

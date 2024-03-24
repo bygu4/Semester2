@@ -1,4 +1,10 @@
-﻿namespace stackCalculator.Tests;
+﻿// Copyright 2024 Alexander Bugaev
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
+namespace stackCalculator.Tests;
 
 using Stack;
 
@@ -13,8 +19,8 @@ public class StackTest
     {
         get
         {
-            yield return new TestCaseData(new StackOnPointers<float>());
-            yield return new TestCaseData(new StackOnArray<float>());
+            yield return new TestCaseData(new ListStack<float>());
+            yield return new TestCaseData(new ArrayStack<float>());
         }
     }
 
@@ -46,7 +52,7 @@ public class StackTest
     [TestCaseSource(nameof(StackTypeTestCases))]
     public void TestForStack_PopOutOfAnEmptyStack_ThrowException(IStack<float> stack)
     {
-        Assert.Throws<InvalidOperationException>(delegate { stack.Pop(); });
+        Assert.Throws<InvalidOperationException>(() => { stack.Pop(); });
     }
 
     [TestCaseSource(nameof(StackTypeTestCases))]
