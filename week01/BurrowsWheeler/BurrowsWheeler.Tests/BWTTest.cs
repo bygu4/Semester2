@@ -1,3 +1,9 @@
+// Copyright 2024 Alexander Bugaev
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
 namespace BurrowsWheeler.Tests;
 
 using BurrowsWheeler;
@@ -12,7 +18,7 @@ public class BWTTest
     [Test]
     public void TestForTransformation_EmptyString_GetEmptyStringAndZero()
     {
-        Assert.That(BWT.Transform(""), Is.EqualTo(("", 0)));
+        Assert.That(BWT.Transform(string.Empty), Is.EqualTo((string.Empty, 0)));
     }
 
     [Test]
@@ -41,7 +47,7 @@ public class BWTTest
     [TestCase(23)]
     public void TestForReverseTransform_EmptyString_GetEmptyString(int position)
     {
-        Assert.That(BWT.ReverseTransform("", position), Is.EqualTo(""));
+        Assert.That(BWT.ReverseTransform(string.Empty, position), Is.EqualTo(string.Empty));
     }
 
     [Test]
@@ -62,7 +68,7 @@ public class BWTTest
     [TestCase(90)]
     public void TestForReverseTransform_IndexOutOfRange_ThrowException(int position)
     {
-        Assert.Throws<IndexOutOfRangeException>(delegate { BWT.ReverseTransform("abcdefg", position); });
+        Assert.Throws<IndexOutOfRangeException>(() => { BWT.ReverseTransform("abcdefg", position); });
     }
 
     [TestCase("ccccaaaabbbb", 0, "abcabcabcabc")]

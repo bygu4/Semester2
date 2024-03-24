@@ -1,4 +1,10 @@
-﻿using BurrowsWheeler;
+﻿// Copyright 2024 Alexander Bugaev
+//
+// Use of this source code is governed by an MIT-style
+// license that can be found in the LICENSE file or at
+// https://opensource.org/licenses/MIT.
+
+using BurrowsWheeler;
 
 static string GetInputString()
 {
@@ -7,6 +13,7 @@ static string GetInputString()
     {
         throw new Exception("Failed to read a string from console");
     }
+
     return inputString;
 }
 
@@ -29,6 +36,7 @@ static int GetReverseBWTPosition(int length)
     {
         return position;
     }
+
     throw new IndexOutOfRangeException();
 }
 
@@ -69,11 +77,13 @@ while (command != 0)
             {
                 Console.WriteLine("\nWrong format");
             }
+
             break;
         default:
             Console.WriteLine("\nUnknown command");
             break;
     }
+
     Console.WriteLine("\nEnter a command: ");
     command = GetCommand();
 }
