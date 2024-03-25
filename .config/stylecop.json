@@ -8,9 +8,9 @@
 
         "documentationRules": {
             "companyName": "SPBU",
-            "copyrightText": "Copyright (c) {holderName} {year}. All rights reserved.\nLicensed under the {licenseName} license. See {licenseFile} file in the project root for full license information.",
+            "copyrightText": "Copyright (c) {authorName} {year}. All rights reserved.\nLicensed under the {licenseName} license. See {licenseFile} file in the project root for full license information.",
             "variables": {
-                "holderName": "Alexander Bugaev",
+                "authorName": "Alexander Bugaev",
                 "year": "2024",
                 "licenseName": "MIT",
                 "licenseFile": "LICENSE"
