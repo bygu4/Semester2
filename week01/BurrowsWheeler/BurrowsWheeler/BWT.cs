@@ -12,12 +12,12 @@ public static class BWT
 {
     private static string transformingString = string.Empty;
 
-/// <summary>
-/// Transforms an input string by the Burrows-Wheeler algorithm.
-/// </summary>
-/// <param name="inputString">String to transform.</param>
-/// <returns>Transformed string and
-/// the position of initial string in the rotations matrix.</returns>
+    /// <summary>
+    /// Transforms an input string by the Burrows-Wheeler algorithm.
+    /// </summary>
+    /// <param name="inputString">String to transform.</param>
+    /// <returns>Transformed string and
+    /// the position of initial string in the rotations matrix.</returns>
     public static (string, int) Transform(string inputString)
     {
         transformingString = inputString;
@@ -27,14 +27,14 @@ public static class BWT
         return (GetResultString(inputString, shifts), (position >= 0) ? position : 0);
     }
 
-/// <summary>
-/// Reverse Burrows-Wheeler transformation.
-/// </summary>
-/// <param name="inputString">String transformed by BWT algorithm.</param>
-/// <param name="position">Position of string in the rotations matrix.</param>
-/// <returns>String after reverse transformation.</returns>
-/// <exception cref="IndexOutOfRangeException">
-/// Position is not in range of the input string length.</exception>
+    /// <summary>
+    /// Reverse Burrows-Wheeler transformation.
+    /// </summary>
+    /// <param name="inputString">String transformed by BWT algorithm.</param>
+    /// <param name="position">Position of string in the rotations matrix.</param>
+    /// <returns>String after reverse transformation.</returns>
+    /// <exception cref="IndexOutOfRangeException">
+    /// Position is not in range of the input string length.</exception>
     public static string ReverseTransform(string inputString, int position)
     {
         if (inputString.Length != 0 && (position < 0 || position >= inputString.Length))
