@@ -397,5 +397,5 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 
-# Stylecop Analyzers config
+# Stylecop Analizers Config
 .editorconfig
