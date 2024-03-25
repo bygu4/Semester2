@@ -1,32 +1,50 @@
+// <copyright file="UniqueList.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
 namespace UniqueList;
 
 using List;
 using Exceptions;
 
+/// <summary>
+/// A List without repeating elements.
+/// </summary>
 public class UniqueList : List
 {
-    private void CheckThatElementIsNotInList(int value, int index)
-    {
-        int currentIndex = 0;
-        for (Vertex? current = tail; current is not null; current = current.next)
-        {
-            if (current.value == value && currentIndex != index)
-            {
-                throw new ElementIsAlreadyInListException();
-            }
-            ++currentIndex;
-        }
-    }
-
+    /// <summary>
+    /// Add an element to the end of the List.
+    /// </summary>
+    /// <param name="value">Value of the element to add.</param>
     public override void Add(int value)
     {
-        CheckThatElementIsNotInList(value, -1);
+        this.CheckThatElementIsNotInList(value, -1);
         base.Add(value);
     }
 
+    /// <summary>
+    /// Set value of the element on given position in the List to the specified value.
+    /// </summary>
+    /// <param name="value">Value to set for the element.</param>
+    /// <param name="index">Index of the element in the List.</param>
     public override void SetValue(int value, int index)
     {
-        CheckThatElementIsNotInList(value, index);
+        this.CheckThatElementIsNotInList(value, index);
         base.SetValue(value, index);
+    }
+
+    private void CheckThatElementIsNotInList(int value, int index)
+    {
+        int currentIndex = 0;
+        for (Vertex? current = this.Tail; current is not null; current = current.Next)
+        {
+            if (current.Value == value && currentIndex != index)
+            {
+                throw new ElementIsAlreadyInListException();
+            }
+
+            ++currentIndex;
+        }
     }
 }

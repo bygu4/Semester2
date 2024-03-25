@@ -1,3 +1,8 @@
+// <copyright file="UniqueListTest.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
 namespace UniqueList.Tests;
 
 using Exceptions;
@@ -5,6 +10,12 @@ using Exceptions;
 public class TestBase
 {
     public UniqueList testList;
+
+    [SetUp]
+    public void Setup()
+    {
+        testList = new UniqueList();
+    }
 }
 
 [TestFixture]
@@ -13,7 +24,6 @@ public class TestForEmptyList : TestBase
     [SetUp]
     public void EmptyListSetup()
     {
-        testList = new UniqueList();
     }
 
     [Test]
@@ -26,7 +36,7 @@ public class TestForEmptyList : TestBase
     [Test]
     public void TestForRemove_TryToRemoveFromEmptyList_ThrowException()
     {
-        Assert.Throws<ElementNotFoundException>(delegate { testList.Remove(10); });
+        Assert.Throws<ElementNotFoundException>(() => { testList.Remove(10); });
     }
 
     [Test]
@@ -53,7 +63,6 @@ public class TestForGeneralCase : TestBase
     [SetUp]
     public void GeneralSetup()
     {
-        testList = new UniqueList();
         AddElements([-543, 0, 100, -5, 67, 22, 3, -12, 9999, 555]);
     }
 
@@ -67,8 +76,8 @@ public class TestForGeneralCase : TestBase
     [Test]
     public void TestForAdd_TryToAddElementThatIsInList_ThrowException()
     {
-        Assert.Throws<ElementIsAlreadyInListException>(delegate { testList.Add(0); });
-        Assert.Throws<ElementIsAlreadyInListException>(delegate { testList.Add(67); });
+        Assert.Throws<ElementIsAlreadyInListException>(() => { testList.Add(0); });
+        Assert.Throws<ElementIsAlreadyInListException>(() => { testList.Add(67); });
     }
 
     [Test]
@@ -82,8 +91,8 @@ public class TestForGeneralCase : TestBase
     [Test]
     public void TestForRemove_TryToRemoveElementNotInList_ThrowException()
     {
-        Assert.Throws<ElementNotFoundException>(delegate { testList.Remove(8676767); });
-        Assert.Throws<ElementNotFoundException>(delegate { testList.Remove(-1); });
+        Assert.Throws<ElementNotFoundException>(() => { testList.Remove(8676767); });
+        Assert.Throws<ElementNotFoundException>(() => { testList.Remove(-1); });
     }
 
     [Test]
@@ -97,8 +106,8 @@ public class TestForGeneralCase : TestBase
     [Test]
     public void TestForGetValue_IndexOutOfRange_ThrowException()
     {
-        Assert.Throws<IndexOutOfRangeException>(delegate { testList.GetValue(-1); });
-        Assert.Throws<IndexOutOfRangeException>(delegate { testList.GetValue(10); });
+        Assert.Throws<IndexOutOfRangeException>(() => { testList.GetValue(-1); });
+        Assert.Throws<IndexOutOfRangeException>(() => { testList.GetValue(10); });
     }
 
     [Test]
@@ -120,14 +129,14 @@ public class TestForGeneralCase : TestBase
     [Test]
     public void TestForSetValue_IndexOutOfRange_ThrowException()
     {
-        Assert.Throws<IndexOutOfRangeException>(delegate { testList.SetValue(7777, -3); });
-        Assert.Throws<IndexOutOfRangeException>(delegate { testList.SetValue(455, 13); });
+        Assert.Throws<IndexOutOfRangeException>(() => { testList.SetValue(7777, -3); });
+        Assert.Throws<IndexOutOfRangeException>(() => { testList.SetValue(455, 13); });
     }
 
     [Test]
     public void TestForSetValue_ElementIsInList_ThrowException()
     {
-        Assert.Throws<ElementIsAlreadyInListException>(delegate { testList.SetValue(0, 0); });
-        Assert.Throws<ElementIsAlreadyInListException>(delegate { testList.SetValue(9999, 6); });
+        Assert.Throws<ElementIsAlreadyInListException>(() => { testList.SetValue(0, 0); });
+        Assert.Throws<ElementIsAlreadyInListException>(() => { testList.SetValue(9999, 6); });
     }
 }
