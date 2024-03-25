@@ -1,12 +1,18 @@
-﻿using LZWEncoder;
+﻿// <copyright file="Program.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
-if (args.Length != 2 || args[1] != "-c" && args[1] != "-u")
+using LZWEncoder;
+
+if (args.Length != 2 || (args[1] != "-c" && args[1] != "-u"))
 {
     Console.WriteLine("Incorrect format. Try: {path of the file} {-c | -u}\n" +
         "c - compress file\n" +
         "u - decompress file");
     return;
 }
+
 try
 {
     if (args[1] == "-c")

@@ -1,4 +1,9 @@
-﻿namespace LZWEncoder;
+﻿// <copyright file="Encoder.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace LZWEncoder;
 
 using Trie;
 using BurrowsWheeler;
@@ -7,103 +12,36 @@ using Utility;
 
 using System;
 
+/// <summary>
+/// Class implementing a file archiver.
+/// </summary>
 public static class Encoder
 {
-    private const int lengthOfEncoding = 16;
+    private const int LengthOfEncoding = 16;
 
     private enum Offsets
     {
         BWTPositionOffset = 12,
         NumberOfUniqueCharactersOffset = 8,
-        LengthOfEncodedDataOffset = 4
+        LengthOfEncodedDataOffset = 4,
     }
 
-    private class CompressionInfo
-    {
-        public bool lastByteCutOff;
-        public int BWTPosition;
-        public int numberOfUniqueCharacters;
-        public int lengthOfEncodedData;
-
-        public CompressionInfo()
-        {
-        }
-
-        public void Write(CodeWriter writer)
-        {
-            writer.LengthOfCode = 1;
-            writer.WriteCode(lastByteCutOff ? 1 : 0);
-            writer.EmptyBuffer();
-
-            writer.WriteNumber(BWTPosition);
-            writer.WriteNumber(numberOfUniqueCharacters);
-            writer.WriteNumber(lengthOfEncodedData);
-        }
-
-        public void Read(byte[] bytes)
-        {
-            lengthOfEncodedData = BitConverter.ToInt32(bytes, 
-                bytes.Length - (int)Offsets.LengthOfEncodedDataOffset);
-            numberOfUniqueCharacters = BitConverter.ToInt32(bytes,
-                bytes.Length - (int)Offsets.NumberOfUniqueCharactersOffset);
-            BWTPosition = BitConverter.ToInt32(bytes, bytes.Length - (int)Offsets.BWTPositionOffset);
-
-            if (lengthOfEncodedData < 0 || lengthOfEncoding < 0 || BWTPosition < 0)
-            {
-                throw new InvalidDataException("Invalid file format");
-            }
-        }
-
-        public void ReadLastByteCutOffInfo(CodeReader reader)
-        {
-            reader.LengthOfCode = 1;
-            lastByteCutOff = reader.ReadCode() == 1;
-        }
-    }
-
-    private static void WriteAndAddUniqueCharacters(CodeWriter writer, Trie<int> dictionary, string data)
-    {
-        foreach (char character in data)
-        {
-            if (dictionary.Add(character, dictionary.Size))
-            {
-                writer.WriteCode(character);
-            }
-        }
-    }
-
-    private static (string, long, CompressionInfo, CodeWriter, Trie<int>) Compress_Setup(string filePath)
-    {
-        FileStream inputStream = File.OpenRead(filePath);
-        string resultDirectory = Path.Join(Path.GetDirectoryName(filePath), "LZWCompression");
-        Directory.CreateDirectory(resultDirectory);
-        FileStream resultStream = File.OpenWrite(
-            Path.Join(resultDirectory, Path.GetFileName(filePath)) + ".zipped");
-
-        long inputFileLength = inputStream.Length;
-        byte[] inputBytes = Utility.GetBytes(inputStream);
-        CodeReader reader = new CodeReader(inputBytes, lengthOfEncoding);
-        string inputData = reader.GetString();
-
-        CompressionInfo info = new CompressionInfo();
-        info.lastByteCutOff = reader.LastByteCutOff;
-        info.lengthOfEncodedData = inputData.Length;
-        (inputData, info.BWTPosition) = BWT.Transform(inputData);
-
-        CodeWriter writer = new CodeWriter(resultStream, lengthOfEncoding);
-        Trie<int> dictionary = new Trie<int>();
-        WriteAndAddUniqueCharacters(writer, dictionary, inputData);
-        return (inputData, inputFileLength, info, writer, dictionary);
-    }
-
+    /// <summary>
+    /// Compress the file in the given path.
+    /// Compressed files are stored in the LZWCompression directory relatively
+    /// to the original file. The '.zipped' extension is added to the compressed file.
+    /// </summary>
+    /// <param name="filePath">The path of the file to compress.</param>
+    /// <returns>The compression ratio that is the length of the original file
+    /// divided by the length of compressed file.</returns>
     public static float Compress(string filePath)
     {
         var (inputData, inputFileLength, compressionInfo, writer, words) =
             Compress_Setup(filePath);
-        compressionInfo.numberOfUniqueCharacters = words.Size;
+        compressionInfo.NumberOfUniqueCharacters = words.Size;
 
         writer.LengthOfCode = Utility.GetLengthOfCode(words.Size);
-        string currentWord = "";
+        string currentWord = string.Empty;
         for (int i = 0; i < inputData.Length; ++i)
         {
             string next = inputData[i].ToString();
@@ -121,66 +59,39 @@ public static class Encoder
                 currentWord = next;
             }
         }
+
         if (words.Size > 0)
         {
             writer.WriteCode(words.Value(currentWord));
         }
-        compressionInfo.Write(writer);
 
+        compressionInfo.Write(writer);
         long resultFileLength = writer.GetLengthOfStream();
         writer.CloseStream();
         return (float)inputFileLength / resultFileLength;
     }
 
-    private static void ReadAndAddUniqueCharacters(CodeReader reader, 
-        Dictionary<int, string> dictionary, int numberOfUniqueCharacters)
-    {
-        for (int i = 0; i < numberOfUniqueCharacters; ++i)
-        {
-            char character = (char)reader.ReadCode();
-            dictionary.Add(dictionary.Count, character.ToString());
-        }
-        dictionary.TryAdd(0, "");
-    }
-
-    private static (CompressionInfo, CodeReader, Dictionary<int, string>) Decompress_Setup(string filePath)
-    {
-        if (Path.GetExtension(filePath) != ".zipped")
-        {
-            throw new InvalidDataException("Incorrect file extension. Expected: '.zipped'");
-        }
-        try
-        {
-            FileStream inputStream = File.OpenRead(filePath);
-            byte[] inputBytes = Utility.GetBytes(inputStream);
-            CompressionInfo info = new CompressionInfo();
-            info.Read(inputBytes);
-
-            CodeReader reader = new CodeReader(inputBytes, lengthOfEncoding);
-            Dictionary<int, string> dictionary = new Dictionary<int, string>();
-            ReadAndAddUniqueCharacters(reader, dictionary, info.numberOfUniqueCharacters);
-            return (info, reader, dictionary);
-        }
-        catch (ArgumentOutOfRangeException e)
-        {
-            throw new InvalidDataException("Invalid file format", e);
-        }
-    }
-
+    /// <summary>
+    /// Decompress the file with '.zipped' extension in the given path.
+    /// The decompressed file is stored in the same directory as the given one.
+    /// The '.zipped' extension is deleted after the decompression.
+    /// </summary>
+    /// <param name="filePath">The path of the file to decompress.</param>
+    /// <exception cref="InvalidDataException">The data in the
+    /// given file is invalid and unable to decompress.</exception>
     public static void Decompress(string filePath)
     {
-        var (compressionInfo, reader, words) = 
-            Decompress_Setup(filePath);
+        var (compressionInfo, reader, words) = Decompress_Setup(filePath);
 
         reader.LengthOfCode = Utility.GetLengthOfCode(words.Count);
         int currentCode = reader.ReadCode();
         try
         {
-            char[] encodedData = new char[compressionInfo.lengthOfEncodedData];
+            char[] encodedData = new char[compressionInfo.LengthOfEncodedData];
             int encodedDataIndex = 0;
             words[currentCode].CopyTo(encodedData);
             encodedDataIndex += words[currentCode].Length;
-            while (encodedDataIndex < compressionInfo.lengthOfEncodedData)
+            while (encodedDataIndex < compressionInfo.LengthOfEncodedData)
             {
                 reader.LengthOfCode = int.Max(
                     reader.LengthOfCode, Utility.GetLengthOfCode(words.Count + 1));
@@ -197,24 +108,144 @@ public static class Encoder
                     output = words[currentCode] + words[currentCode][0];
                     wordToAdd = output;
                 }
+
                 output.CopyTo(0, encodedData, encodedDataIndex, output.Length);
                 encodedDataIndex += output.Length;
                 words.Add(words.Count, wordToAdd);
                 currentCode = next;
             }
-            compressionInfo.ReadLastByteCutOffInfo(reader);
+
+            compressionInfo.ReadLengthOfLastCode(reader);
             string encodedString = new string(encodedData);
             string result = BWT.ReverseTransform(encodedString, compressionInfo.BWTPosition);
 
             FileStream resultStream = File.OpenWrite(
                 Path.Join(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)));
-            CodeWriter writer = new CodeWriter(resultStream, lengthOfEncoding);
-            writer.GetBytesAndWrite(result, compressionInfo.lastByteCutOff);
+            CodeWriter writer = new CodeWriter(resultStream, LengthOfEncoding);
+            writer.GetBytesAndWrite(result, compressionInfo.LengthOfLastCode);
             writer.CloseStream();
         }
         catch (Exception e) when (e is KeyNotFoundException || e is IndexOutOfRangeException)
         {
             throw new InvalidDataException("Invalid file format", e);
+        }
+    }
+
+    private static void WriteAndAddUniqueCharacters(CodeWriter writer, Trie<int> dictionary, string data)
+    {
+        foreach (char character in data)
+        {
+            if (dictionary.Add(character, dictionary.Size))
+            {
+                writer.WriteCode(character);
+            }
+        }
+    }
+
+    private static void ReadAndAddUniqueCharacters(
+        CodeReader reader, Dictionary<int, string> dictionary, int numberOfUniqueCharacters)
+    {
+        for (int i = 0; i < numberOfUniqueCharacters; ++i)
+        {
+            char character = (char)reader.ReadCode();
+            dictionary.Add(dictionary.Count, character.ToString());
+        }
+
+        dictionary.TryAdd(0, string.Empty);
+    }
+
+    private static (string, long, CompressionInfo, CodeWriter, Trie<int>) Compress_Setup(string filePath)
+    {
+        FileStream inputStream = File.OpenRead(filePath);
+        string resultDirectory = Path.Join(Path.GetDirectoryName(filePath), "LZWCompression");
+        Directory.CreateDirectory(resultDirectory);
+        FileStream resultStream = File.OpenWrite(
+            Path.Join(resultDirectory, Path.GetFileName(filePath)) + ".zipped");
+
+        long inputFileLength = inputStream.Length;
+        byte[] inputBytes = Utility.GetBytes(inputStream);
+        CodeReader reader = new CodeReader(inputBytes, LengthOfEncoding);
+        string inputData = reader.GetString();
+
+        CompressionInfo info = new CompressionInfo();
+        info.LengthOfLastCode = reader.LengthOfLastCode;
+        info.LengthOfEncodedData = inputData.Length;
+        (inputData, info.BWTPosition) = BWT.Transform(inputData);
+
+        CodeWriter writer = new CodeWriter(resultStream, LengthOfEncoding);
+        Trie<int> dictionary = new Trie<int>();
+        WriteAndAddUniqueCharacters(writer, dictionary, inputData);
+        return (inputData, inputFileLength, info, writer, dictionary);
+    }
+
+    private static (CompressionInfo, CodeReader, Dictionary<int, string>) Decompress_Setup(string filePath)
+    {
+        if (Path.GetExtension(filePath) != ".zipped")
+        {
+            throw new InvalidDataException("Incorrect file extension. Expected: '.zipped'");
+        }
+
+        try
+        {
+            FileStream inputStream = File.OpenRead(filePath);
+            byte[] inputBytes = Utility.GetBytes(inputStream);
+            CompressionInfo info = new CompressionInfo();
+            info.Read(inputBytes);
+
+            CodeReader reader = new CodeReader(inputBytes, LengthOfEncoding);
+            Dictionary<int, string> dictionary = new Dictionary<int, string>();
+            ReadAndAddUniqueCharacters(reader, dictionary, info.NumberOfUniqueCharacters);
+            return (info, reader, dictionary);
+        }
+        catch (ArgumentOutOfRangeException e)
+        {
+            throw new InvalidDataException("Invalid file format", e);
+        }
+    }
+
+    private class CompressionInfo
+    {
+        public CompressionInfo()
+        {
+        }
+
+        public int LengthOfLastCode { get; set; }
+
+        public int BWTPosition { get; set; }
+
+        public int NumberOfUniqueCharacters { get; set; }
+
+        public int LengthOfEncodedData { get; set; }
+
+        public void Write(CodeWriter writer)
+        {
+            writer.LengthOfCode = Utility.GetLengthOfCode(LengthOfEncoding + 1);
+            writer.WriteCode(this.LengthOfLastCode);
+            writer.EmptyBuffer();
+
+            writer.WriteNumber(this.BWTPosition);
+            writer.WriteNumber(this.NumberOfUniqueCharacters);
+            writer.WriteNumber(this.LengthOfEncodedData);
+        }
+
+        public void Read(byte[] bytes)
+        {
+            this.LengthOfEncodedData = BitConverter.ToInt32(
+                bytes, bytes.Length - (int)Offsets.LengthOfEncodedDataOffset);
+            this.NumberOfUniqueCharacters = BitConverter.ToInt32(
+                bytes, bytes.Length - (int)Offsets.NumberOfUniqueCharactersOffset);
+            this.BWTPosition = BitConverter.ToInt32(bytes, bytes.Length - (int)Offsets.BWTPositionOffset);
+
+            if (this.LengthOfEncodedData < 0 || this.NumberOfUniqueCharacters < 0 || this.BWTPosition < 0)
+            {
+                throw new InvalidDataException("Invalid file format");
+            }
+        }
+
+        public void ReadLengthOfLastCode(CodeReader reader)
+        {
+            reader.LengthOfCode = Utility.GetLengthOfCode(LengthOfEncoding + 1);
+            this.LengthOfLastCode = reader.ReadCode();
         }
     }
 }

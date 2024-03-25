@@ -1,86 +1,125 @@
-﻿namespace CodeIO;
+﻿// <copyright file="CodeWriter.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace CodeIO;
 
 using Utility;
 
+/// <summary>
+/// Class for writing codes of specific length to the file stream.
+/// </summary>
 public class CodeWriter
 {
     private FileStream stream;
     private int buffer;
     private int shift;
 
-    public int LengthOfCode { get; set; }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CodeWriter"/> class.
+    /// </summary>
+    /// <param name="stream">File stream to write codes to.</param>
+    /// <param name="lenghtOfCode">The bit length of codes to write.</param>
     public CodeWriter(FileStream stream, int lenghtOfCode)
     {
         this.stream = stream;
-        LengthOfCode = lenghtOfCode;
+        this.LengthOfCode = lenghtOfCode;
     }
 
-    private void WriteCurrentBuffer()
-    {
-        stream.WriteByte(Convert.ToByte(buffer));
-        buffer = 0;
-        shift = 0;
-    }
+    /// <summary>
+    /// Gets or sets the current bit length of codes to write.
+    /// </summary>
+    public int LengthOfCode { get; set; }
 
+    /// <summary>
+    /// Write the given integer code of current length to the file stream.
+    /// </summary>
+    /// <param name="code">Integer code to write.</param>
     public void WriteCode(int code)
     {
-        int numberOfUnwrittenBits = LengthOfCode;
+        int numberOfUnwrittenBits = this.LengthOfCode;
         while (numberOfUnwrittenBits > 0)
         {
-            int bitsToAdd = Utility.LeftBitShift(code, 
-                Utility.lengthOfByte - numberOfUnwrittenBits - shift);
-            int sum = buffer | bitsToAdd;
-            int addedBits = Utility.RightBitShift(sum - buffer, 
-                Utility.lengthOfByte - numberOfUnwrittenBits - shift);
-            buffer = sum;
-            shift += numberOfUnwrittenBits;
-            numberOfUnwrittenBits = shift - Utility.lengthOfByte;
+            int bitsToAdd = Utility.LeftBitShift(
+                code, Utility.LengthOfByte - numberOfUnwrittenBits - this.shift);
+            int sum = this.buffer | bitsToAdd;
+            int addedBits = Utility.RightBitShift(
+                sum - this.buffer, Utility.LengthOfByte - numberOfUnwrittenBits - this.shift);
+            this.buffer = sum;
+            this.shift += numberOfUnwrittenBits;
+            numberOfUnwrittenBits = this.shift - Utility.LengthOfByte;
             if (numberOfUnwrittenBits >= 0)
             {
-                WriteCurrentBuffer();
+                this.WriteCurrentBuffer();
             }
+
             code -= addedBits;
         }
     }
 
+    /// <summary>
+    /// If the current buffer is not empty, write it to the stream and set to null.
+    /// </summary>
     public void EmptyBuffer()
     {
-        if (shift > 0)
+        if (this.shift > 0)
         {
-            WriteCurrentBuffer();
+            this.WriteCurrentBuffer();
         }
     }
 
-    public void GetBytesAndWrite(string data, bool cutOffLastByte)
+    /// <summary>
+    /// Convert given string to integer codes and write to the file stream.
+    /// </summary>
+    /// <param name="data">String to convert to codes.</param>
+    /// <param name="lengthOfLastCode">The length of the last code to write.</param>
+    public void GetBytesAndWrite(string data, int lengthOfLastCode)
     {
         for (int i = 0; i < data.Length - 1; ++i)
         {
-            WriteCode(data[i]);
+            this.WriteCode(data[i]);
         }
+
         if (data.Length > 0)
         {
-            if (cutOffLastByte)
-            {
-                LengthOfCode = Utility.lengthOfByte - shift;
-            }
-            WriteCode(data[data.Length - 1]);
+            this.LengthOfCode = lengthOfLastCode;
+            this.WriteCode(data[^1]);
         }
-        EmptyBuffer();
+
+        this.EmptyBuffer();
     }
 
+    /// <summary>
+    /// Write an Int32 number to the file stream.
+    /// </summary>
+    /// <param name="value">A number to write.</param>
     public void WriteNumber(int value)
     {
-        stream.Write(BitConverter.GetBytes(value));
+        this.stream.Write(BitConverter.GetBytes(value));
     }
 
+    /// <summary>
+    /// Get a length of the file stream in bytes.
+    /// </summary>
+    /// <returns>The length of the stream in bytes.</returns>
     public long GetLengthOfStream()
     {
-        return stream.Length;
+        return this.stream.Length;
     }
 
+    /// <summary>
+    /// Close the file stream.
+    /// </summary>
     public void CloseStream()
     {
-        stream.Close();
+        this.stream.Close();
+    }
+
+    private void WriteCurrentBuffer()
+    {
+        this.stream.WriteByte(Convert.ToByte(this.buffer));
+        this.buffer = 0;
+        this.shift = 0;
     }
 }

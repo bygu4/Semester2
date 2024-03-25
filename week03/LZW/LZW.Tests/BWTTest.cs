@@ -1,3 +1,8 @@
+// <copyright file="BWTTest.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
 namespace LZW.Tests;
 
 using BurrowsWheeler;
@@ -12,7 +17,7 @@ public class BWTTest
     [Test]
     public void TestForTransformation_EmptyString_GetEmptyStringAndZero()
     {
-        Assert.That(BWT.Transform(""), Is.EqualTo(("", 0)));
+        Assert.That(BWT.Transform(string.Empty), Is.EqualTo((String.Empty, 0)));
     }
 
     [Test]
@@ -41,7 +46,7 @@ public class BWTTest
     [TestCase(23)]
     public void TestForReverseTransform_EmptyString_GetEmptyString(int position)
     {
-        Assert.That(BWT.ReverseTransform("", position), Is.EqualTo(""));
+        Assert.That(BWT.ReverseTransform(string.Empty, position), Is.EqualTo(String.Empty));
     }
 
     [Test]
@@ -62,7 +67,7 @@ public class BWTTest
     [TestCase(90)]
     public void TestForReverseTransform_IndexOutOfRange_ThrowException(int position)
     {
-        Assert.Throws<IndexOutOfRangeException>(delegate { BWT.ReverseTransform("abcdefg", position); });
+        Assert.Throws<IndexOutOfRangeException>(() => { BWT.ReverseTransform("abcdefg", position); });
     }
 
     [TestCase("ccccaaaabbbb", 0, "abcabcabcabc")]

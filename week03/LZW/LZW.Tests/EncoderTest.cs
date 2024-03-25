@@ -1,4 +1,9 @@
-﻿namespace LZW.Tests;
+﻿// <copyright file="EncoderTest.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace LZW.Tests;
 
 using LZWEncoder;
 using System;
@@ -71,14 +76,14 @@ class EncoderTest
     public void TestForEncoder_TryToCompressUnexistingFile_ThrowException()
     {
         Assert.Throws<FileNotFoundException>(
-            delegate { Encoder.Compress("ololo.txt"); });
+            () => { Encoder.Compress("ololo.txt"); });
     }
 
     [Test]
     public void TestForEncoder_TryToDecompressUnexistingFile_ThrowException()
     {
         Assert.Throws<FileNotFoundException>(
-            delegate { Encoder.Decompress("ololo.txt.zipped"); });
+            () => { Encoder.Decompress("ololo.txt.zipped"); });
     }
 
     [TestCase("Executable.exe")]
@@ -86,7 +91,7 @@ class EncoderTest
     public void TestForEncoder_TryToDecompressUnzippedFile_ThrowException(string fileName)
     {
         Assert.Throws<InvalidDataException>(
-            delegate { Encoder.Decompress(GetOriginalFilePath(fileName)); });
+            () => { Encoder.Decompress(GetOriginalFilePath(fileName)); });
     }
 
     [TestCase("EmptyFile.txt.zipped")]
@@ -94,7 +99,7 @@ class EncoderTest
     public void TestForEncoder_TryToDecompressInvalidData_ThrowException(string fileName)
     {
         Assert.Throws<InvalidDataException>(
-            delegate { Encoder.Decompress(GetOriginalFilePath(fileName)); });
+            () => { Encoder.Decompress(GetOriginalFilePath(fileName)); });
     }
 
     [Test, MaxTime(100)]

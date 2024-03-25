@@ -1,4 +1,9 @@
-﻿namespace LZW.Tests;
+﻿// <copyright file="TrieTest.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
+namespace LZW.Tests;
 
 using Trie;
 
@@ -26,7 +31,7 @@ public class TrieTest
     {
         for (int i = 0; i < keys.Length; ++i)
         {
-            Assert.Throws<KeyNotFoundException>(delegate { trie.Value(keys[i]); });
+            Assert.Throws<KeyNotFoundException>(() => { trie.Value(keys[i]); });
         }
     }
 
