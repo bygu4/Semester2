@@ -1,7 +1,6 @@
-﻿// Copyright 2024 Alexander Bugaev
-//
-// Use of this source code is governed by an MIT-style
-// license that can be found in the LICENSE file or at
-// https://opensource.org/licenses/MIT.
+﻿// <copyright file="Program.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
 
 Console.Write(string.Empty);
