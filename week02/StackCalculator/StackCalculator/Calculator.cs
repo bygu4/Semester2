@@ -14,21 +14,21 @@ using System;
 public static class Calculator
 {
     /// <summary>
-    /// Parses an ariphmetic expression in postfix form an calculates its value.
+    /// Parses an ariphmetic expression in postfix form and calculates its value.
     /// </summary>
     /// <param name="inputString">String to parse.</param>
+    /// <param name="stack">Stack to use.</param>
     /// <returns>The calculated value.</returns>
     /// <exception cref="InvalidDataException">Failed to parse an expression.</exception>
-    public static float Compute(string inputString)
+    public static float Compute(string inputString, IStack<float> stack)
     {
-        Stack<float> stack = new Stack<float>();
         foreach (string element in inputString.Split(' '))
         {
             int number = 0;
             bool elementIsNumber = int.TryParse(element, out number);
             if (elementIsNumber || element.Length == 0)
             {
-                stack.Push((float)number);
+                stack.Push(number);
             }
             else
             {
@@ -45,7 +45,13 @@ public static class Calculator
             }
         }
 
-        return stack.Pop();
+        float result = stack.Pop();
+        if (!stack.IsEmpty())
+        {
+            throw new InvalidDataException();
+        }
+
+        return result;
     }
 
     private static float Calculate(float value1, float value2, char operand)

@@ -15,13 +15,19 @@ public interface IStack<Type>
     /// Add a new element to the Stack.
     /// </summary>
     /// <param name="value">Value to add.</param>
-    void Push(Type? value);
+    public void Push(Type? value);
 
     /// <summary>
     /// Remove the last added element from the Stack and get its value.
     /// </summary>
     /// <returns>The value of removed element.</returns>
-    Type? Pop();
+    public Type? Pop();
+
+    /// <summary>
+    /// Check if the Stack is empty.
+    /// </summary>
+    /// <returns>True if the Stack is empty, otherwise false.</returns>
+    public bool IsEmpty();
 }
 
 /// <summary>
@@ -64,6 +70,15 @@ public class ListStack<Type> : IStack<Type>
         Type? output = this.head.Value;
         this.head = this.head.Next;
         return output;
+    }
+
+    /// <summary>
+    /// Check if the Stack is empty.
+    /// </summary>
+    /// <returns>True if the Stack is empty, otherwise false.</returns>
+    public bool IsEmpty()
+    {
+        return this.head is null;
     }
 
     private class Element
@@ -134,6 +149,15 @@ public class ArrayStack<Type> : IStack<Type>
         }
 
         return value;
+    }
+
+    /// <summary>
+    /// Check if the Stack is empty.
+    /// </summary>
+    /// <returns>True if the Stack is empty, otherwise false.</returns>
+    public bool IsEmpty()
+    {
+        return this.count == 0;
     }
 
     private void Resize(int size)
