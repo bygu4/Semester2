@@ -27,7 +27,7 @@ public static class Encoder
     }
 
     /// <summary>
-    /// Compress the file in the given path.
+    /// Compress the file at the given path.
     /// Compressed files are stored in the LZWCompression directory relatively
     /// to the original file. The '.zipped' extension is added to the compressed file.
     /// </summary>
@@ -72,7 +72,7 @@ public static class Encoder
     }
 
     /// <summary>
-    /// Decompress the file with '.zipped' extension in the given path.
+    /// Decompress the file with '.zipped' extension at the given path.
     /// The decompressed file is stored in the same directory as the given one.
     /// The '.zipped' extension is deleted after the decompression.
     /// </summary>
@@ -115,14 +115,15 @@ public static class Encoder
                 currentCode = next;
             }
 
-            compressionInfo.ReadLengthOfLastCode(reader);
+            compressionInfo.ReadLastByteTrimmedInfo(reader);
             string encodedString = new string(encodedData);
             string result = BWT.ReverseTransform(encodedString, compressionInfo.BWTPosition);
 
             FileStream resultStream = File.OpenWrite(
                 Path.Join(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)));
             CodeWriter writer = new CodeWriter(resultStream, LengthOfEncoding);
-            writer.GetBytesAndWrite(result, compressionInfo.LengthOfLastCode);
+            int lengthOfLastCode = compressionInfo.LastByteTrimmed ? LengthOfEncoding / 2 : LengthOfEncoding;
+            writer.GetBytesAndWrite(result, lengthOfLastCode);
             writer.CloseStream();
         }
         catch (Exception e) when (e is KeyNotFoundException || e is IndexOutOfRangeException)
@@ -168,7 +169,7 @@ public static class Encoder
         string inputData = reader.GetString();
 
         CompressionInfo info = new CompressionInfo();
-        info.LengthOfLastCode = reader.LengthOfLastCode;
+        info.LastByteTrimmed = reader.LengthOfLastCode % LengthOfEncoding != 0;
         info.LengthOfEncodedData = inputData.Length;
         (inputData, info.BWTPosition) = BWT.Transform(inputData);
 
@@ -209,7 +210,7 @@ public static class Encoder
         {
         }
 
-        public int LengthOfLastCode { get; set; }
+        public bool LastByteTrimmed { get; set; }
 
         public int BWTPosition { get; set; }
 
@@ -219,8 +220,8 @@ public static class Encoder
 
         public void Write(CodeWriter writer)
         {
-            writer.LengthOfCode = Utility.GetLengthOfCode(LengthOfEncoding + 1);
-            writer.WriteCode(this.LengthOfLastCode);
+            writer.LengthOfCode = 1;
+            writer.WriteCode(this.LastByteTrimmed ? 1 : 0);
             writer.EmptyBuffer();
 
             writer.WriteNumber(this.BWTPosition);
@@ -242,10 +243,10 @@ public static class Encoder
             }
         }
 
-        public void ReadLengthOfLastCode(CodeReader reader)
+        public void ReadLastByteTrimmedInfo(CodeReader reader)
         {
-            reader.LengthOfCode = Utility.GetLengthOfCode(LengthOfEncoding + 1);
-            this.LengthOfLastCode = reader.ReadCode();
+            reader.LengthOfCode = 1;
+            this.LastByteTrimmed = reader.ReadCode() == 1;
         }
     }
 }
