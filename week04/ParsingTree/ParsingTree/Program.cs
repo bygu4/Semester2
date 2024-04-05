@@ -7,7 +7,7 @@ using Parsing;
 
 if (args.Length != 1)
 {
-    Console.WriteLine("Missing argument: path of the file.");
+    Console.WriteLine("Incorrect arguments. Expected: { path of the file }.");
 }
 
 try

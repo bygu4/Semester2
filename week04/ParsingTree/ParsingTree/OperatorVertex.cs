@@ -1,4 +1,4 @@
-// <copyright file="Vertices.cs" company="SPBU">
+// <copyright file="OperatorVertex.cs" company="SPBU">
 // Copyright (c) Alexander Bugaev 2024. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
@@ -7,74 +7,6 @@ namespace Vertices;
 
 using Operations;
 using System;
-
-/// <summary>
-/// The vertex of Parsing Tree.
-/// Can be either an operand or an operator.
-/// Supports calculating its value and printing the expression it represents to the console.
-/// </summary>
-public interface IVertex
-{
-    /// <summary>
-    /// Calculate the value of vertex.
-    /// </summary>
-    /// <returns>The calculated value.</returns>
-    public float Evaluate();
-
-    /// <summary>
-    /// Print the expression of the vertex to the console.
-    /// </summary>
-    public void PrintToConsole();
-
-    /// <summary>
-    /// Get the expression represented by the vertex.
-    /// </summary>
-    /// <returns>The expression in the string form.</returns>
-    public string GetExpression();
-}
-
-/// <summary>
-/// Implementation of the operand vertex of Parsing Tree.
-/// </summary>
-public class OperandVertex : IVertex
-{
-    private int value;
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="OperandVertex"/> class.
-    /// </summary>
-    /// <param name="value">Value of the operand.</param>
-    public OperandVertex(int value)
-    {
-        this.value = value;
-    }
-
-    /// <summary>
-    /// Get the value of the operand.
-    /// </summary>
-    /// <returns>The value of the operand.</returns>
-    public float Evaluate()
-    {
-        return this.value;
-    }
-
-    /// <summary>
-    /// Print the operand to the console.
-    /// </summary>
-    public void PrintToConsole()
-    {
-        Console.Write(this.value);
-    }
-
-    /// <summary>
-    /// Get the operand in a string form.
-    /// </summary>
-    /// <returns>The operand in a string form.</returns>
-    public string GetExpression()
-    {
-        return $"{this.value}";
-    }
-}
 
 /// <summary>
 /// Implementation of the operator vertex of Parsing Tree.

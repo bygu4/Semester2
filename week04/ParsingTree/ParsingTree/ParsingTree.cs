@@ -65,11 +65,8 @@ public class ParsingTree
 
     private string GetString(string filePath)
     {
-        FileStream stream = File.OpenRead(filePath);
-        StreamReader reader = new StreamReader(stream);
-        string inputString = reader.ReadToEnd();
-        reader.Dispose();
-        return inputString;
+        using StreamReader reader = new StreamReader(filePath);
+        return reader.ReadToEnd();
     }
 
     private Operations GetOperation(string element)
