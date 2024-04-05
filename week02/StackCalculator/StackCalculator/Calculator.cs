@@ -38,9 +38,9 @@ public static class Calculator
                     float value1 = stack.Pop();
                     stack.Push(Calculate(value1, value2, element[0]));
                 }
-                catch (InvalidOperationException)
+                catch (InvalidOperationException e)
                 {
-                    throw new InvalidDataException();
+                    throw new InvalidDataException("Incorrect expression", e);
                 }
             }
         }
@@ -48,7 +48,7 @@ public static class Calculator
         float result = stack.Pop();
         if (!stack.IsEmpty())
         {
-            throw new InvalidDataException();
+            throw new InvalidDataException("Incorrect expression");
         }
 
         return result;
@@ -67,12 +67,12 @@ public static class Calculator
             case '/':
                 if (Math.Abs(value2) < float.Epsilon)
                 {
-                    throw new DivideByZeroException();
+                    throw new DivideByZeroException("Division by zero");
                 }
 
                 return value1 / value2;
             default:
-                throw new InvalidDataException();
+                throw new InvalidDataException("Incorrect expression");
         }
     }
 }

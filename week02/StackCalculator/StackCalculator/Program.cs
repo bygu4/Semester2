@@ -7,7 +7,7 @@ using Stack;
 using StackCalculator;
 
 Console.WriteLine("----- Stack calculator -----");
-Console.WriteLine("\nEnter an expression in postfix form: ");
+Console.Write("\nEnter an expression in postfix form: ");
 try
 {
     string? inputString = Console.ReadLine();
@@ -17,9 +17,9 @@ try
     }
 
     ListStack<float> stack = new ListStack<float>();
-    Console.WriteLine($"\nResult: {Calculator.Compute(inputString, stack)}");
+    Console.WriteLine($"\nResult: {Calculator.Compute(inputString, stack)}\n");
 }
-catch (Exception)
+catch (Exception e) when (e is InvalidDataException || e is DivideByZeroException)
 {
-    Console.WriteLine("\nAn error occured");
+    Console.WriteLine($"\nError: {e.Message}\n");
 }
