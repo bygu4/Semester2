@@ -87,9 +87,9 @@ public class Vector
                 return value1 - value2;
             case Operations.Multiplication:
                 return value1 * value2;
+            default:
+                throw new ArgumentException("Unknown operation");
         }
-
-        return 0;
     }
 
     private int[] ApplyOperation(int[] array1, int[] array2, Operations operation)
@@ -118,9 +118,9 @@ public class Vector
 
     private class Element
     {
-        public int Value { get; set; }
+        public int Value { get; }
 
-        public int Index { get; set; }
+        public int Index { get; }
 
         public Element(int value, int index)
         {
