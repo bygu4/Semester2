@@ -4,22 +4,21 @@ using Operations;
 
 public class Vector
 {
-    private List<(int, int)> elements;
+    private List<Element> elements;
     private int length;
 
     public Vector(IList<int> input)
     {
-        this.elements = new List<(int, int)>();
-        int i = 0;
-        for (; i < input.Count; ++i)
+        this.elements = new List<Element>();
+        for (int i = 0; i < input.Count; ++i)
         {
             if (input[i] != 0)
             {
-                this.elements.Add((input[i], i));
+                this.elements.Add(new Element(input[i], i));
             }
         }
 
-        this.length = i;
+        this.length = input.Count;
     }
 
     public bool IsNull {
@@ -31,12 +30,12 @@ public class Vector
 
     public Vector Add(Vector vector)
     {
-        return GetVectorArraysAndApplyOperation(this, vector, Operations.Addition);
+        return this.GetVectorArraysAndApplyOperation(this, vector, Operations.Addition);
     }
 
     public Vector Substract(Vector vector)
     {
-        return GetVectorArraysAndApplyOperation(this, vector, Operations.Substraction);
+        return this.GetVectorArraysAndApplyOperation(this, vector, Operations.Substraction);
     }
 
     public int GetScalarProduct(Vector vector)
@@ -48,7 +47,14 @@ public class Vector
 
         int[] array1 = this.ToArray();
         int[] array2 = vector.ToArray();
-        return GetScalarProduct(array1, array2);
+
+        int product = 0;
+        for (int i = 0; i < array1.Length; ++i)
+        {
+            product += array1[i] * array2[i];
+        }
+
+        return product;
     }
 
     public int[] ToArray()
@@ -58,13 +64,13 @@ public class Vector
         for (int i = 0 ; i < this.elements.Count; ++i)
         {
             var element = this.elements[i];
-            while (index < element.Item2)
+            while (index < element.Index)
             {
                 array[index] = 0;
                 ++index;
             }
 
-            array[index] = element.Item1;
+            array[index] = element.Value;
             ++index;
         }
 
@@ -88,10 +94,10 @@ public class Vector
 
     private int[] ApplyOperation(int[] array1, int[] array2, Operations operation)
     {
-        int[] result = new int[array2.Length];
+        int[] result = new int[array1.Length];
         for (int i = 0; i < array1.Length; ++i)
         {
-            result[i] = GetResultOfOperation(array1[i], array2[i], operation);
+            result[i] = this.GetResultOfOperation(array1[i], array2[i], operation);
         }
 
         return result;
@@ -107,17 +113,19 @@ public class Vector
 
         int[] array1 = vector1.ToArray();
         int[] array2 = vector2.ToArray();
-        return new Vector(ApplyOperation(array1, array2, operation));
+        return new Vector(this.ApplyOperation(array1, array2, operation));
     }
 
-    private int GetScalarProduct(int[] array1, int[] array2)
+    private class Element
     {
-        int product = 0;
-        for (int i = 0; i < array1.Length; ++i)
-        {
-            product += array1[i] * array2[i];
-        }
+        public int Value { get; set; }
 
-        return product;
+        public int Index { get; set; }
+
+        public Element(int value, int index)
+        {
+            this.Value = value;
+            this.Index = index;
+        }
     }
 }
