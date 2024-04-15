@@ -1,8 +1,8 @@
 ﻿namespace CalculatorGUI
 {
-    internal class ButtonEventArgs : EventArgs
+    public class CustomButtonClickArgs : EventArgs
     {
-        public ButtonEventArgs(int value)
+        public CustomButtonClickArgs(int value)
         {
             this.Value = value;
         }

@@ -1,8 +1,9 @@
 ﻿namespace Calculator;
 
 using Operations;
+using System.ComponentModel;
 
-public class Calculator
+public class Calculator : INotifyPropertyChanged
 {
     private float firstOperand;
     private Operations? operation;
@@ -12,23 +13,58 @@ public class Calculator
     private int numberOfDigitsInFractionalPart;
     private bool clearNextInput;
 
+    private string expression;
+    private float result;
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
     public Calculator()
     {
-        this.Equation = string.Empty;
+        this.expression = string.Empty;
     }
 
-    public string Equation { get; private set; }
+    public string Expression
+    {
+        get
+        {
+            return this.expression;
+        }
 
-    public float Result { get; private set; }
+        private set
+        {
+            if (this.expression != value)
+            {
+                this.expression = value;
+                this.NotifyPropertyChanged(nameof(this.Expression));
+            }
+        }
+    }
 
-    public void AddDigit(int number)
+    public float Result
+    {
+        get
+        {
+            return this.result;
+        }
+
+        private set
+        {
+            if (this.result != value)
+            {
+                this.result = value;
+                this.NotifyPropertyChanged(nameof(this.Result));
+            }
+        }
+    }
+
+    public void AddDigitToOperand(int number)
     {
         if (this.clearNextInput)
         {
             this.Clear();
         }
 
-        this.AddDigitToBuffer(number);
+        this.AddToCurrentOperand(number);
     }
 
     public void SetOperation(char operation)
@@ -56,7 +92,7 @@ public class Calculator
                 throw new ArgumentException("Unknown operation");
         }
 
-        this.Equation = $"{this.firstOperand} {(char)this.operation}";
+        this.Expression = $"{this.firstOperand} {(char)this.operation}";
         this.EmptyBuffer();
     }
 
@@ -64,11 +100,11 @@ public class Calculator
     {
         if (this.operation is null)
         {
-            this.Equation = $"{this.firstOperand} =";
+            this.Expression = $"{this.firstOperand} =";
         }
         else
         {
-            this.Equation = $"{this.firstOperand} {(char)this.operation} {this.secondOperand} =";
+            this.Expression = $"{this.firstOperand} {(char)this.operation} {this.secondOperand} =";
         }
 
         this.Result = this.GetResultOfOperation();
@@ -76,44 +112,14 @@ public class Calculator
         this.clearNextInput = true;
     }
 
-    public void ToNegative()
-    {
-        this.Buffer = -this.Buffer;
-    }
-
-    public void ToInverse()
-    {
-        this.Buffer = 1f / this.Buffer;
-    }
-
-    public void ToSquared()
-    {
-        this.Buffer = (float)Math.Pow(this.Buffer, 2);
-    }
-
-    public void ToSquareRoot()
-    {
-        this.Buffer = (float)Math.Sqrt(this.Buffer);
-    }
-
-    public void ToFloat()
-    {
-        if (this.numberOfDigitsInFractionalPart == 0)
-        {
-            ++this.numberOfDigitsInFractionalPart;
-        }
-    }
-
-
     public void Clear()
     {
         this.firstOperand = 0;
         this.operation = null;
         this.secondOperand = 0;
 
-        this.Equation = string.Empty;
+        this.Expression = string.Empty;
         this.Result = 0;
-        this.clearNextInput = false;
 
         this.EmptyBuffer();
     }
@@ -130,16 +136,50 @@ public class Calculator
         {
             --this.numberOfDigitsInFractionalPart;
             float numberAfterDeletion = (float)Math.Floor(
-                this.Buffer * (float)Math.Pow(10, this.numberOfDigitsInFractionalPart));
-            this.Buffer = numberAfterDeletion / (float)Math.Pow(10, this.numberOfDigitsInFractionalPart);
+                this.CurrentOperand * (float)Math.Pow(10, this.numberOfDigitsInFractionalPart));
+            this.CurrentOperand = numberAfterDeletion / (float)Math.Pow(10, this.numberOfDigitsInFractionalPart);
         }
         else
         {
-            this.Buffer /= 10;
+            this.CurrentOperand /= 10;
         }
     }
 
-    private float Buffer
+    public void OperandToNegative()
+    {
+        this.CurrentOperand = -this.CurrentOperand;
+    }
+
+    public void OperandToInverse()
+    {
+        this.CurrentOperand = 1f / this.CurrentOperand;
+    }
+
+    public void OperandToSquare()
+    {
+        this.CurrentOperand = (float)Math.Pow(this.CurrentOperand, 2);
+    }
+
+    public void OperandToSquareRoot()
+    {
+        this.CurrentOperand = (float)Math.Sqrt(this.CurrentOperand);
+    }
+
+    public void OperandToFloat()
+    {
+        if (this.numberOfDigitsInFractionalPart == 0)
+        {
+            ++this.numberOfDigitsInFractionalPart;
+        }
+    }
+
+    public void OperandToPercents()
+    {
+        this.CurrentOperand /= 100;
+        this.numberOfDigitsInFractionalPart += 2;
+    }
+
+    private float CurrentOperand
     {
         get
         {
@@ -153,43 +193,44 @@ public class Calculator
         }
     }
 
+    private void EmptyBuffer()
+    {
+        this.buffer = 0;
+        this.numberOfDigitsInFractionalPart = 0;
+        this.clearNextInput = false;
+    }
+
     private void SetBufferToOperand()
     {
         if (this.operation is null)
         {
-            this.firstOperand = this.Buffer;
+            this.firstOperand = this.CurrentOperand;
         }
         else
         {
-            this.secondOperand = this.Buffer;
+            this.secondOperand = this.CurrentOperand;
         }
 
-        this.Result = this.Buffer;
+        this.Result = this.CurrentOperand;
     }
 
-    private void AddDigitToBuffer(int number)
+    private void AddToCurrentOperand(int number)
     {
         if (number < 0 || number > 9)
         {
             throw new ArgumentException("Argument must be between 0 and 9");
         }
 
-        number = (this.Buffer < 0) ? -number : number;
+        number = (this.CurrentOperand < 0) ? -number : number;
         if (this.numberOfDigitsInFractionalPart == 0)
         {
-            this.Buffer = this.Buffer * 10 + number;
+            this.CurrentOperand = this.CurrentOperand * 10 + number;
         }
         else
         {
-            this.Buffer += number / (float)Math.Pow(10, this.numberOfDigitsInFractionalPart);
+            this.CurrentOperand += number / (float)Math.Pow(10, this.numberOfDigitsInFractionalPart);
             ++this.numberOfDigitsInFractionalPart;
         }
-    }
-
-    private void EmptyBuffer()
-    {
-        this.buffer = 0;
-        this.numberOfDigitsInFractionalPart = 0;
     }
 
     private float GetResultOfOperation()
@@ -207,5 +248,10 @@ public class Calculator
             default:
                 return this.firstOperand;
         }
+    }
+
+    private void NotifyPropertyChanged(string propertyName)
+    {
+        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

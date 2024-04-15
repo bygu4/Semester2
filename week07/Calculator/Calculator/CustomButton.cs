@@ -1,16 +1,38 @@
-﻿namespace CalculatorGUI
-{
-    internal class CustomButton : Button
-    {
-        new public event EventHandler<ButtonEventArgs> Click;
+﻿using System.ComponentModel;
 
-        public CustomButton(int digit)
-            : base()
+namespace CalculatorGUI
+{
+    [DefaultEvent("Click")]
+    public partial class CustomButton : UserControl
+    {
+        new public event EventHandler<CustomButtonClickArgs>? Click;
+
+        public CustomButton()
         {
-            this.Digit = digit;
-            this.Click += delegate { };
+            InitializeComponent();
         }
 
-        public int Digit { get; private set; }
+        public int Value { get; set; }
+
+        public string Label
+        {
+            get => this.Button.Text;
+            set => this.Button.Text = value;
+        }
+
+        public Color ButtonColor
+        {
+            get => this.Button.BackColor;
+            set => this.Button.BackColor = value;
+        }
+
+        private void Button_Click(object sender, EventArgs e)
+        {
+            var handler = this.Click;
+            if (handler != null)
+            {
+                handler(this, new CustomButtonClickArgs(this.Value));
+            }
+        }
     }
 }
