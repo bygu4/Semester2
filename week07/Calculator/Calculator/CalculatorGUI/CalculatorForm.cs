@@ -1,14 +1,25 @@
+// <copyright file="CalculatorForm.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
 namespace CalculatorGUI
 {
     using Calculator;
 
+    /// <summary>
+    /// The main form of the application.
+    /// </summary>
     public partial class CalculatorForm : Form
     {
         private Calculator calculator;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CalculatorForm"/> class.
+        /// </summary>
         public CalculatorForm()
         {
-            InitializeComponent();
+            this.InitializeComponent();
             this.calculator = new Calculator();
             this.Bind();
         }
@@ -16,11 +27,18 @@ namespace CalculatorGUI
         private void Bind()
         {
             this.Expression_Box.DataBindings.Add(
-                "Text", this.calculator, nameof(Calculator.Expression),
-                false, DataSourceUpdateMode.OnPropertyChanged);
+                "Text",
+                this.calculator,
+                nameof(Calculator.Expression),
+                false,
+                DataSourceUpdateMode.OnPropertyChanged);
+
             this.Result_Box.DataBindings.Add(
-                "Text", this.calculator, nameof(Calculator.Result),
-                false, DataSourceUpdateMode.OnPropertyChanged);
+                "Text",
+                this.calculator,
+                nameof(Calculator.Result),
+                false,
+                DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void Clear_Button_Click(object sender, CustomButtonClickArgs e)
