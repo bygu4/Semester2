@@ -28,11 +28,7 @@ namespace CalculatorGUI
 
         private void Button_Click(object sender, EventArgs e)
         {
-            var handler = this.Click;
-            if (handler != null)
-            {
-                handler(this, new CustomButtonClickArgs(this.Value));
-            }
+            this.Click?.Invoke(this, new CustomButtonClickArgs(this.Value));
         }
     }
 }

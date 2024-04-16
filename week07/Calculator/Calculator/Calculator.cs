@@ -5,253 +5,205 @@ using System.ComponentModel;
 
 public class Calculator : INotifyPropertyChanged
 {
-    private float firstOperand;
-    private Operations? operation;
-    private float secondOperand;
+    private Operand firstOperand;
+    private Operation? operation;
+    private Operand secondOperand;
 
-    private float buffer;
-    private int numberOfDigitsInFractionalPart;
-    private bool clearNextInput;
+    private bool lastActionIsCalculate;
 
     private string expression;
-    private float result;
+    private string result;
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public Calculator()
     {
+        this.firstOperand = new Operand();
+        this.secondOperand = new Operand();
+        this.BindOperandsWithResultProperty();
+
         this.expression = string.Empty;
+        this.result = Operand.Default;
     }
 
     public string Expression
     {
-        get
-        {
-            return this.expression;
-        }
+        get => this.expression;
 
-        private set
-        {
-            if (this.expression != value)
-            {
-                this.expression = value;
-                this.NotifyPropertyChanged(nameof(this.Expression));
-            }
-        }
+        private set => this.ChangePropertyAndNotify(
+            ref this.expression, value, nameof(this.Expression));
     }
 
-    public float Result
+    public string Result
     {
-        get
-        {
-            return this.result;
-        }
+        get => this.result;
 
-        private set
-        {
-            if (this.result != value)
-            {
-                this.result = value;
-                this.NotifyPropertyChanged(nameof(this.Result));
-            }
-        }
-    }
-
-    public void AddDigitToOperand(int number)
-    {
-        if (this.clearNextInput)
-        {
-            this.Clear();
-        }
-
-        this.AddToCurrentOperand(number);
-    }
-
-    public void SetOperation(char operation)
-    {
-        if (this.operation is not null)
-        {
-            this.Calculate();
-        }
-
-        switch (operation)
-        {
-            case '+':
-                this.operation = Operations.Addition;
-                break;
-            case '-':
-                this.operation = Operations.Substraction;
-                break;
-            case '*':
-                this.operation = Operations.Multiplication;
-                break;
-            case '/':
-                this.operation = Operations.Division;
-                break;
-            default:
-                throw new ArgumentException("Unknown operation");
-        }
-
-        this.Expression = $"{this.firstOperand} {(char)this.operation}";
-        this.EmptyBuffer();
-    }
-
-    public void Calculate()
-    {
-        if (this.operation is null)
-        {
-            this.Expression = $"{this.firstOperand} =";
-        }
-        else
-        {
-            this.Expression = $"{this.firstOperand} {(char)this.operation} {this.secondOperand} =";
-        }
-
-        this.Result = this.GetResultOfOperation();
-        this.firstOperand = this.Result;
-        this.clearNextInput = true;
+        private set => this.ChangePropertyAndNotify(
+            ref this.result, value, nameof(this.Result));
     }
 
     public void Clear()
     {
-        this.firstOperand = 0;
+        this.firstOperand.SetToDefault();
         this.operation = null;
-        this.secondOperand = 0;
+        this.secondOperand.SetToDefault();
 
+        this.lastActionIsCalculate = false;
         this.Expression = string.Empty;
-        this.Result = 0;
-
-        this.EmptyBuffer();
     }
 
-    public void ClearOperand()
+    public void Calculate()
     {
-        this.EmptyBuffer();
-        this.Result = 0;
+        var result = this.GetResultOfOperation();
+        this.SetPropertiesAfterCalculations(result);
     }
 
-    public void DeleteLastDigit()
+    public void SetOperationBySign(char sign)
     {
-        if (this.numberOfDigitsInFractionalPart > 0)
+        if (this.secondOperand.Value != 0 && !this.lastActionIsCalculate)
         {
-            --this.numberOfDigitsInFractionalPart;
-            float numberAfterDeletion = (float)Math.Floor(
-                this.CurrentOperand * (float)Math.Pow(10, this.numberOfDigitsInFractionalPart));
-            this.CurrentOperand = numberAfterDeletion / (float)Math.Pow(10, this.numberOfDigitsInFractionalPart);
-        }
-        else
-        {
-            this.CurrentOperand /= 10;
-        }
-    }
-
-    public void OperandToNegative()
-    {
-        this.CurrentOperand = -this.CurrentOperand;
-    }
-
-    public void OperandToInverse()
-    {
-        this.CurrentOperand = 1f / this.CurrentOperand;
-    }
-
-    public void OperandToSquare()
-    {
-        this.CurrentOperand = (float)Math.Pow(this.CurrentOperand, 2);
-    }
-
-    public void OperandToSquareRoot()
-    {
-        this.CurrentOperand = (float)Math.Sqrt(this.CurrentOperand);
-    }
-
-    public void OperandToFloat()
-    {
-        if (this.numberOfDigitsInFractionalPart == 0)
-        {
-            ++this.numberOfDigitsInFractionalPart;
-        }
-    }
-
-    public void OperandToPercents()
-    {
-        this.CurrentOperand /= 100;
-        this.numberOfDigitsInFractionalPart += 2;
-    }
-
-    private float CurrentOperand
-    {
-        get
-        {
-            return this.buffer;
+            this.Calculate();
         }
 
-        set
-        {
-            this.buffer = value;
-            this.SetBufferToOperand();
-        }
+        this.operation = Operations.GetOperationBySign(sign);
+        this.SetPropertiesAfterOperationSetting(
+            $"{this.firstOperand.Representation} {sign}");
     }
 
-    private void EmptyBuffer()
+    public void Operand_Clear()
     {
-        this.buffer = 0;
-        this.numberOfDigitsInFractionalPart = 0;
-        this.clearNextInput = false;
+        this.ClearAfterCalculations();
+        this.CurrentOperand.SetToDefault();
     }
 
-    private void SetBufferToOperand()
+    public void Operand_AddDigit(char digit)
+    {
+        this.ClearAfterCalculations();
+        this.CurrentOperand.AddDigit(digit);
+    }
+
+    public void Operand_DeleteLastDigit()
+    {
+        this.ClearAfterCalculations();
+        this.CurrentOperand.DeleteLastDigit();
+    }
+
+    public void Operand_ToNegative()
+    {
+        this.ClearAfterCalculations();
+        this.CurrentOperand.ToNegative();
+    }
+
+    public void Operand_ToFloat()
+    {
+        this.ClearAfterCalculations();
+        this.CurrentOperand.ToFloat();
+    }
+
+    public void Operand_InPercents()
+    {
+        this.ResetOperationAfterCalculations();
+        this.CurrentOperand.InPercents();
+    }
+
+    public void Operand_Square()
+    {
+        this.ResetOperationAfterCalculations();
+        this.CurrentOperand.Square();
+    }
+
+    public void Operand_SquareRoot()
+    {
+        this.ResetOperationAfterCalculations();
+        this.CurrentOperand.SquareRoot();
+    }
+
+    public void Operand_Inverse()
+    {
+        this.ResetOperationAfterCalculations();
+        this.CurrentOperand.Inverse();
+    }
+
+    private Operand CurrentOperand
+    {
+        get => (this.operation is null) ? this.firstOperand : this.secondOperand;
+    }
+
+    private (string, float) GetResultOfOperation()
     {
         if (this.operation is null)
         {
-            this.firstOperand = this.CurrentOperand;
+            return ($"{this.firstOperand.Representation} =", this.firstOperand.Value);
         }
         else
         {
-            this.secondOperand = this.CurrentOperand;
-        }
+            string expression = this.operation.GetExpression(
+                this.firstOperand.Representation, this.secondOperand.Representation);
+            float result = this.operation.GetResult(
+                this.firstOperand.Value, this.secondOperand.Value);
 
-        this.Result = this.CurrentOperand;
-    }
-
-    private void AddToCurrentOperand(int number)
-    {
-        if (number < 0 || number > 9)
-        {
-            throw new ArgumentException("Argument must be between 0 and 9");
-        }
-
-        number = (this.CurrentOperand < 0) ? -number : number;
-        if (this.numberOfDigitsInFractionalPart == 0)
-        {
-            this.CurrentOperand = this.CurrentOperand * 10 + number;
-        }
-        else
-        {
-            this.CurrentOperand += number / (float)Math.Pow(10, this.numberOfDigitsInFractionalPart);
-            ++this.numberOfDigitsInFractionalPart;
+            return (expression, result);
         }
     }
 
-    private float GetResultOfOperation()
+    private void SetPropertiesAfterCalculations((string, float) propertiesToSet)
     {
-        switch (this.operation)
+        this.Expression = propertiesToSet.Item1;
+        this.firstOperand.SetByValue(propertiesToSet.Item2);
+        this.lastActionIsCalculate = true;
+    }
+
+    private void SetPropertiesAfterOperationSetting(string expressionToSet)
+    {
+        this.Expression = expressionToSet;
+        this.secondOperand.SetToDefault();
+        this.Result = this.firstOperand.Representation;
+        this.lastActionIsCalculate = false;
+    }
+
+    private void ClearAfterCalculations()
+    {
+        if (this.lastActionIsCalculate)
         {
-            case Operations.Addition:
-                return this.firstOperand + this.secondOperand;
-            case Operations.Substraction:
-                return this.firstOperand - this.secondOperand;
-            case Operations.Multiplication:
-                return this.firstOperand * this.secondOperand;
-            case Operations.Division:
-                return this.firstOperand / this.secondOperand;
-            default:
-                return this.firstOperand;
+            this.Clear();
         }
+    }
+
+    private void ResetOperationAfterCalculations()
+    {
+        if (this.lastActionIsCalculate)
+        {
+            this.operation = null;
+            this.Expression = string.Empty;
+        }
+    }
+
+    private void OnOperandChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not null)
+        {
+            this.Result = ((Operand)sender).Representation;
+        }
+    }
+
+    private void BindOperandsWithResultProperty()
+    {
+        this.firstOperand.PropertyChanged += OnOperandChanged;
+        this.secondOperand.PropertyChanged += OnOperandChanged;
     }
 
     private void NotifyPropertyChanged(string propertyName)
     {
         this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    private void ChangePropertyAndNotify(
+        ref string property, string newValue, string propertyName)
+    {
+        if (property != newValue)
+        {
+            property = newValue;
+            this.NotifyPropertyChanged(propertyName);
+        }
     }
 }

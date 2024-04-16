@@ -30,11 +30,11 @@
         {
             components = new System.ComponentModel.Container();
             tableLayoutPanel1 = new TableLayoutPanel();
-            ToPercents_Button = new CustomButton();
+            InPercents_Button = new CustomButton();
             ClearOperand_Button = new CustomButton();
-            ToSquare_Button = new CustomButton();
-            ToSquareRoot_Button = new CustomButton();
-            ToInverse_Button = new CustomButton();
+            Square_Button = new CustomButton();
+            SquareRoot_Button = new CustomButton();
+            Inverse_Button = new CustomButton();
             Division_Button = new CustomButton();
             Two_Button = new CustomButton();
             Three_Button = new CustomButton();
@@ -56,8 +56,8 @@
             Clear_Button = new CustomButton();
             tableLayoutPanel2 = new TableLayoutPanel();
             Result_Box = new RichTextBox();
-            calculatorBindingSource = new BindingSource(components);
             Expression_Box = new RichTextBox();
+            calculatorBindingSource = new BindingSource(components);
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)calculatorBindingSource).BeginInit();
@@ -70,11 +70,11 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.Controls.Add(ToPercents_Button, 0, 0);
+            tableLayoutPanel1.Controls.Add(InPercents_Button, 0, 0);
             tableLayoutPanel1.Controls.Add(ClearOperand_Button, 2, 0);
-            tableLayoutPanel1.Controls.Add(ToSquare_Button, 0, 1);
-            tableLayoutPanel1.Controls.Add(ToSquareRoot_Button, 1, 1);
-            tableLayoutPanel1.Controls.Add(ToInverse_Button, 2, 1);
+            tableLayoutPanel1.Controls.Add(Square_Button, 0, 1);
+            tableLayoutPanel1.Controls.Add(SquareRoot_Button, 1, 1);
+            tableLayoutPanel1.Controls.Add(Inverse_Button, 2, 1);
             tableLayoutPanel1.Controls.Add(Division_Button, 3, 1);
             tableLayoutPanel1.Controls.Add(Two_Button, 1, 2);
             tableLayoutPanel1.Controls.Add(Three_Button, 2, 2);
@@ -109,19 +109,19 @@
             tableLayoutPanel1.Size = new Size(376, 404);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // ToPercents_Button
+            // InPercents_Button
             // 
-            ToPercents_Button.BackColor = Color.WhiteSmoke;
-            ToPercents_Button.ButtonColor = Color.LightGray;
-            ToPercents_Button.Dock = DockStyle.Fill;
-            ToPercents_Button.Label = "%";
-            ToPercents_Button.Location = new Point(0, 0);
-            ToPercents_Button.Margin = new Padding(0);
-            ToPercents_Button.Name = "ToPercents_Button";
-            ToPercents_Button.Size = new Size(94, 67);
-            ToPercents_Button.TabIndex = 0;
-            ToPercents_Button.Value = 0;
-            ToPercents_Button.Click += ToPercents_Button_Click;
+            InPercents_Button.BackColor = Color.WhiteSmoke;
+            InPercents_Button.ButtonColor = Color.LightGray;
+            InPercents_Button.Dock = DockStyle.Fill;
+            InPercents_Button.Label = "%";
+            InPercents_Button.Location = new Point(0, 0);
+            InPercents_Button.Margin = new Padding(0);
+            InPercents_Button.Name = "InPercents_Button";
+            InPercents_Button.Size = new Size(94, 67);
+            InPercents_Button.TabIndex = 0;
+            InPercents_Button.Value = 0;
+            InPercents_Button.Click += InPercents_Button_Click;
             // 
             // ClearOperand_Button
             // 
@@ -137,62 +137,62 @@
             ClearOperand_Button.Value = 0;
             ClearOperand_Button.Click += ClearOperand_Button_Click;
             // 
-            // ToSquare_Button
+            // Square_Button
             // 
-            ToSquare_Button.BackColor = Color.WhiteSmoke;
-            ToSquare_Button.ButtonColor = Color.LightGray;
-            ToSquare_Button.Dock = DockStyle.Fill;
-            ToSquare_Button.ImeMode = ImeMode.NoControl;
-            ToSquare_Button.Label = "x^2";
-            ToSquare_Button.Location = new Point(0, 67);
-            ToSquare_Button.Margin = new Padding(0);
-            ToSquare_Button.Name = "ToSquare_Button";
-            ToSquare_Button.Size = new Size(94, 67);
-            ToSquare_Button.TabIndex = 4;
-            ToSquare_Button.Value = 0;
-            ToSquare_Button.Click += ToSquare_Button_Click;
+            Square_Button.BackColor = Color.WhiteSmoke;
+            Square_Button.ButtonColor = Color.LightGray;
+            Square_Button.Dock = DockStyle.Fill;
+            Square_Button.ImeMode = ImeMode.NoControl;
+            Square_Button.Label = "x^2";
+            Square_Button.Location = new Point(0, 67);
+            Square_Button.Margin = new Padding(0);
+            Square_Button.Name = "Square_Button";
+            Square_Button.Size = new Size(94, 67);
+            Square_Button.TabIndex = 4;
+            Square_Button.Value = 0;
+            Square_Button.Click += ToSquare_Button_Click;
             // 
-            // ToSquareRoot_Button
+            // SquareRoot_Button
             // 
-            ToSquareRoot_Button.BackColor = Color.WhiteSmoke;
-            ToSquareRoot_Button.ButtonColor = Color.LightGray;
-            ToSquareRoot_Button.Dock = DockStyle.Fill;
-            ToSquareRoot_Button.Label = "√x";
-            ToSquareRoot_Button.Location = new Point(94, 67);
-            ToSquareRoot_Button.Margin = new Padding(0);
-            ToSquareRoot_Button.Name = "ToSquareRoot_Button";
-            ToSquareRoot_Button.Size = new Size(94, 67);
-            ToSquareRoot_Button.TabIndex = 5;
-            ToSquareRoot_Button.Value = 0;
-            ToSquareRoot_Button.Click += ToSquareRoot_Button_Click;
+            SquareRoot_Button.BackColor = Color.WhiteSmoke;
+            SquareRoot_Button.ButtonColor = Color.LightGray;
+            SquareRoot_Button.Dock = DockStyle.Fill;
+            SquareRoot_Button.Label = "√x";
+            SquareRoot_Button.Location = new Point(94, 67);
+            SquareRoot_Button.Margin = new Padding(0);
+            SquareRoot_Button.Name = "SquareRoot_Button";
+            SquareRoot_Button.Size = new Size(94, 67);
+            SquareRoot_Button.TabIndex = 5;
+            SquareRoot_Button.Value = 0;
+            SquareRoot_Button.Click += ToSquareRoot_Button_Click;
             // 
-            // ToInverse_Button
+            // Inverse_Button
             // 
-            ToInverse_Button.BackColor = Color.WhiteSmoke;
-            ToInverse_Button.ButtonColor = Color.LightGray;
-            ToInverse_Button.Dock = DockStyle.Fill;
-            ToInverse_Button.Label = "1/x";
-            ToInverse_Button.Location = new Point(188, 67);
-            ToInverse_Button.Margin = new Padding(0);
-            ToInverse_Button.Name = "ToInverse_Button";
-            ToInverse_Button.Size = new Size(94, 67);
-            ToInverse_Button.TabIndex = 6;
-            ToInverse_Button.Value = 0;
-            ToInverse_Button.Click += ToInverse_Button_Click;
+            Inverse_Button.BackColor = Color.WhiteSmoke;
+            Inverse_Button.ButtonColor = Color.LightGray;
+            Inverse_Button.Dock = DockStyle.Fill;
+            Inverse_Button.Label = "1/x";
+            Inverse_Button.Location = new Point(188, 67);
+            Inverse_Button.Margin = new Padding(0);
+            Inverse_Button.Name = "Inverse_Button";
+            Inverse_Button.Size = new Size(94, 67);
+            Inverse_Button.TabIndex = 6;
+            Inverse_Button.Value = 0;
+            Inverse_Button.Click += ToInverse_Button_Click;
             // 
             // Division_Button
             // 
             Division_Button.BackColor = Color.WhiteSmoke;
             Division_Button.ButtonColor = Color.LightGray;
             Division_Button.Dock = DockStyle.Fill;
-            Division_Button.Label = "/";
+            Division_Button.Label = "÷";
             Division_Button.Location = new Point(282, 67);
             Division_Button.Margin = new Padding(0);
             Division_Button.Name = "Division_Button";
             Division_Button.Size = new Size(94, 67);
             Division_Button.TabIndex = 7;
-            Division_Button.Value = 47;
-            Division_Button.Click += Operation_Button_Click;
+            Division_Button.Value = '÷';
+            Division_Button.Click += SetOperation_Button_Click;
             // 
             // Two_Button
             // 
@@ -205,8 +205,8 @@
             Two_Button.Name = "Two_Button";
             Two_Button.Size = new Size(94, 67);
             Two_Button.TabIndex = 9;
-            Two_Button.Value = 2;
-            Two_Button.Click += Digit_Button_Click;
+            Two_Button.Value = 50;
+            Two_Button.Click += AddDigit_Button_Click;
             // 
             // Three_Button
             // 
@@ -220,22 +220,22 @@
             Three_Button.Name = "Three_Button";
             Three_Button.Size = new Size(94, 67);
             Three_Button.TabIndex = 10;
-            Three_Button.Value = 3;
-            Three_Button.Click += Digit_Button_Click;
+            Three_Button.Value = 51;
+            Three_Button.Click += AddDigit_Button_Click;
             // 
             // Multiplication_Button
             // 
             Multiplication_Button.BackColor = Color.WhiteSmoke;
             Multiplication_Button.ButtonColor = Color.LightGray;
             Multiplication_Button.Dock = DockStyle.Fill;
-            Multiplication_Button.Label = "*";
+            Multiplication_Button.Label = "×";
             Multiplication_Button.Location = new Point(282, 134);
             Multiplication_Button.Margin = new Padding(0);
             Multiplication_Button.Name = "Multiplication_Button";
             Multiplication_Button.Size = new Size(94, 67);
             Multiplication_Button.TabIndex = 11;
-            Multiplication_Button.Value = 42;
-            Multiplication_Button.Click += Operation_Button_Click;
+            Multiplication_Button.Value = '×';
+            Multiplication_Button.Click += SetOperation_Button_Click;
             // 
             // Four_Button
             // 
@@ -248,8 +248,8 @@
             Four_Button.Name = "Four_Button";
             Four_Button.Size = new Size(94, 67);
             Four_Button.TabIndex = 12;
-            Four_Button.Value = 4;
-            Four_Button.Click += Digit_Button_Click;
+            Four_Button.Value = 52;
+            Four_Button.Click += AddDigit_Button_Click;
             // 
             // Five_Button
             // 
@@ -262,8 +262,8 @@
             Five_Button.Name = "Five_Button";
             Five_Button.Size = new Size(94, 67);
             Five_Button.TabIndex = 13;
-            Five_Button.Value = 5;
-            Five_Button.Click += Digit_Button_Click;
+            Five_Button.Value = 53;
+            Five_Button.Click += AddDigit_Button_Click;
             // 
             // Six_Button
             // 
@@ -276,8 +276,8 @@
             Six_Button.Name = "Six_Button";
             Six_Button.Size = new Size(94, 67);
             Six_Button.TabIndex = 14;
-            Six_Button.Value = 6;
-            Six_Button.Click += Digit_Button_Click;
+            Six_Button.Value = 54;
+            Six_Button.Click += AddDigit_Button_Click;
             // 
             // Substraction_Button
             // 
@@ -291,7 +291,7 @@
             Substraction_Button.Size = new Size(94, 67);
             Substraction_Button.TabIndex = 15;
             Substraction_Button.Value = 45;
-            Substraction_Button.Click += Operation_Button_Click;
+            Substraction_Button.Click += SetOperation_Button_Click;
             // 
             // Seven_Button
             // 
@@ -304,8 +304,8 @@
             Seven_Button.Name = "Seven_Button";
             Seven_Button.Size = new Size(94, 67);
             Seven_Button.TabIndex = 16;
-            Seven_Button.Value = 7;
-            Seven_Button.Click += Digit_Button_Click;
+            Seven_Button.Value = 55;
+            Seven_Button.Click += AddDigit_Button_Click;
             // 
             // Eight_Button
             // 
@@ -318,8 +318,8 @@
             Eight_Button.Name = "Eight_Button";
             Eight_Button.Size = new Size(94, 67);
             Eight_Button.TabIndex = 17;
-            Eight_Button.Value = 8;
-            Eight_Button.Click += Digit_Button_Click;
+            Eight_Button.Value = 56;
+            Eight_Button.Click += AddDigit_Button_Click;
             // 
             // Nine_Button
             // 
@@ -332,8 +332,8 @@
             Nine_Button.Name = "Nine_Button";
             Nine_Button.Size = new Size(94, 67);
             Nine_Button.TabIndex = 18;
-            Nine_Button.Value = 9;
-            Nine_Button.Click += Digit_Button_Click;
+            Nine_Button.Value = 57;
+            Nine_Button.Click += AddDigit_Button_Click;
             // 
             // Addition_Button
             // 
@@ -347,7 +347,7 @@
             Addition_Button.Size = new Size(94, 67);
             Addition_Button.TabIndex = 19;
             Addition_Button.Value = 43;
-            Addition_Button.Click += Operation_Button_Click;
+            Addition_Button.Click += SetOperation_Button_Click;
             // 
             // ToNegative_Button
             // 
@@ -374,8 +374,8 @@
             Zero_Button.Name = "Zero_Button";
             Zero_Button.Size = new Size(94, 69);
             Zero_Button.TabIndex = 21;
-            Zero_Button.Value = 0;
-            Zero_Button.Click += Digit_Button_Click;
+            Zero_Button.Value = 48;
+            Zero_Button.Click += AddDigit_Button_Click;
             // 
             // ToFloat_Button
             // 
@@ -416,8 +416,8 @@
             One_Button.Name = "One_Button";
             One_Button.Size = new Size(94, 67);
             One_Button.TabIndex = 8;
-            One_Button.Value = 1;
-            One_Button.Click += Digit_Button_Click;
+            One_Button.Value = 49;
+            One_Button.Click += AddDigit_Button_Click;
             // 
             // DeleteLastDigit_Button
             // 
@@ -469,28 +469,24 @@
             Result_Box.BackColor = Color.White;
             Result_Box.BorderStyle = BorderStyle.None;
             Result_Box.Dock = DockStyle.Fill;
-            Result_Box.Font = new Font("Segoe UI", 22.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            Result_Box.Font = new Font("Segoe UI", 36F, FontStyle.Regular, GraphicsUnit.Point, 204);
             Result_Box.Location = new Point(1, 56);
             Result_Box.Margin = new Padding(1);
             Result_Box.MaxLength = 16;
             Result_Box.Multiline = false;
             Result_Box.Name = "Result_Box";
             Result_Box.ReadOnly = true;
-            Result_Box.RightToLeft = RightToLeft.Yes;
+            Result_Box.RightToLeft = RightToLeft.No;
             Result_Box.Size = new Size(380, 86);
             Result_Box.TabIndex = 3;
             Result_Box.Text = "";
-            // 
-            // calculatorBindingSource
-            // 
-            calculatorBindingSource.DataSource = typeof(Calculator.Calculator);
             // 
             // Expression_Box
             // 
             Expression_Box.BackColor = Color.LightGray;
             Expression_Box.BorderStyle = BorderStyle.None;
             Expression_Box.Dock = DockStyle.Fill;
-            Expression_Box.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            Expression_Box.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point, 204);
             Expression_Box.Location = new Point(1, 1);
             Expression_Box.Margin = new Padding(1);
             Expression_Box.MaxLength = 32;
@@ -500,6 +496,10 @@
             Expression_Box.Size = new Size(380, 53);
             Expression_Box.TabIndex = 2;
             Expression_Box.Text = "";
+            // 
+            // calculatorBindingSource
+            // 
+            calculatorBindingSource.DataSource = typeof(Calculator.Calculator);
             // 
             // CalculatorForm
             // 
@@ -521,13 +521,13 @@
 
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
-        private CustomButton ToPercents_Button;
+        private CustomButton InPercents_Button;
         private CustomButton Clear_Button;
         private CustomButton ClearOperand_Button;
         private CustomButton DeleteLastDigit_Button;
-        private CustomButton ToSquare_Button;
-        private CustomButton ToSquareRoot_Button;
-        private CustomButton ToInverse_Button;
+        private CustomButton Square_Button;
+        private CustomButton SquareRoot_Button;
+        private CustomButton Inverse_Button;
         private CustomButton Division_Button;
         private CustomButton Two_Button;
         private CustomButton Three_Button;

@@ -23,14 +23,9 @@ namespace CalculatorGUI
                 false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
-        private void Digit_Button_Click(object sender, CustomButtonClickArgs e)
+        private void Clear_Button_Click(object sender, CustomButtonClickArgs e)
         {
-            this.calculator.AddDigitToOperand(e.Value);
-        }
-
-        private void Operation_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.SetOperation((char)e.Value);
+            this.calculator.Clear();
         }
 
         private void Calculate_Button_Click(object sender, CustomButtonClickArgs e)
@@ -38,49 +33,54 @@ namespace CalculatorGUI
             this.calculator.Calculate();
         }
 
-        private void ToPercents_Button_Click(object sender, CustomButtonClickArgs e)
+        private void SetOperation_Button_Click(object sender, CustomButtonClickArgs e)
         {
-            this.calculator.OperandToPercents();
-        }
-
-        private void Clear_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Clear();
+            this.calculator.SetOperationBySign((char)e.Value);
         }
 
         private void ClearOperand_Button_Click(object sender, CustomButtonClickArgs e)
         {
-            this.calculator.ClearOperand();
+            this.calculator.Operand_Clear();
+        }
+
+        private void AddDigit_Button_Click(object sender, CustomButtonClickArgs e)
+        {
+            this.calculator.Operand_AddDigit((char)e.Value);
         }
 
         private void DeleteLastDigit_Button_Click(object sender, CustomButtonClickArgs e)
         {
-            this.calculator.DeleteLastDigit();
-        }
-
-        private void ToSquare_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.OperandToSquare();
-        }
-
-        private void ToSquareRoot_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.OperandToSquareRoot();
-        }
-
-        private void ToInverse_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.OperandToInverse();
+            this.calculator.Operand_DeleteLastDigit();
         }
 
         private void ToNegative_Button_Click(object sender, CustomButtonClickArgs e)
         {
-            this.calculator.OperandToNegative();
+            this.calculator.Operand_ToNegative();
         }
 
         private void ToFloat_Button_Click(object sender, CustomButtonClickArgs e)
         {
-            this.calculator.OperandToFloat();
+            this.calculator.Operand_ToFloat();
+        }
+
+        private void InPercents_Button_Click(object sender, CustomButtonClickArgs e)
+        {
+            this.calculator.Operand_InPercents();
+        }
+
+        private void ToSquare_Button_Click(object sender, CustomButtonClickArgs e)
+        {
+            this.calculator.Operand_Square();
+        }
+
+        private void ToSquareRoot_Button_Click(object sender, CustomButtonClickArgs e)
+        {
+            this.calculator.Operand_SquareRoot();
+        }
+
+        private void ToInverse_Button_Click(object sender, CustomButtonClickArgs e)
+        {
+            this.calculator.Operand_Inverse();
         }
     }
 }
