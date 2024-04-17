@@ -146,9 +146,9 @@ public class Calculator : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Convert the last operand of current expression to float.
+    /// Add decimal point to the last operand of current expression.
     /// </summary>
-    public void Operand_ToFloat()
+    public void Operand_Decimal()
     {
         this.ClearAfterCalculations();
         this.CurrentOperand.ToFloat();

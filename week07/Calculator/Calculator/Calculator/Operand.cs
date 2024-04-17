@@ -98,10 +98,13 @@ public class Operand : INotifyPropertyChanged
             throw new ArgumentException("Argument was not a digit");
         }
 
-        if (this.Value == 0 && this.Representation[^1] != ',')
+        if (this.representation == Operand.Default)
         {
-            bool isNegative = this.Representation[0] == '-';
-            this.SetByRepresentation($"{(isNegative ? "-" : "")}{digit}");
+            this.SetByRepresentation($"{digit}");
+        }
+        else if (this.representation == $"-{Operand.Default}")
+        {
+            this.SetByRepresentation($"-{digit}");
         }
         else
         {
@@ -114,7 +117,8 @@ public class Operand : INotifyPropertyChanged
     /// </summary>
     public void DeleteLastDigit()
     {
-        if (this.Value == 0 || this.Representation.Length == 1)
+        if ((this.Value > 0 && this.Representation.Length == 1) ||
+            this.representation == $"-{Operand.Default}")
         {
             this.SetToDefault();
         }
@@ -141,10 +145,7 @@ public class Operand : INotifyPropertyChanged
     /// </summary>
     public void ToFloat()
     {
-        if (this.Representation[^1] != ',')
-        {
-            this.SetByRepresentation($"{this.Representation},");
-        }
+        this.SetByRepresentation($"{this.Representation},");
     }
 
     /// <summary>

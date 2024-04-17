@@ -6,6 +6,7 @@
 namespace CalculatorGUI
 {
     using Calculator;
+    using Operations;
 
     /// <summary>
     /// The main form of the application.
@@ -78,7 +79,7 @@ namespace CalculatorGUI
 
         private void ToFloat_Button_Click(object sender, CustomButtonClickArgs e)
         {
-            this.calculator.Operand_ToFloat();
+            this.calculator.Operand_Decimal();
         }
 
         private void InPercents_Button_Click(object sender, CustomButtonClickArgs e)
@@ -99,6 +100,41 @@ namespace CalculatorGUI
         private void ToInverse_Button_Click(object sender, CustomButtonClickArgs e)
         {
             this.calculator.Operand_Inverse();
+        }
+
+        private void CalculatorForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            char keyChar = CalculatorKeys.GetChar(e);
+            if (char.IsDigit(keyChar))
+            {
+                this.calculator.Operand_AddDigit(keyChar);
+            }
+            else if (Enum.IsDefined(typeof(Operations.Signs), (int)keyChar))
+            {
+                this.calculator.SetOperationBySign(keyChar);
+            }
+
+            switch (keyChar)
+            {
+                case CalculatorKeys.Enter:
+                    this.calculator.Calculate();
+                    break;
+                case CalculatorKeys.Clear:
+                    this.calculator.Clear();
+                    break;
+                case CalculatorKeys.Delete:
+                    this.calculator.Operand_Clear();
+                    break;
+                case CalculatorKeys.Back:
+                    this.calculator.Operand_DeleteLastDigit();
+                    break;
+                case CalculatorKeys.Comma:
+                    this.calculator.Operand_Decimal();
+                    break;
+                case CalculatorKeys.Percent:
+                    this.calculator.Operand_InPercents();
+                    break;
+            }
         }
     }
 }

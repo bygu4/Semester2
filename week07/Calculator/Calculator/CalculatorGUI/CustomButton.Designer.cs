@@ -39,6 +39,7 @@ namespace CalculatorGUI
             // Button
             // 
             Button.BackColor = Color.White;
+            Button.CausesValidation = false;
             Button.Dock = DockStyle.Fill;
             Button.FlatAppearance.BorderColor = Color.DimGray;
             Button.FlatStyle = FlatStyle.Flat;
@@ -48,6 +49,7 @@ namespace CalculatorGUI
             Button.Name = "Button";
             Button.Size = new Size(150, 150);
             Button.TabIndex = 0;
+            Button.TabStop = false;
             Button.Text = "button1";
             Button.UseVisualStyleBackColor = false;
             Button.Click += Button_Click;
@@ -57,6 +59,7 @@ namespace CalculatorGUI
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
+            CausesValidation = false;
             Controls.Add(Button);
             Margin = new Padding(0);
             Name = "CustomButton";
