@@ -5,49 +5,15 @@
 
 namespace CalculatorGUI;
 
+using Calculator;
 using Operations;
 
 /// <summary>
-/// Set of key values for UI of the Calculator.
+/// Class for processing keyboard input.
 /// </summary>
 public static class CalculatorKeys
 {
-    /// <summary>
-    /// Key value for Calculate.
-    /// </summary>
-    public const char Enter = '\n';
-
-    /// <summary>
-    /// Key value for Clear.
-    /// </summary>
-    public const char Clear = 'c';
-
-    /// <summary>
-    /// Key value for Operand_Clear.
-    /// </summary>
-    public const char Delete = '\r';
-
-    /// <summary>
-    /// Key value for Operand_DeleteLastDigit.
-    /// </summary>
-    public const char Back = '\b';
-
-
-    /// <summary>
-    /// Key value for Operand_Decimal.
-    /// </summary>
-    public const char Comma = ',';
-
-    /// <summary>
-    /// Key value for Operand_InPercents.
-    /// </summary>
-    public const char Percent = '%';
-
-    /// <summary>
-    /// Default key value.
-    /// </summary>
-    public const char Default = (char)0;
-
+    private const char Default = (char)0;
     private const int NumpadOffset = 48;
 
     /// <summary>
@@ -75,27 +41,27 @@ public static class CalculatorKeys
         }
         else if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Oemplus)
         {
-            return CalculatorKeys.Enter;
+            return CalculatorCommands.Enter;
         }
         else if (e.KeyCode == Keys.Clear || e.KeyCode == Keys.OemClear)
         {
-            return CalculatorKeys.Clear;
+            return CalculatorCommands.Clear;
         }
         else if (e.KeyCode == Keys.Delete)
         {
-            return CalculatorKeys.Delete;
+            return CalculatorCommands.Delete;
         }
         else if (e.KeyCode == Keys.Back)
         {
-            return CalculatorKeys.Back;
+            return CalculatorCommands.Back;
         }
         else if (e.KeyCode == Keys.Decimal || e.KeyCode == Keys.Oemcomma)
         {
-            return CalculatorKeys.Comma;
+            return CalculatorCommands.Decimal;
         }
         else if (e.KeyCode == Keys.D5 && e.Shift)
         {
-            return CalculatorKeys.Percent;
+            return CalculatorCommands.Percent;
         }
         else if (char.IsDigit((char)e.KeyCode))
         {

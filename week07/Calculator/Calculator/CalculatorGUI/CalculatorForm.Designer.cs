@@ -164,7 +164,7 @@ namespace CalculatorGUI
             Square_Button.TabIndex = 4;
             Square_Button.TabStop = false;
             Square_Button.Value = 0;
-            Square_Button.Click += ToSquare_Button_Click;
+            Square_Button.Click += Square_Button_Click;
             // 
             // SquareRoot_Button
             // 
@@ -181,7 +181,7 @@ namespace CalculatorGUI
             SquareRoot_Button.TabIndex = 5;
             SquareRoot_Button.TabStop = false;
             SquareRoot_Button.Value = 0;
-            SquareRoot_Button.Click += ToSquareRoot_Button_Click;
+            SquareRoot_Button.Click += SquareRoot_Button_Click;
             // 
             // Inverse_Button
             // 
@@ -198,7 +198,7 @@ namespace CalculatorGUI
             Inverse_Button.TabIndex = 6;
             Inverse_Button.TabStop = false;
             Inverse_Button.Value = 0;
-            Inverse_Button.Click += ToInverse_Button_Click;
+            Inverse_Button.Click += Inverse_Button_Click;
             // 
             // Division_Button
             // 
@@ -453,7 +453,7 @@ namespace CalculatorGUI
             Decimal_Button.TabIndex = 22;
             Decimal_Button.TabStop = false;
             Decimal_Button.Value = 0;
-            Decimal_Button.Click += ToFloat_Button_Click;
+            Decimal_Button.Click += Decimal_Button_Click;
             // 
             // Calculate_Button
             // 

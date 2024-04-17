@@ -6,7 +6,7 @@
 namespace Operations;
 
 /// <summary>
-/// Set of operations.
+/// Set of basic operations.
 /// </summary>
 public static class Operations
 {

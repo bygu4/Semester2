@@ -6,7 +6,6 @@
 namespace CalculatorGUI
 {
     using Calculator;
-    using Operations;
 
     /// <summary>
     /// The main form of the application.
@@ -77,7 +76,7 @@ namespace CalculatorGUI
             this.calculator.Operand_ToNegative();
         }
 
-        private void ToFloat_Button_Click(object sender, CustomButtonClickArgs e)
+        private void Decimal_Button_Click(object sender, CustomButtonClickArgs e)
         {
             this.calculator.Operand_Decimal();
         }
@@ -87,17 +86,17 @@ namespace CalculatorGUI
             this.calculator.Operand_InPercents();
         }
 
-        private void ToSquare_Button_Click(object sender, CustomButtonClickArgs e)
+        private void Square_Button_Click(object sender, CustomButtonClickArgs e)
         {
             this.calculator.Operand_Square();
         }
 
-        private void ToSquareRoot_Button_Click(object sender, CustomButtonClickArgs e)
+        private void SquareRoot_Button_Click(object sender, CustomButtonClickArgs e)
         {
             this.calculator.Operand_SquareRoot();
         }
 
-        private void ToInverse_Button_Click(object sender, CustomButtonClickArgs e)
+        private void Inverse_Button_Click(object sender, CustomButtonClickArgs e)
         {
             this.calculator.Operand_Inverse();
         }
@@ -105,36 +104,7 @@ namespace CalculatorGUI
         private void CalculatorForm_KeyDown(object sender, KeyEventArgs e)
         {
             char keyChar = CalculatorKeys.GetChar(e);
-            if (char.IsDigit(keyChar))
-            {
-                this.calculator.Operand_AddDigit(keyChar);
-            }
-            else if (Enum.IsDefined(typeof(Operations.Signs), (int)keyChar))
-            {
-                this.calculator.SetOperationBySign(keyChar);
-            }
-
-            switch (keyChar)
-            {
-                case CalculatorKeys.Enter:
-                    this.calculator.Calculate();
-                    break;
-                case CalculatorKeys.Clear:
-                    this.calculator.Clear();
-                    break;
-                case CalculatorKeys.Delete:
-                    this.calculator.Operand_Clear();
-                    break;
-                case CalculatorKeys.Back:
-                    this.calculator.Operand_DeleteLastDigit();
-                    break;
-                case CalculatorKeys.Comma:
-                    this.calculator.Operand_Decimal();
-                    break;
-                case CalculatorKeys.Percent:
-                    this.calculator.Operand_InPercents();
-                    break;
-            }
+            CalculatorCommands.Execute(this.calculator, keyChar);
         }
     }
 }
