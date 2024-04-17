@@ -33,14 +33,14 @@ public static class CalculatorCommands
     public const char Back = '\b';
 
     /// <summary>
-    /// Value of Operand_ToNegative command.
-    /// </summary>
-    public const char ToNegative = '±';
-
-    /// <summary>
     /// Value of Operand_Decimal command.
     /// </summary>
     public const char Decimal = ',';
+
+    /// <summary>
+    /// Value of Operand_ToNegative command.
+    /// </summary>
+    public const char ToNegative = '±';
 
     /// <summary>
     /// Value of Operand_InPercents command.
@@ -93,11 +93,11 @@ public static class CalculatorCommands
             case CalculatorCommands.Back:
                 calculator.Operand_DeleteLastDigit();
                 return;
-            case CalculatorCommands.ToNegative:
-                calculator.Operand_ToNegative();
-                return;
             case CalculatorCommands.Decimal:
                 calculator.Operand_Decimal();
+                return;
+            case CalculatorCommands.ToNegative:
+                calculator.Operand_ToNegative();
                 return;
             case CalculatorCommands.Percent:
                 calculator.Operand_InPercents();

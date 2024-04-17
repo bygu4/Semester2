@@ -59,9 +59,25 @@ public static class CalculatorKeys
         {
             return CalculatorCommands.Decimal;
         }
+        else if (e.KeyCode == Keys.F9)
+        {
+            return CalculatorCommands.ToNegative;
+        }
         else if (e.KeyCode == Keys.D5 && e.Shift)
         {
             return CalculatorCommands.Percent;
+        }
+        else if (e.KeyCode == Keys.Q)
+        {
+            return CalculatorCommands.Square;
+        }
+        else if (e.KeyCode == Keys.D2 && e.Shift)
+        {
+            return CalculatorCommands.SquareRoot;
+        }
+        else if (e.KeyCode == Keys.R)
+        {
+            return CalculatorCommands.Inverse;
         }
         else if (char.IsDigit((char)e.KeyCode))
         {

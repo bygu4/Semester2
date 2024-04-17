@@ -123,19 +123,28 @@ public class Operand : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Convert Operand value to the negative one.
-    /// </summary>
-    public void ToNegative()
-    {
-        this.SetByValue(-this.Value);
-    }
-
-    /// <summary>
     /// Add decimal point to the representation of the Operand.
     /// </summary>
     public void Decimal()
     {
         this.SetByRepresentation($"{this.Representation},");
+    }
+
+    /// <summary>
+    /// Convert Operand value to the negative one.
+    /// </summary>
+    public void ToNegative()
+    {
+        if (this.Representation.StartsWith('-'))
+        {
+            this.Representation = this.Representation[1..];
+        }
+        else
+        {
+            this.Representation = $"-{this.Representation}";
+        }
+
+        this.Value = -this.Value;
     }
 
     /// <summary>

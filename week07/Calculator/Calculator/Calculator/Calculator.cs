@@ -115,8 +115,7 @@ public class Calculator : INotifyPropertyChanged
     /// </summary>
     public void Operand_Clear()
     {
-        this.ClearAfterCalculations();
-        this.CurrentOperand.SetToDefault();
+        this.CurrentOperand_ExecuteInputMethod((Operand x) => x.SetToDefault());
     }
 
     /// <summary>
@@ -125,8 +124,7 @@ public class Calculator : INotifyPropertyChanged
     /// <param name="digit">Digit to add.</param>
     public void Operand_AddDigit(char digit)
     {
-        this.ClearAfterCalculations();
-        this.CurrentOperand.AddDigit(digit);
+        this.CurrentOperand_ExecuteInputMethod((Operand x) => x.AddDigit(digit));
     }
 
     /// <summary>
@@ -134,17 +132,7 @@ public class Calculator : INotifyPropertyChanged
     /// </summary>
     public void Operand_DeleteLastDigit()
     {
-        this.ClearAfterCalculations();
-        this.CurrentOperand.DeleteLastDigit();
-    }
-
-    /// <summary>
-    /// Convert the last operand of current expression to the negative one.
-    /// </summary>
-    public void Operand_ToNegative()
-    {
-        this.ClearAfterCalculations();
-        this.CurrentOperand.ToNegative();
+        this.CurrentOperand_ExecuteInputMethod((Operand x) => x.DeleteLastDigit());
     }
 
     /// <summary>
@@ -152,8 +140,15 @@ public class Calculator : INotifyPropertyChanged
     /// </summary>
     public void Operand_Decimal()
     {
-        this.ClearAfterCalculations();
-        this.CurrentOperand.Decimal();
+        this.CurrentOperand_ExecuteInputMethod((Operand x) => x.Decimal());
+    }
+
+    /// <summary>
+    /// Convert the last operand of current expression to the negative one.
+    /// </summary>
+    public void Operand_ToNegative()
+    {
+        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.ToNegative());
     }
 
     /// <summary>
@@ -161,8 +156,7 @@ public class Calculator : INotifyPropertyChanged
     /// </summary>
     public void Operand_InPercents()
     {
-        this.ResetOperationAfterCalculations();
-        this.CurrentOperand.InPercents();
+        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.InPercents());
     }
 
     /// <summary>
@@ -170,8 +164,7 @@ public class Calculator : INotifyPropertyChanged
     /// </summary>
     public void Operand_Square()
     {
-        this.ResetOperationAfterCalculations();
-        this.CurrentOperand.Square();
+        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.Square());
     }
 
     /// <summary>
@@ -179,8 +172,7 @@ public class Calculator : INotifyPropertyChanged
     /// </summary>
     public void Operand_SquareRoot()
     {
-        this.ResetOperationAfterCalculations();
-        this.CurrentOperand.SquareRoot();
+        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.SquareRoot());
     }
 
     /// <summary>
@@ -188,8 +180,7 @@ public class Calculator : INotifyPropertyChanged
     /// </summary>
     public void Operand_Inverse()
     {
-        this.ResetOperationAfterCalculations();
-        this.CurrentOperand.Inverse();
+        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.Inverse());
     }
 
     private (string, float) GetResultOfOperation()
@@ -228,7 +219,7 @@ public class Calculator : INotifyPropertyChanged
         this.lastActionIsSetOperation = true;
     }
 
-    private void ClearAfterCalculations()
+    private void ResetBeforeInput()
     {
         if (this.lastActionIsCalculate)
         {
@@ -236,13 +227,26 @@ public class Calculator : INotifyPropertyChanged
         }
     }
 
-    private void ResetOperationAfterCalculations()
+    private void ResetBeforeUnaryOperation()
     {
         if (this.lastActionIsCalculate)
         {
             this.operation = null;
             this.Expression = string.Empty;
         }
+    }
+
+    private void CurrentOperand_ExecuteInputMethod(Action<Operand> inputMethod)
+    {
+        this.ResetBeforeInput();
+        inputMethod(this.CurrentOperand);
+    }
+
+    private void CurrentOperand_ExecuteUnaryOperationMethod(Action<Operand> unaryOperationMethod)
+    {
+        this.ResetBeforeUnaryOperation();
+        unaryOperationMethod(this.CurrentOperand);
+        this.lastActionIsSetOperation = this.operation == null;
     }
 
     private void OnOperandChanged(object? sender, PropertyChangedEventArgs e)

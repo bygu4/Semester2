@@ -42,11 +42,6 @@ namespace CalculatorGUI
                 DataSourceUpdateMode.OnPropertyChanged);
         }
 
-        private void Clear_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Clear();
-        }
-
         private void Calculate_Button_Click(object sender, CustomButtonClickArgs e)
         {
             this.calculator.Calculate();
@@ -55,6 +50,11 @@ namespace CalculatorGUI
         private void SetOperation_Button_Click(object sender, CustomButtonClickArgs e)
         {
             this.calculator.SetOperationBySign((char)e.Value);
+        }
+
+        private void Clear_Button_Click(object sender, CustomButtonClickArgs e)
+        {
+            this.calculator.Clear();
         }
 
         private void ClearOperand_Button_Click(object sender, CustomButtonClickArgs e)
@@ -72,14 +72,14 @@ namespace CalculatorGUI
             this.calculator.Operand_DeleteLastDigit();
         }
 
-        private void ToNegative_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_ToNegative();
-        }
-
         private void Decimal_Button_Click(object sender, CustomButtonClickArgs e)
         {
             this.calculator.Operand_Decimal();
+        }
+
+        private void ToNegative_Button_Click(object sender, CustomButtonClickArgs e)
+        {
+            this.calculator.Operand_ToNegative();
         }
 
         private void InPercents_Button_Click(object sender, CustomButtonClickArgs e)
