@@ -73,7 +73,7 @@ public static class Operations
     {
         get => new Operation(
             (x, y) => $"{x} {(char)Signs.Division} {y} =",
-            (x, y) => x / y);
+            (x, y) => (y != 0) ? x / y : float.NaN);
     }
 
     /// <summary>
@@ -113,7 +113,7 @@ public static class Operations
     {
         get => new Operation(
             (x, y) => $"1/{x}",
-            (x, y) => 1f / x);
+            (x, y) => (x != 0) ? 1f / x : float.NaN);
     }
 
     /// <summary>

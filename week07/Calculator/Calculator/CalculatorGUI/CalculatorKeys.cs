@@ -21,7 +21,7 @@ public static class CalculatorKeys
     /// </summary>
     /// <param name="e">Event args of KeyDown event.</param>
     /// <returns>The value of pressed key.</returns>
-    public static char GetChar(KeyEventArgs e)
+    public static char GetCommand(KeyEventArgs e)
     {
         if (e.KeyCode == Keys.Add || (e.KeyCode == Keys.Oemplus && e.Shift))
         {
@@ -43,7 +43,7 @@ public static class CalculatorKeys
         {
             return CalculatorCommands.Enter;
         }
-        else if (e.KeyCode == Keys.Clear || e.KeyCode == Keys.OemClear)
+        else if (e.KeyCode == Keys.Clear || e.KeyCode == Keys.Escape)
         {
             return CalculatorCommands.Clear;
         }

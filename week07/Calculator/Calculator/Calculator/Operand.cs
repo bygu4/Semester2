@@ -77,16 +77,6 @@ public class Operand : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Set Operand properties based on given value.
-    /// </summary>
-    /// <param name="value">Value to set.</param>
-    public void SetByValue(float value)
-    {
-        this.Value = value;
-        this.Representation = $"{value}";
-    }
-
-    /// <summary>
     /// Add digit to the representation of the Operand.
     /// </summary>
     /// <param name="digit">Digit to add.</param>
@@ -141,9 +131,9 @@ public class Operand : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Convert Operand value to float.
+    /// Add decimal point to the representation of the Operand.
     /// </summary>
-    public void ToFloat()
+    public void Decimal()
     {
         this.SetByRepresentation($"{this.Representation},");
     }
@@ -178,6 +168,24 @@ public class Operand : INotifyPropertyChanged
     public void Inverse()
     {
         this.ApplyUnaryOperation(Operations.Inverse);
+    }
+
+    /// <summary>
+    /// Set Operand properties based on given value.
+    /// </summary>
+    /// <param name="value">Value to set.</param>
+    public void SetByValue(float value)
+    {
+        if (float.IsNaN(value))
+        {
+            this.Representation = "Undefined";
+        }
+        else
+        {
+            this.Representation = $"{value}";
+        }
+
+        this.Value = value;
     }
 
     private void SetByRepresentation(string representation)

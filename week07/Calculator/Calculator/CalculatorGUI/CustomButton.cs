@@ -52,6 +52,7 @@ namespace CalculatorGUI
         private void Button_Click(object sender, EventArgs e)
         {
             this.Click?.Invoke(this, new CustomButtonClickArgs(this.Value));
+            this.ActiveControl = null;
         }
     }
 }

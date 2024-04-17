@@ -21,6 +21,7 @@ public class Calculator : INotifyPropertyChanged
     private Operand secondOperand;
 
     private bool lastActionIsCalculate;
+    private bool lastActionIsSetOperation;
 
     private string expression;
     private string result;
@@ -80,6 +81,7 @@ public class Calculator : INotifyPropertyChanged
         this.secondOperand.SetToDefault();
 
         this.lastActionIsCalculate = false;
+        this.lastActionIsSetOperation = false;
         this.Expression = string.Empty;
     }
 
@@ -98,7 +100,7 @@ public class Calculator : INotifyPropertyChanged
     /// <param name="sign">Sign of the operation.</param>
     public void SetOperationBySign(char sign)
     {
-        if (this.secondOperand.Value != 0 && !this.lastActionIsCalculate)
+        if (!this.lastActionIsCalculate && !this.lastActionIsSetOperation)
         {
             this.Calculate();
         }
@@ -151,7 +153,7 @@ public class Calculator : INotifyPropertyChanged
     public void Operand_Decimal()
     {
         this.ClearAfterCalculations();
-        this.CurrentOperand.ToFloat();
+        this.CurrentOperand.Decimal();
     }
 
     /// <summary>
@@ -211,7 +213,9 @@ public class Calculator : INotifyPropertyChanged
     {
         this.Expression = propertiesToSet.Item1;
         this.firstOperand.SetByValue(propertiesToSet.Item2);
+
         this.lastActionIsCalculate = true;
+        this.lastActionIsSetOperation = false;
     }
 
     private void SetPropertiesAfterOperationSetting(string expressionToSet)
@@ -219,7 +223,9 @@ public class Calculator : INotifyPropertyChanged
         this.Expression = expressionToSet;
         this.secondOperand.SetToDefault();
         this.Result = this.firstOperand.Representation;
+
         this.lastActionIsCalculate = false;
+        this.lastActionIsSetOperation = true;
     }
 
     private void ClearAfterCalculations()
@@ -244,6 +250,8 @@ public class Calculator : INotifyPropertyChanged
         if (sender is not null)
         {
             this.Result = ((Operand)sender).Representation;
+            this.lastActionIsCalculate = false;
+            this.lastActionIsSetOperation = false;
         }
     }
 

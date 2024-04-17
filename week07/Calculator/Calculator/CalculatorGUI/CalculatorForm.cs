@@ -22,6 +22,7 @@ namespace CalculatorGUI
             this.InitializeComponent();
             this.calculator = new Calculator();
             this.Bind();
+            this.Select();
         }
 
         private void Bind()
@@ -103,8 +104,8 @@ namespace CalculatorGUI
 
         private void CalculatorForm_KeyDown(object sender, KeyEventArgs e)
         {
-            char keyChar = CalculatorKeys.GetChar(e);
-            CalculatorCommands.Execute(this.calculator, keyChar);
+            char command = CalculatorKeys.GetCommand(e);
+            CalculatorCommands.Execute(this.calculator, command);
         }
     }
 }

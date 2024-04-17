@@ -33,7 +33,6 @@ namespace CalculatorGUI
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             tableLayoutPanel1 = new TableLayoutPanel();
             InPercents_Button = new CustomButton();
             ClearOperand_Button = new CustomButton();
@@ -62,10 +61,8 @@ namespace CalculatorGUI
             tableLayoutPanel2 = new TableLayoutPanel();
             Result_Box = new RichTextBox();
             Expression_Box = new RichTextBox();
-            calculatorBindingSource = new BindingSource(components);
             tableLayoutPanel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)calculatorBindingSource).BeginInit();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -544,8 +541,10 @@ namespace CalculatorGUI
             // 
             Result_Box.BackColor = Color.White;
             Result_Box.BorderStyle = BorderStyle.None;
+            Result_Box.CausesValidation = false;
             Result_Box.Dock = DockStyle.Fill;
             Result_Box.Font = new Font("Segoe UI", 36F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            Result_Box.ImeMode = ImeMode.NoControl;
             Result_Box.Location = new Point(1, 56);
             Result_Box.Margin = new Padding(1);
             Result_Box.MaxLength = 16;
@@ -561,6 +560,7 @@ namespace CalculatorGUI
             // 
             Expression_Box.BackColor = Color.LightGray;
             Expression_Box.BorderStyle = BorderStyle.None;
+            Expression_Box.CausesValidation = false;
             Expression_Box.Dock = DockStyle.Fill;
             Expression_Box.Font = new Font("Segoe UI", 19.8000011F, FontStyle.Regular, GraphicsUnit.Point, 204);
             Expression_Box.Location = new Point(1, 1);
@@ -573,15 +573,12 @@ namespace CalculatorGUI
             Expression_Box.TabIndex = 2;
             Expression_Box.Text = "";
             // 
-            // calculatorBindingSource
-            // 
-            calculatorBindingSource.DataSource = typeof(Calculator.Calculator);
-            // 
             // CalculatorForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoValidate = AutoValidate.EnablePreventFocusChange;
+            CausesValidation = false;
             ClientSize = new Size(382, 553);
             Controls.Add(tableLayoutPanel2);
             KeyPreview = true;
@@ -592,7 +589,6 @@ namespace CalculatorGUI
             KeyDown += CalculatorForm_KeyDown;
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)calculatorBindingSource).EndInit();
             ResumeLayout(false);
         }
 
@@ -626,6 +622,5 @@ namespace CalculatorGUI
         private CustomButton One_Button;
         private RichTextBox Expression_Box;
         private RichTextBox Result_Box;
-        private BindingSource calculatorBindingSource;
     }
 }

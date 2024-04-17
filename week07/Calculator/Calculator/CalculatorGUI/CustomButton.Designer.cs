@@ -58,6 +58,7 @@ namespace CalculatorGUI
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoValidate = AutoValidate.EnablePreventFocusChange;
             BackColor = Color.White;
             CausesValidation = false;
             Controls.Add(Button);
