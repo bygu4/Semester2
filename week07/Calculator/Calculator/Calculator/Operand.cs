@@ -185,7 +185,11 @@ public class Operand : INotifyPropertyChanged
     /// <param name="value">Value to set.</param>
     public void SetByValue(float value)
     {
-        if (float.IsNaN(value))
+        if (value == 0)
+        {
+            this.SetToDefault();
+        }
+        else if (float.IsNaN(value))
         {
             this.Representation = "Undefined";
         }

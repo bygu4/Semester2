@@ -15,17 +15,17 @@ public static class CalculatorCommands
     /// <summary>
     /// Value of Calculate command.
     /// </summary>
-    public const char Enter = '\n';
+    public const char Enter = '=';
 
     /// <summary>
     /// Value of Clear command.
     /// </summary>
-    public const char Clear = '\r';
+    public const char Clear = '\n';
 
     /// <summary>
     /// Value of Operand_Clear command.
     /// </summary>
-    public const char Delete = '\\';
+    public const char Delete = '\r';
 
     /// <summary>
     /// Value of Operand_DeleteLastDigit command.
@@ -50,17 +50,17 @@ public static class CalculatorCommands
     /// <summary>
     /// Value of Operand_Square command.
     /// </summary>
-    public const char Square = '²';
+    public const char Square = 'Q';
 
     /// <summary>
     /// Value of Operand_SquareRoot command.
     /// </summary>
-    public const char SquareRoot = '½';
+    public const char SquareRoot = '@';
 
     /// <summary>
     /// Value of Operand_Inverse command.
     /// </summary>
-    public const char Inverse = '⁻';
+    public const char Inverse = 'R';
 
     /// <summary>
     /// Execute Calculator method for given instance based on given char command.
