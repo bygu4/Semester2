@@ -8,6 +8,7 @@ for f in $(find .. -name "*.sln"); do (
             echo - ${f##*/}: test aborted
         else
             echo - ${f##*/}: test failed
+            exit 1
         fi
     else
         echo - ${f##*/}: build failed
