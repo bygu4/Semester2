@@ -6,6 +6,7 @@
 namespace CalculatorGUI
 {
     using Calculator;
+    using Operations;
 
     /// <summary>
     /// The main form of the application.
@@ -19,8 +20,8 @@ namespace CalculatorGUI
         /// </summary>
         public CalculatorForm()
         {
-            this.InitializeComponent();
             this.calculator = new Calculator();
+            this.InitializeComponent();
             this.Bind();
             this.Select();
         }
@@ -49,7 +50,7 @@ namespace CalculatorGUI
 
         private void SetOperation_Button_Click(object sender, CustomButtonClickArgs e)
         {
-            this.calculator.SetOperationBySign((char)e.Value);
+            this.calculator.SetBinaryOperation((Operations.Binary)e.Value);
         }
 
         private void Clear_Button_Click(object sender, CustomButtonClickArgs e)
@@ -104,8 +105,7 @@ namespace CalculatorGUI
 
         private void CalculatorForm_KeyDown(object sender, KeyEventArgs e)
         {
-            char command = CalculatorKeys.GetCommand(e);
-            CalculatorCommands.Execute(this.calculator, command);
+            CalculatorKeys.ProcessKeyDown(this.calculator, e);
         }
     }
 }

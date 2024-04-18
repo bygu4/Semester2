@@ -13,81 +13,78 @@ using Operations;
 /// </summary>
 public static class CalculatorKeys
 {
-    private const char Default = (char)0;
     private const int NumpadOffset = 48;
 
     /// <summary>
-    /// Get key value of KeyDown event.
+    /// Process KeyDown event for given Calculator instance.
     /// </summary>
+    /// <param name="calculator">Calculator instance for which to process operation.</param>
     /// <param name="e">Event args of KeyDown event.</param>
-    /// <returns>The value of pressed key.</returns>
-    public static char GetCommand(KeyEventArgs e)
+    public static void ProcessKeyDown(Calculator calculator, KeyEventArgs e)
     {
         if (e.KeyCode == Keys.Add || (e.KeyCode == Keys.Oemplus && e.Shift))
         {
-            return (char)Operations.Signs.Addition;
+            calculator.SetBinaryOperation(Operations.Binary.Addition);
         }
         else if (e.KeyCode == Keys.Subtract || e.KeyCode == Keys.OemMinus)
         {
-            return (char)Operations.Signs.Substraction;
+            calculator.SetBinaryOperation(Operations.Binary.Substraction);
         }
         else if (e.KeyCode == Keys.Multiply || (e.KeyCode == Keys.D8 && e.Shift))
         {
-            return (char)Operations.Signs.Multiplication;
+            calculator.SetBinaryOperation(Operations.Binary.Multiplication);
         }
         else if (e.KeyCode == Keys.Divide || e.KeyCode == Keys.Oem2)
         {
-            return (char)Operations.Signs.Division;
+            calculator.SetBinaryOperation(Operations.Binary.Division);
         }
         else if (e.KeyCode == Keys.Enter || e.KeyCode == Keys.Oemplus)
         {
-            return CalculatorCommands.Enter;
+            calculator.Calculate();
         }
         else if (e.KeyCode == Keys.Clear || e.KeyCode == Keys.Escape)
         {
-            return CalculatorCommands.Clear;
+            calculator.Clear();
         }
         else if (e.KeyCode == Keys.Delete)
         {
-            return CalculatorCommands.Delete;
+            calculator.Operand_Clear();
         }
         else if (e.KeyCode == Keys.Back)
         {
-            return CalculatorCommands.Back;
+            calculator.Operand_DeleteLastDigit();
         }
         else if (e.KeyCode == Keys.Decimal || e.KeyCode == Keys.Oemcomma)
         {
-            return CalculatorCommands.Decimal;
+            calculator.Operand_Decimal();
         }
         else if (e.KeyCode == Keys.F9)
         {
-            return CalculatorCommands.ToNegative;
+            calculator.Operand_ToNegative();
         }
         else if (e.KeyCode == Keys.D5 && e.Shift)
         {
-            return CalculatorCommands.Percent;
+            calculator.Operand_InPercents();
         }
         else if (e.KeyCode == Keys.Q)
         {
-            return CalculatorCommands.Square;
+            calculator.Operand_Square();
         }
         else if (e.KeyCode == Keys.D2 && e.Shift)
         {
-            return CalculatorCommands.SquareRoot;
+            calculator.Operand_Square();
         }
         else if (e.KeyCode == Keys.R)
         {
-            return CalculatorCommands.Inverse;
+            calculator.Operand_Inverse();
         }
         else if (char.IsDigit((char)e.KeyCode))
         {
-            return (char)e.KeyCode;
+            calculator.Operand_AddDigit((char)e.KeyCode);
         }
         else if (char.IsDigit((char)(e.KeyCode - CalculatorKeys.NumpadOffset)))
         {
-            return (char)(e.KeyCode - CalculatorKeys.NumpadOffset);
+            calculator.Operand_AddDigit((char)(e.KeyCode - CalculatorKeys.NumpadOffset));
         }
-
-        return CalculatorKeys.Default;
     }
 }

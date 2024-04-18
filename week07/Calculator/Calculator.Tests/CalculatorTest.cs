@@ -5,6 +5,8 @@
 
 namespace Calculator.Tests;
 
+using Operations;
+
 public class CalculatorTest
 {
     private Calculator testCalculator;
@@ -157,7 +159,8 @@ public class CalculatorTest
     [TestCase('q')]
     public void TestForSetOperation_UnknownOperation_ThrowException(char value)
     {
-        Assert.Throws<ArgumentException>(() => this.testCalculator.SetOperationBySign(value));
+        Assert.Throws<ArgumentException>(() =>
+            this.testCalculator.SetBinaryOperation((Operations.Binary)value));
     }
 
     private void Execute(string expression)

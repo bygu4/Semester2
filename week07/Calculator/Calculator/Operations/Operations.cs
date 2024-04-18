@@ -11,69 +11,29 @@ namespace Operations;
 public static class Operations
 {
     /// <summary>
-    /// Signs of ariphmetic operations.
+    /// Set of binary ariphmetic operations.
     /// </summary>
-    public enum Signs
+    public enum Binary : int
     {
         /// <summary>
-        /// Sign of addition.
+        /// Binary operation of addition.
         /// </summary>
         Addition = '+',
 
         /// <summary>
-        /// Sign of substraction.
+        /// Binary operation of substraction.
         /// </summary>
         Substraction = '-',
 
         /// <summary>
-        /// Sign of multiplication.
+        /// Binary operation of multiplication.
         /// </summary>
         Multiplication = '×',
 
         /// <summary>
-        /// Sign on division.
+        /// Binary operation of division.
         /// </summary>
         Division = '÷',
-    }
-
-    /// <summary>
-    /// Gets addition as an instance of Operation class.
-    /// </summary>
-    public static Operation Addition
-    {
-        get => new Operation(
-            (x, y) => $"{x} {(char)Signs.Addition} {y} =",
-            (x, y) => x + y);
-    }
-
-    /// <summary>
-    /// Gets substraction as an instance of Operation class.
-    /// </summary>
-    public static Operation Substraction
-    {
-        get => new Operation(
-            (x, y) => $"{x} {(char)Signs.Substraction} {y} =",
-            (x, y) => x - y);
-    }
-
-    /// <summary>
-    /// Gets multiplication as an instance of Operation class.
-    /// </summary>
-    public static Operation Multiplication
-    {
-        get => new Operation(
-            (x, y) => $"{x} {(char)Signs.Multiplication} {y} =",
-            (x, y) => x * y);
-    }
-
-    /// <summary>
-    /// Gets division as an instance of Operation class.
-    /// </summary>
-    public static Operation Division
-    {
-        get => new Operation(
-            (x, y) => $"{x} {(char)Signs.Division} {y} =",
-            (x, y) => (y != 0) ? x / y : float.NaN);
     }
 
     /// <summary>
@@ -116,20 +76,48 @@ public static class Operations
             (x, y) => (x != 0) ? 1f / x : float.NaN);
     }
 
-    /// <summary>
-    /// Get an instance of ariphmetic operation based on given operation sign.
-    /// </summary>
-    /// <param name="sign">The sign of operation.</param>
-    /// <returns>Ariphmetic operation as an instance of Operation class.</returns>
-    /// <exception cref="ArgumentException">Given sign is not in Operations.Signs.</exception>
-    public static Operation GetOperationBySign(char sign)
+    private static Operation Addition
     {
-        return sign switch
+        get => new Operation(
+            (x, y) => $"{x} {(char)Binary.Addition} {y} =",
+            (x, y) => x + y);
+    }
+
+    private static Operation Substraction
+    {
+        get => new Operation(
+            (x, y) => $"{x} {(char)Binary.Substraction} {y} =",
+            (x, y) => x - y);
+    }
+
+    private static Operation Multiplication
+    {
+        get => new Operation(
+            (x, y) => $"{x} {(char)Binary.Multiplication} {y} =",
+            (x, y) => x * y);
+    }
+
+    private static Operation Division
+    {
+        get => new Operation(
+            (x, y) => $"{x} {(char)Binary.Division} {y} =",
+            (x, y) => (y != 0) ? x / y : float.NaN);
+    }
+
+    /// <summary>
+    /// Get an instance of binary operation based on given enumerable type.
+    /// </summary>
+    /// <param name="operation">Binary operation to get.</param>
+    /// <returns>Binary operation as an instance of Operation class.</returns>
+    /// <exception cref="ArgumentException">Given value is not in Operations.Binary.</exception>
+    public static Operation GetOperation(Operations.Binary operation)
+    {
+        return operation switch
         {
-            (char)Operations.Signs.Addition => Operations.Addition,
-            (char)Operations.Signs.Substraction => Operations.Substraction,
-            (char)Operations.Signs.Multiplication => Operations.Multiplication,
-            (char)Operations.Signs.Division => Operations.Division,
+            Operations.Binary.Addition => Operations.Addition,
+            Operations.Binary.Substraction => Operations.Substraction,
+            Operations.Binary.Multiplication => Operations.Multiplication,
+            Operations.Binary.Division => Operations.Division,
             _ => throw new ArgumentException("Unknown operation"),
         };
     }

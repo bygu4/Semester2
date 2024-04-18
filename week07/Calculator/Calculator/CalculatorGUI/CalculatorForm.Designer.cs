@@ -442,7 +442,7 @@ namespace CalculatorGUI
             Decimal_Button.ButtonColor = Color.White;
             Decimal_Button.CausesValidation = false;
             Decimal_Button.Dock = DockStyle.Fill;
-            Decimal_Button.Label = ",";
+            Decimal_Button.Label = this.calculator.DecimalSeparator;
             Decimal_Button.Location = new Point(188, 335);
             Decimal_Button.Margin = new Padding(0);
             Decimal_Button.Name = "Decimal_Button";

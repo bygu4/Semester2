@@ -15,7 +15,7 @@ public static class CalculatorCommands
     /// <summary>
     /// Value of Calculate command.
     /// </summary>
-    public const char Enter = '=';
+    public const char Calculate = '=';
 
     /// <summary>
     /// Value of Clear command.
@@ -74,14 +74,14 @@ public static class CalculatorCommands
         {
             calculator.Operand_AddDigit(command);
         }
-        else if (Enum.IsDefined(typeof(Operations.Signs), (int)command))
+        else if (Enum.IsDefined(typeof(Operations.Binary), (int)command))
         {
-            calculator.SetOperationBySign(command);
+            calculator.SetBinaryOperation((Operations.Binary)command);
         }
 
         switch (command)
         {
-            case CalculatorCommands.Enter:
+            case CalculatorCommands.Calculate:
                 calculator.Calculate();
                 return;
             case CalculatorCommands.Clear:

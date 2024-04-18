@@ -66,6 +66,14 @@ public class Calculator : INotifyPropertyChanged
             ref this.result, value, nameof(this.Result));
     }
 
+    /// <summary>
+    /// Gets decimal separator used in the Calculator in current culture.
+    /// </summary>
+    public string DecimalSeparator
+    {
+        get => this.CurrentOperand.DecimalSeparator;
+    }
+
     private Operand CurrentOperand
     {
         get => (this.operation is null) ? this.firstOperand : this.secondOperand;
@@ -95,19 +103,19 @@ public class Calculator : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Set operation of current expreession based on given operation sign.
+    /// Set operation of current expression based on given enumerable type.
     /// </summary>
-    /// <param name="sign">Sign of the operation.</param>
-    public void SetOperationBySign(char sign)
+    /// <param name="operation">Operation to set.</param>
+    public void SetBinaryOperation(Operations.Binary operation)
     {
         if (!this.lastActionIsCalculate && !this.lastActionIsSetOperation)
         {
             this.Calculate();
         }
 
-        this.operation = Operations.GetOperationBySign(sign);
+        this.operation = Operations.GetOperation(operation);
         this.SetPropertiesAfterOperationSetting(
-            $"{this.firstOperand.Representation} {sign}");
+            $"{this.firstOperand.Representation} {(char)operation}");
     }
 
     /// <summary>
@@ -191,7 +199,7 @@ public class Calculator : INotifyPropertyChanged
         }
         else
         {
-            string expression = this.operation.GetExpression(
+            string expression = this.operation.GetRepresentation(
                 this.firstOperand.Representation, this.secondOperand.Representation);
             float result = this.operation.GetResult(
                 this.firstOperand.Value, this.secondOperand.Value);

@@ -7,6 +7,7 @@ namespace Calculator;
 
 using Operations;
 using System.ComponentModel;
+using System.Globalization;
 
 /// <summary>
 /// Class representing an operand of the expression.
@@ -69,6 +70,12 @@ public class Operand : INotifyPropertyChanged
     }
 
     /// <summary>
+    /// Gets decimal separator of Operand in current culture.
+    /// </summary>
+    public string DecimalSeparator { get; } =
+        CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+
+    /// <summary>
     /// Set Operand to default values.
     /// </summary>
     public void SetToDefault()
@@ -80,7 +87,7 @@ public class Operand : INotifyPropertyChanged
     /// Add digit to the representation of the Operand.
     /// </summary>
     /// <param name="digit">Digit to add.</param>
-    /// <exception cref="ArgumentException">Argument not a digit.</exception>
+    /// <exception cref="ArgumentException">Argument is not a digit.</exception>
     public void AddDigit(char digit)
     {
         if (!char.IsDigit(digit))
@@ -127,7 +134,7 @@ public class Operand : INotifyPropertyChanged
     /// </summary>
     public void Decimal()
     {
-        this.SetByRepresentation($"{this.Representation},");
+        this.SetByRepresentation($"{this.Representation}{this.DecimalSeparator}");
     }
 
     /// <summary>
@@ -212,7 +219,7 @@ public class Operand : INotifyPropertyChanged
 
     private void ApplyUnaryOperation(Operation operation)
     {
-        this.Representation = operation.GetExpression(this.Representation, string.Empty);
+        this.Representation = operation.GetRepresentation(this.Representation, string.Empty);
         this.Value = operation.GetResult(this.Value, 0);
     }
 
