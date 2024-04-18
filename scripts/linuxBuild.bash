@@ -1,7 +1,7 @@
 for f in $(find .. -name "*.sln"); do (
-    dotnet build $f --nologo -clp:NoSummary  -v:q
+    dotnet build $f --nologo -clp:NoSummary  -v:m
     if [ $? -eq 0 ]; then
-        dotnet test $f --no-build --nologo -v:q
+        dotnet test $f --no-build --nologo -v:m
         if [ $? -eq 0 ]; then
             echo - ${f##*/}: test passed
         else
