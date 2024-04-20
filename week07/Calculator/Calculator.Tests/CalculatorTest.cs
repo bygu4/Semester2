@@ -6,14 +6,17 @@
 namespace Calculator.Tests;
 
 using Operations;
+using System.Globalization;
 
 public class CalculatorTest
 {
     private Calculator testCalculator;
+    private CultureInfo testCulture = new CultureInfo("ru-RU");
 
     [SetUp]
     public void Setup()
     {
+        CultureInfo.CurrentCulture = testCulture;
         this.testCalculator = new Calculator();
     }
 

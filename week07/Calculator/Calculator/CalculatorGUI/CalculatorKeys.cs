@@ -14,6 +14,7 @@ using Operations;
 public static class CalculatorKeys
 {
     private const int NumpadOffset = 48;
+    private const int OemOffset = 144;
 
     /// <summary>
     /// Process KeyDown event for given Calculator instance.
@@ -54,7 +55,8 @@ public static class CalculatorKeys
         {
             calculator.Operand_DeleteLastDigit();
         }
-        else if (e.KeyCode == Keys.Decimal || e.KeyCode == Keys.Oemcomma)
+        else if (e.KeyCode == Keys.Decimal ||
+            (char)(e.KeyCode - OemOffset) == calculator.DecimalSeparator[0])
         {
             calculator.Operand_Decimal();
         }
