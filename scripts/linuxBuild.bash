@@ -1,8 +1,13 @@
-for f in $(find .. -name "*.sln"); do (
+windows_targeted=${PWD}/.config/windowsTargeted.txt
+
+for f in $(find . -name "*.sln"); do (
     dotnet build $f --nologo -clp:NoSummary  -v:m
     if [ $? -eq 0 ]; then
-        dotnet test $f --no-build --nologo -v:m
-        echo $?
+        if grep -Fxq "${f##*/}" $windows_targeted; then
+            echo WINDOWS TARGETED TEST IGNORED
+        else
+            dotnet test $f --no-build --nologo -v:m
+        fi
         if [ $? -eq 0 ]; then
             echo - ${f##*/}: test passed
         else
