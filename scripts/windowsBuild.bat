@@ -1,7 +1,5 @@
 @echo off
 
-cd ..
-
 for /r %%i in (*.sln) do (
     dotnet build %%i --nologo -clp:NoSummary -v:m
     if errorlevel 1 (
