@@ -12,7 +12,7 @@ namespace Stack;
 public class ArrayStack<Type> : IStack<Type>
 {
     private Type?[] values;
-    private int count;
+    private int numberOfElements;
     private int arraySize = 1;
 
     /// <summary>
@@ -29,13 +29,13 @@ public class ArrayStack<Type> : IStack<Type>
     /// <param name="value">Value to add.</param>
     public void Push(Type? value)
     {
-        if (this.count == this.arraySize)
+        if (this.numberOfElements == this.arraySize)
         {
             this.Resize(this.arraySize * 2);
         }
 
-        this.values[this.count] = value;
-        ++this.count;
+        this.values[this.numberOfElements] = value;
+        ++this.numberOfElements;
     }
 
     /// <summary>
@@ -44,16 +44,16 @@ public class ArrayStack<Type> : IStack<Type>
     /// <returns>The value of removed element.</returns>
     public Type? Pop()
     {
-        if (this.count == 0)
+        if (this.numberOfElements == 0)
         {
             throw new InvalidOperationException(
                 "Stack was empty");
         }
 
-        --this.count;
-        Type? value = this.values[this.count];
-        this.values[this.count] = default(Type);
-        if (this.count < this.arraySize / 2)
+        --this.numberOfElements;
+        Type? value = this.values[this.numberOfElements];
+        this.values[this.numberOfElements] = default(Type);
+        if (this.numberOfElements < this.arraySize / 2)
         {
             this.Resize(this.arraySize / 2);
         }
@@ -65,15 +65,12 @@ public class ArrayStack<Type> : IStack<Type>
     /// Check if the Stack is empty.
     /// </summary>
     /// <returns>True if the Stack is empty, otherwise false.</returns>
-    public bool IsEmpty()
-    {
-        return this.count == 0;
-    }
+    public bool IsEmpty() => this.numberOfElements == 0;
 
     private void Resize(int size)
     {
         Type?[] newArray = new Type?[size];
-        for (int i = 0; i < this.count; ++i)
+        for (int i = 0; i < this.numberOfElements; ++i)
         {
             newArray[i] = this.values[i];
         }

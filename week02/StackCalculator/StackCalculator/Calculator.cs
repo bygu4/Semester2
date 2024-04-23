@@ -24,8 +24,7 @@ public static class Calculator
     {
         foreach (string element in inputString.Split(' '))
         {
-            int number = 0;
-            bool elementIsNumber = int.TryParse(element, out number);
+            var elementIsNumber = int.TryParse(element, out int number);
             if (elementIsNumber || element.Length == 0)
             {
                 stack.Push(number);
@@ -34,8 +33,8 @@ public static class Calculator
             {
                 try
                 {
-                    float value2 = stack.Pop();
-                    float value1 = stack.Pop();
+                    var value2 = stack.Pop();
+                    var value1 = stack.Pop();
                     stack.Push(Calculate(value1, value2, element[0]));
                 }
                 catch (InvalidOperationException e)
@@ -45,7 +44,7 @@ public static class Calculator
             }
         }
 
-        float result = stack.Pop();
+        var result = stack.Pop();
         if (!stack.IsEmpty())
         {
             throw new InvalidDataException("Incorrect expression");

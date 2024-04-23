@@ -19,11 +19,6 @@ public class CalculatorTest
         }
     }
 
-    [SetUp]
-    public void Setup()
-    {
-    }
-
     [TestCaseSource(nameof(StackTypeTestCases))]
     public void TestForCompute_EmptyString_GetZero(IStack<float> stack)
     {

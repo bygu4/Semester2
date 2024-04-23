@@ -51,10 +51,7 @@ public class ListStack<Type> : IStack<Type>
     /// Check if the Stack is empty.
     /// </summary>
     /// <returns>True if the Stack is empty, otherwise false.</returns>
-    public bool IsEmpty()
-    {
-        return this.head is null;
-    }
+    public bool IsEmpty() => this.head is null;
 
     private class Element
     {
