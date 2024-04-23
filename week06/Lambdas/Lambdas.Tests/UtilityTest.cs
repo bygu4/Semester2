@@ -9,35 +9,6 @@ using Utility;
 
 public class UtilityTest
 {
-    [SetUp]
-    public void Setup()
-    {
-    }
-
-    [TestCaseSource(nameof(MapTestCases))]
-    public void MapTest<T>(
-        IList<T?> collection, Func<T?, T?> method, IList<T?> expectedCollection)
-    {
-        Utility.Map(collection, method);
-        AssertThatCollectionsAreEqual(collection, expectedCollection);
-    }
-
-    [TestCaseSource(nameof(FilterTestCases))]
-    public void FilterTest<T>(
-        IList<T?> collection, Func<T?, bool> method, bool[] expectedOutput)
-    {
-        bool[] output = Utility.Filter(collection, method);
-        Assert.That(output, Is.EqualTo(expectedOutput));
-    }
-
-    [TestCaseSource(nameof(FoldTestCases))]
-    public void FoldTest<T>(
-        IList<T?> collection, Func<T?, T?, T?> method, T? expectedOutput)
-    {
-        T? output = Utility.Fold(collection, method);
-        Assert.That(output, Is.EqualTo(expectedOutput));
-    }
-
     private static IEnumerable<TestCaseData> MapTestCases
     {
         get
@@ -68,19 +39,19 @@ public class UtilityTest
             yield return new TestCaseData(
                 new float[] { 55.01f, 0, 85, 42.432f, -100, -99.99f, 33.5f, 33, 1, 2, 3 },
                 (float x) => x > 25,
-                new bool[] { true, false, true, true, false, false, true, true, false, false, false });
+                new List<float> { 55.01f, 85, 42.432f, 33.5f, 33 });
             yield return new TestCaseData(
                 new List<string> { "abrakadabra", "", "1011010", "iewfjoewj", "lalal", "e" },
                 (string x) => x.Length > 5,
-                new bool[] { true, false, true, true, false, false });
+                new List<string> { "abrakadabra", "1011010", "iewfjoewj" });
             yield return new TestCaseData(
                 new string[] { "", "10202", "11001", "10", "21001", "10111", "10000" },
                 (string x) => x.StartsWith("10"),
-                new bool[] { false, true, false, true, false, true, true });
+                new List<string> { "10202", "10", "10111", "10000" });
             yield return new TestCaseData(
                 new List<int> { 0, -22, 4331, 1, 99, -23, 5, 9, 100, -3232 },
                 (int x) => x % 2 == 0,
-                new bool[] { true, true, false, false, false, false, false, false, true, true });
+                new List<int> { 0, -22, 100, -3232 });
         }
     }
 
@@ -105,6 +76,30 @@ public class UtilityTest
                 (float acc, float elem) => acc + (int)Math.Pow(elem, 2),
                 2095);
         }
+    }
+
+    [TestCaseSource(nameof(MapTestCases))]
+    public void MapTest<T>(
+        IList<T?> collection, Func<T?, T?> method, IList<T?> expectedCollection)
+    {
+        Utility.Map(collection, method);
+        AssertThatCollectionsAreEqual(collection, expectedCollection);
+    }
+
+    [TestCaseSource(nameof(FilterTestCases))]
+    public void FilterTest<T>(
+        IList<T?> collection, Func<T?, bool> method, List<T> expectedOutput)
+    {
+        var output = Utility.Filter(collection, method);
+        Assert.That(output, Is.EqualTo(expectedOutput));
+    }
+
+    [TestCaseSource(nameof(FoldTestCases))]
+    public void FoldTest<T>(
+        IList<T?> collection, Func<T?, T?, T?> method, T? expectedOutput)
+    {
+        var output = Utility.Fold(collection, method);
+        Assert.That(output, Is.EqualTo(expectedOutput));
     }
 
     private static void AssertThatCollectionsAreEqual<T>(IList<T?> collection1, IList<T?> collection2)

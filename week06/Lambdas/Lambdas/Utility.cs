@@ -25,19 +25,21 @@ public static class Utility
     }
 
     /// <summary>
-    /// Get an array of bool values which are the outputs
-    /// of given method applied to each element of the collection.
+    /// Get list of elements from given collection for which given method returns true.
     /// </summary>
     /// <typeparam name="T">Type of elements in the collection.</typeparam>
-    /// <param name="collection">The collection to apply method to.</param>
-    /// <param name="method">The method to apply to each element.</param>
-    /// <returns>The array of method outputs.</returns>
-    public static bool[] Filter<T>(IList<T?> collection, Func<T?, bool> method)
+    /// <param name="collection">The collection to which the method is applied.</param>
+    /// <param name="method">The method that gets element of collection and returns bool value.</param>
+    /// <returns>List of elements for which the method returns true.</returns>
+    public static List<T?> Filter<T>(IList<T?> collection, Func<T?, bool> method)
     {
-        bool[] result = new bool[collection.Count];
+        var result = new List<T?>();
         for (int i = 0; i < collection.Count; ++i)
         {
-            result[i] = method(collection[i]);
+            if (method(collection[i]))
+            {
+                result.Add(collection[i]);
+            }
         }
 
         return result;
