@@ -29,11 +29,15 @@ public class PriorityQueueTest
                 new float[] { 31, 0, -1.5f, 45.551f, 1002, -22.99f, 22 }).Returns(true);
 
             yield return new TestCaseData(
+                new bool[] { true, false, false, true, true, false },
+                new int[] { 1, 1, 1, 1, 1, 1 },
+                new bool[] { true, false, false, true, true, false }).Returns(true);
+
+            yield return new TestCaseData(
                 new (int, int)[] { (16, 12), (-199, 0), (88, 88), (0, 1) },
-                new int[] { -3, -3, 22, 22},
+                new int[] { -3, -3, 22, 22 },
                 new (int, int)[] { (88, 88), (0, 1), (16, 12), (-199, 0) }).Returns(true);
             
-
             yield return new TestCaseData(
                 new string[] { "1221", "ewqewq", "321321", "qqqqqqqqqq" },
                 new int[] { 4, 2, 1, 6 },
