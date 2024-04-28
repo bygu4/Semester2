@@ -12,7 +12,7 @@ for f in $(find . -name "*.sln"); do (
             echo - ${f##*/}: test passed
         else
             echo - ${f##*/}: test failed
-            exit $?
+            exit 1
         fi
     else
         echo - ${f##*/}: build failed
