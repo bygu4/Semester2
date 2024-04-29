@@ -70,6 +70,11 @@ public class List
 
         if (previous is null)
         {
+            if (this.Tail is null)
+            {
+                throw new NullReferenceException();
+            }
+
             this.Tail = this.Tail.Next;
         }
         else
@@ -126,10 +131,15 @@ public class List
             throw new IndexOutOfRangeException();
         }
 
-        Vertex current = this.Tail;
-        for (int i = 0; i < index; ++i)
+        Vertex? current = this.Tail;
+        for (int i = 0; current is not null && i < index; ++i)
         {
             current = current.Next;
+        }
+
+        if (current is null)
+        {
+            throw new NullReferenceException();
         }
 
         return current;
