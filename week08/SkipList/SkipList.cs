@@ -32,6 +32,20 @@ public class SkipList<T> : IList<T>
     }
 
     /// <summary>
+    /// Initializes a new instance of the <see cref="SkipList{T}"/> class
+    /// with elements of given array.
+    /// </summary>
+    /// <param name="items">Elements to add.</param>
+    public SkipList(T[] items)
+        : this()
+    {
+        foreach (var item in items)
+        {
+            this.Add(item);
+        }
+    }
+
+    /// <summary>
     /// Gets number of elements contained in the collection.
     /// </summary>
     public int Count { get; private set; }
@@ -171,16 +185,16 @@ public class SkipList<T> : IList<T>
     /// <summary>
     /// Copy elements of the collection to given array starting from specific position.
     /// </summary>
-    /// <param name="array">Array to copy elements to.</param>
+    /// <param name="destination">Array to copy elements to.</param>
     /// <param name="startIndex">Zero-based index of array to start copying from.</param>
     /// <exception cref="ArgumentOutOfRangeException">Given index was negative.</exception>
     /// <exception cref="ArgumentException">Destination array doesn't have enough space
     /// to copy to starting from given index to the end of the array.</exception>
-    public void CopyTo(T[] array, int startIndex)
+    public void CopyTo(T[] destination, int startIndex)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(startIndex);
 
-        if (array.Length < startIndex + this.Count)
+        if (destination.Length < startIndex + this.Count)
         {
             throw new ArgumentException(
                 $"Destination array doesn't have enough space starting from {nameof(startIndex)}");
@@ -188,7 +202,7 @@ public class SkipList<T> : IList<T>
 
         foreach (var item in this)
         {
-            array[startIndex++] = item;
+            destination[startIndex++] = item;
         }
     }
 
@@ -265,14 +279,19 @@ public class SkipList<T> : IList<T>
     private Element? FindElement(Element current, T value)
     {
         while (current.Next != null && current.Next.Value != null &&
-            current.Next.Value.CompareTo(value) < 0)
+            current.Next.Value.CompareTo(value) <= 0)
         {
             current = current.Next;
         }
 
         if (current.Down == null)
         {
-            return current;
+            if (current.Value != null && current.Value.CompareTo(value) == 0)
+            {
+                return current;
+            }
+
+            return null;
         }
 
         return this.FindElement(current.Down, value);
@@ -309,13 +328,13 @@ public class SkipList<T> : IList<T>
         {
             this.CheckIteratorValidity();
 
-            if (this.current != null)
+            if (this.current == null)
             {
-                this.current = this.current.Next;
-                return true;
+                throw new NullReferenceException();
             }
 
-            return false;
+            this.current = this.current.Next;
+            return this.current != null;
         }
 
         public void Reset()
