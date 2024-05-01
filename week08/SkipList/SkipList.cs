@@ -225,7 +225,7 @@ public class SkipList<T> : IList<T>
 
     private void RemoveEmptyLevels()
     {
-        while (this.topLevelHead.Next != null && this.topLevelHead.Down != null)
+        while (this.topLevelHead.Next == null && this.topLevelHead.Down != null)
         {
             this.topLevelHead = this.topLevelHead.Down;
         }
