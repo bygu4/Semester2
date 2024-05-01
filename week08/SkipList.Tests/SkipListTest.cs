@@ -77,34 +77,34 @@ public static class SkipListTest
 
     private static List<object> indicesOutOfRange = new () { -1, 100, 5 };
 
-    private static IEnumerable<TestCaseData> testCases_IndexOutOfRange =
+    private static List<TestCaseData> testCases_IndexOutOfRange =
         SkipListTest.GetTestCaseData(elementsToAdd, indicesOutOfRange);
     
-    private static IEnumerable<TestCaseData> testCases_NotSupported =
+    private static List<TestCaseData> testCases_NotSupported =
         SkipListTest.GetTestCaseData(elementsToAdd, indicesInRange, elements);
     
-    private static IEnumerable<TestCaseData> testCases_Remove =
+    private static List<TestCaseData> testCases_Remove =
         SkipListTest.GetTestCaseData(elementsToAdd, elementsToRemove, removeOutput, collectionsAfterRemoving);
 
-    private static IEnumerable<TestCaseData> testCases_RemoveAt =
+    private static List<TestCaseData> testCases_RemoveAt =
         SkipListTest.GetTestCaseData(elementsToAdd, indicesToRemoveFrom, collectionsAfterRemoving);
 
-    private static IEnumerable<TestCaseData> testCases_Contains =
+    private static List<TestCaseData> testCases_Contains =
         SkipListTest.GetTestCaseData(elementsToAdd, elementsToFind, elementsWereFound);
     
-    private static IEnumerable<TestCaseData> testCases_IndexOf =
+    private static List<TestCaseData> testCases_IndexOf =
         SkipListTest.GetTestCaseData(elementsToAdd, elementsToFind, foundElementsIndices);
 
-    private static IEnumerable<TestCaseData> testCases_CopyTo_Correct =
+    private static List<TestCaseData> testCases_CopyTo_Correct =
         SkipListTest.GetTestCaseData(elementsToAdd, destinationLengths, startIndices_Correct);
 
-    private static IEnumerable<TestCaseData> testCases_CopyTo_NegativeIndex =
+    private static List<TestCaseData> testCases_CopyTo_NegativeIndex =
         SkipListTest.GetTestCaseData(elementsToAdd, destinationLengths, startIndices_Negative);
 
-    private static IEnumerable<TestCaseData> testCases_CopyTo_Overflow =
+    private static List<TestCaseData> testCases_CopyTo_Overflow =
         SkipListTest.GetTestCaseData(elementsToAdd, destinationLengths, startIndices_Overflow);
 
-    private static IEnumerable<TestCaseData> testCases_RemoveDuringIteration =
+    private static List<TestCaseData> testCases_RemoveDuringIteration =
         SkipListTest.GetTestCaseData(elementsToAdd, elements);
 
     private static void ConstructorTest_WithoutInitialization_CollectionIsEmpty<T>()
@@ -264,7 +264,7 @@ public static class SkipListTest
             () => SkipListTest.RemoveElementDuringIteration(testCollection, elementToRemove));
     }
 
-    private static IEnumerable<TestCaseData> GetTestCaseData(params List<object>[] arguments)
+    private static List<TestCaseData> GetTestCaseData(params List<object>[] arguments)
     {
         var result = new List<TestCaseData>();
         var testCase = new List<object>();

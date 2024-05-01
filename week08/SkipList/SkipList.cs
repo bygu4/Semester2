@@ -276,22 +276,22 @@ public class SkipList<T> : IList<T>
         return removed;
     }
 
-    private Element? FindElement(Element current, T value)
+    private Element? FindElement(Element? current, T value)
     {
-        while (current.Next != null && current.Next.Value != null &&
-            current.Next.Value.CompareTo(value) <= 0)
+        if (current == null)
         {
-            current = current.Next;
+            return null;
         }
 
-        if (current.Down == null)
+        if (current.Value != null && current.Value.CompareTo(value) == 0)
         {
-            if (current.Value != null && current.Value.CompareTo(value) == 0)
-            {
-                return current;
-            }
+            return current;
+        }
 
-            return null;
+        if (current.Next != null && current.Next.Value != null &&
+            current.Next.Value.CompareTo(value) <= 0)
+        {
+            return this.FindElement(current.Next, value);
         }
 
         return this.FindElement(current.Down, value);
