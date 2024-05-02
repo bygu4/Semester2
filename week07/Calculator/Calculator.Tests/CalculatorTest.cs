@@ -135,7 +135,7 @@ public class CalculatorTest
         ("45 - 50 = @ =", "sqrt(-5) =", "Undefined"),
     ];
 
-    private static List<object> testCases_NotADigits = ['+', 'a', '\b'];
+    private static List<object> testCases_NotDigits = ['+', 'a', '\b'];
 
     private static List<object> testCases_UnknownOperations = ['*', '5', 'q'];
 
