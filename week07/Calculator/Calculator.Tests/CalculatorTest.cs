@@ -169,8 +169,8 @@ public class CalculatorTest
     private static List<TestCaseData> TestCaseSource_UndefinedResults =
         CalculatorTest.GetTestCaseData(testCases_UndefinedResults);
 
-    private static List<TestCaseData> TestCaseSource_NotADigits =
-        CalculatorTest.GetTestCaseData(testCases_NotADigits);
+    private static List<TestCaseData> TestCaseSource_NotDigits =
+        CalculatorTest.GetTestCaseData(testCases_NotDigits);
 
     private static List<TestCaseData> TestCaseSource_UnknownOperations =
         CalculatorTest.GetTestCaseData(testCases_UnknownOperations);
@@ -224,7 +224,7 @@ public class CalculatorTest
     public void TestForUndefinedResults(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
-    [TestCaseSource(nameof(TestCaseSource_NotADigits))]
+    [TestCaseSource(nameof(TestCaseSource_NotDigits))]
     public void TestForAddDigit_NotADigit_ThrowException(CultureInfo testCulture, char value)
     {
         var testCalculator = CalculatorTest.TestSetUp(testCulture);
