@@ -8,7 +8,7 @@ namespace Calculator.Tests;
 using Operations;
 using System.Globalization;
 
-public class CalculatorTest
+public static class CalculatorTest
 {
     private static List<object> testCultures =
     [
@@ -176,7 +176,7 @@ public class CalculatorTest
         CalculatorTest.GetTestCaseData(testCases_UnknownOperations);
 
     [TestCaseSource(nameof(testCultures))]
-    public void TestForDecimalSeparator(CultureInfo testCulture)
+    public static void TestForDecimalSeparator(CultureInfo testCulture)
     {
         var testCalculator = CalculatorTest.TestSetUp(testCulture);
         Assert.That(
@@ -185,54 +185,54 @@ public class CalculatorTest
     }
 
     [TestCaseSource(nameof(TestCaseSource_AddDigit))]
-    public void TestForAddDigit(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForAddDigit(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_Decimal))]
-    public void TestForDecimal(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForDecimal(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_ToNegative))]
-    public void TestForToNegative(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForToNegative(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_Back))]
-    public void TestForBack(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForBack(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_SetOperation))]
-    public void TestForSetOperation(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForSetOperation(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_Calculate))]
-    public void TestForCalculate(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForCalculate(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_ClearOperand))]
-    public void TestForClearOperand(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForClearOperand(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_Clear))]
-    public void TestForClear(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForClear(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_UnaryOperations))]
-    public void TestForUnaryOperations(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForUnaryOperations(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_UndefinedResults))]
-    public void TestForUndefinedResults(CultureInfo testCulture, (string, string, string) testCase)
+    public static void TestForUndefinedResults(CultureInfo testCulture, (string, string, string) testCase)
         => CalculatorTest.TestBase(testCulture, testCase);
 
     [TestCaseSource(nameof(TestCaseSource_NotDigits))]
-    public void TestForAddDigit_NotADigit_ThrowException(CultureInfo testCulture, char value)
+    public static void TestForAddDigit_NotADigit_ThrowException(CultureInfo testCulture, char value)
     {
         var testCalculator = CalculatorTest.TestSetUp(testCulture);
         Assert.Throws<ArgumentException>(() => testCalculator.Operand_AddDigit(value));
     }
 
     [TestCaseSource(nameof(TestCaseSource_UnknownOperations))]
-    public void TestForSetOperation_UnknownOperation_ThrowException(CultureInfo testCulture, char value)
+    public static void TestForSetOperation_UnknownOperation_ThrowException(CultureInfo testCulture, char value)
     {
         var testCalculator = CalculatorTest.TestSetUp(testCulture);
         Assert.Throws<ArgumentException>(
