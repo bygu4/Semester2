@@ -7,75 +7,75 @@ namespace SkipList.Tests;
 
 public static class SkipListTest
 {
-    private static List<object> elementsToAdd = new ()
-    {
+    private static List<object> elementsToAdd =
+    [
         new string[] { "eewq", "", "32123", "aaa", "aaa", "qqqwwwqqq" },
         new float[] { 22.2f, 0, 0.5f, -100, 43.99f, 0, 8 },
         new (int, int)[] { (1, 2), (55, 2), (-12, 0), (66, 3), (78, 33) },
-    };
+    ];
 
-    private static List<object> elementsToRemove = new ()
-    {
+    private static List<object> elementsToRemove =
+    [
         new string[] { "TTTTTT", "", "1", "aaa", "eewq", "" },
         new float[] { 8, 0, -100, 9090909, -1.11f, 8 },
         new (int, int)[] { (55, 2), (0, 0), (55, -55), (1, 2) },
-    };
+    ];
 
-    private static List<object> removeOutput = new ()
-    {
+    private static List<object> removeOutput =
+    [
         new bool[] { false, true, false, true, true, false },
         new bool[] { true, true, true, false, false, false },
         new bool[] { true, false, false, true },
-    };
+    ];
 
-    private static List<object> indicesToRemoveFrom = new ()
-    {
+    private static List<object> indicesToRemoveFrom =
+    [
         new int[] { 0, 1, 2 },
         new int[] { 4, 0, 0 },
         new int[] { 1, 1 },
-    };
+    ];
 
-    private static List<object> collectionsAfterRemoving = new ()
-    {
+    private static List<object> collectionsAfterRemoving =
+    [
         new string[] { "32123", "aaa", "qqqwwwqqq" },
         new float[] { 0, 0.5f, 22.2f, 43.99f },
         new (int, int)[] { (-12, 0), (66, 3), (78, 33) },
-    };
+    ];
 
-    private static List<object> elementsToFind = new ()
-    {
+    private static List<object> elementsToFind =
+    [
         new string[] { "", "", "4325225", "wqw", "aaa" },
         new float[] { 0, -100, -100, 999, 7, 5 },
         new (int, int)[] { (1, 2), (1001, 1001), (1, 2), (-12, 0) },
-    };
+    ];
 
-    private static List<object> elementsWereFound = new ()
-    {
+    private static List<object> elementsWereFound =
+    [
         new bool[] { true, true, false, false, true },
         new bool[] { true, true, true, false, false, false },
         new bool[] { true, false, true, true },
-    };
+    ];
 
-    private static List<object> foundElementsIndices = new ()
-    {
+    private static List<object> foundElementsIndices =
+    [
         new int[] { 0, 0, -1, -1, 2 },
         new int[] { 1, 0, 0, -1, -1, -1 },
         new int[] { 1, -1, 1, 0 },
-    };
+    ];
 
-    private static List<object> destinationLengths = new () { 78, 44, 5 };
+    private static List<object> destinationLengths = [78, 44, 5];
 
-    private static List<object> startIndices_Correct = new () { 45, 10, 0 };
+    private static List<object> startIndices_Correct = [45, 10, 0];
 
-    private static List<object> startIndices_Negative = new () { -1, -2, -3 };
+    private static List<object> startIndices_Negative = [-1, -2, -3];
 
-    private static List<object> startIndices_Overflow = new () { 78, 42, 1 };
+    private static List<object> startIndices_Overflow = [78, 42, 1];
 
-    private static List<object> elements = new () { "aaa", 8, (1, 2) };
+    private static List<object> elements = ["aaa", 8, (1, 2)];
 
-    private static List<object> indicesInRange = new () { 2, 3, 1 };
+    private static List<object> indicesInRange = [2, 3, 1];
 
-    private static List<object> indicesOutOfRange = new () { -1, 100, 5 };
+    private static List<object> indicesOutOfRange = [-1, 100, 5];
 
     private static List<TestCaseData> testCases_IndexOutOfRange =
         SkipListTest.GetTestCaseData(elementsToAdd, indicesOutOfRange);
@@ -339,7 +339,7 @@ public static class SkipListTest
 
     private static void RemoveElementDuringIteration<T>(IList<T> collection, T elementToRemove)
     {
-        foreach (var element in collection)
+        foreach (var _ in collection)
         {
             collection.Remove(elementToRemove);
         }
