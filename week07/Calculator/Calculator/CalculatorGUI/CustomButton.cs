@@ -8,7 +8,7 @@ namespace CalculatorGUI
     using System.ComponentModel;
 
     /// <summary>
-    /// Button with specific value.
+    /// Button with specific char value.
     /// </summary>
     [DefaultEvent("Click")]
     public partial class CustomButton : UserControl
@@ -16,10 +16,7 @@ namespace CalculatorGUI
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomButton"/> class.
         /// </summary>
-        public CustomButton()
-        {
-            this.InitializeComponent();
-        }
+        public CustomButton() => this.InitializeComponent();
 
         /// <summary>
         /// Handlers that are invoked when the button is clicked.
@@ -29,7 +26,7 @@ namespace CalculatorGUI
         /// <summary>
         /// Gets or sets the value of the button.
         /// </summary>
-        public int Value { get; set; }
+        public char Value { get; set; }
 
         /// <summary>
         /// Gets or sets the label on the button.

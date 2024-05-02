@@ -53,7 +53,7 @@ public static class CalculatorKeys
         }
         else if (e.KeyCode == Keys.Back)
         {
-            calculator.Operand_DeleteLastDigit();
+            calculator.Operand_Back();
         }
         else if (e.KeyCode == Keys.Decimal ||
             (char)(e.KeyCode - OemOffset) == calculator.DecimalSeparator[0])

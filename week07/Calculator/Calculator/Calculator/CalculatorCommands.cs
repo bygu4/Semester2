@@ -91,7 +91,7 @@ public static class CalculatorCommands
                 calculator.Operand_Clear();
                 return;
             case CalculatorCommands.Back:
-                calculator.Operand_DeleteLastDigit();
+                calculator.Operand_Back();
                 return;
             case CalculatorCommands.Decimal:
                 calculator.Operand_Decimal();

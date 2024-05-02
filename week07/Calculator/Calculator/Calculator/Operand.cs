@@ -25,10 +25,7 @@ public class Operand : INotifyPropertyChanged
     /// <summary>
     /// Initializes a new instance of the <see cref="Operand"/> class.
     /// </summary>
-    public Operand()
-    {
-        this.representation = Operand.Default;
-    }
+    public Operand() => this.representation = Operand.Default;
 
     /// <summary>
     /// Handlers that are invoked after setting of Operand properties.
@@ -40,10 +37,7 @@ public class Operand : INotifyPropertyChanged
     /// </summary>
     public string Representation
     {
-        get
-        {
-            return this.representation;
-        }
+        get => this.representation;
 
         private set
         {
@@ -57,10 +51,7 @@ public class Operand : INotifyPropertyChanged
     /// </summary>
     public float Value
     {
-        get
-        {
-            return this.value;
-        }
+        get => this.value;
 
         private set
         {
@@ -78,10 +69,7 @@ public class Operand : INotifyPropertyChanged
     /// <summary>
     /// Set Operand to default values.
     /// </summary>
-    public void SetToDefault()
-    {
-        this.SetByRepresentation(Operand.Default);
-    }
+    public void SetToDefault() => this.SetByRepresentation(Operand.Default);
 
     /// <summary>
     /// Add digit to the representation of the Operand.
@@ -110,9 +98,9 @@ public class Operand : INotifyPropertyChanged
     }
 
     /// <summary>
-    /// Delete the last digit from the representation of the Operand.
+    /// Delete the last character of Operand representation.
     /// </summary>
-    public void DeleteLastDigit()
+    public void Back()
     {
         if ((this.Value > 0 && this.Representation.Length == 1) ||
             this.representation == $"-{Operand.Default}")
@@ -133,9 +121,7 @@ public class Operand : INotifyPropertyChanged
     /// Add decimal point to the representation of the Operand.
     /// </summary>
     public void Decimal()
-    {
-        this.SetByRepresentation($"{this.Representation}{this.DecimalSeparator}");
-    }
+        => this.SetByRepresentation($"{this.Representation}{this.DecimalSeparator}");
 
     /// <summary>
     /// Convert Operand value to the negative one.
@@ -157,34 +143,22 @@ public class Operand : INotifyPropertyChanged
     /// <summary>
     /// Convert Operand value to percents.
     /// </summary>
-    public void InPercents()
-    {
-        this.ApplyUnaryOperation(Operations.InPercents);
-    }
+    public void InPercents() => this.ApplyUnaryOperation(Operations.InPercents);
 
     /// <summary>
     /// Raise Operand value to the power of two.
     /// </summary>
-    public void Square()
-    {
-        this.ApplyUnaryOperation(Operations.Square);
-    }
+    public void Square() => this.ApplyUnaryOperation(Operations.Square);
 
     /// <summary>
     /// Set Operand value as its square root.
     /// </summary>
-    public void SquareRoot()
-    {
-        this.ApplyUnaryOperation(Operations.SquareRoot);
-    }
+    public void SquareRoot() => this.ApplyUnaryOperation(Operations.SquareRoot);
 
     /// <summary>
     /// Convert Operand value to the inverse one.
     /// </summary>
-    public void Inverse()
-    {
-        this.ApplyUnaryOperation(Operations.Inverse);
-    }
+    public void Inverse() => this.ApplyUnaryOperation(Operations.Inverse);
 
     /// <summary>
     /// Set Operand properties based on given value.
@@ -224,7 +198,5 @@ public class Operand : INotifyPropertyChanged
     }
 
     private void NotifyPropertyChanged(string propertyName)
-    {
-        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+        => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

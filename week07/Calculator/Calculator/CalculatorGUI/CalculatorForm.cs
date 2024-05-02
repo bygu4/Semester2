@@ -6,7 +6,6 @@
 namespace CalculatorGUI
 {
     using Calculator;
-    using Operations;
 
     /// <summary>
     /// The main form of the application.
@@ -43,69 +42,10 @@ namespace CalculatorGUI
                 DataSourceUpdateMode.OnPropertyChanged);
         }
 
-        private void Calculate_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Calculate();
-        }
-
-        private void SetOperation_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.SetBinaryOperation((Operations.Binary)e.Value);
-        }
-
-        private void Clear_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Clear();
-        }
-
-        private void ClearOperand_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_Clear();
-        }
-
-        private void AddDigit_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_AddDigit((char)e.Value);
-        }
-
-        private void DeleteLastDigit_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_DeleteLastDigit();
-        }
-
-        private void Decimal_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_Decimal();
-        }
-
-        private void ToNegative_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_ToNegative();
-        }
-
-        private void InPercents_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_InPercents();
-        }
-
-        private void Square_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_Square();
-        }
-
-        private void SquareRoot_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_SquareRoot();
-        }
-
-        private void Inverse_Button_Click(object sender, CustomButtonClickArgs e)
-        {
-            this.calculator.Operand_Inverse();
-        }
+        private void CalculatorForm_ButtonClick(object sender, CustomButtonClickArgs e)
+            => CalculatorCommands.Execute(this.calculator, e.Value);
 
         private void CalculatorForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            CalculatorKeys.ProcessKeyDown(this.calculator, e);
-        }
+            => CalculatorKeys.ProcessKeyDown(this.calculator, e);
     }
 }

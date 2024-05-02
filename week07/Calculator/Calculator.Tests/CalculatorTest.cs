@@ -11,7 +11,7 @@ using System.Globalization;
 public class CalculatorTest
 {
     private Calculator testCalculator;
-    private CultureInfo testCulture = new CultureInfo("ru-RU");
+    private CultureInfo testCulture = new ("ru-RU");
 
     [SetUp]
     public void Setup()

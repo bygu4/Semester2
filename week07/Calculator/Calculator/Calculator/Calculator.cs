@@ -122,74 +122,56 @@ public class Calculator : INotifyPropertyChanged
     /// Clear the last operand of current expression.
     /// </summary>
     public void Operand_Clear()
-    {
-        this.CurrentOperand_ExecuteInputMethod((Operand x) => x.SetToDefault());
-    }
+        => this.CurrentOperand_ExecuteInputMethod((Operand x) => x.SetToDefault());
 
     /// <summary>
     /// Add given digit to the last operand of current expression.
     /// </summary>
     /// <param name="digit">Digit to add.</param>
     public void Operand_AddDigit(char digit)
-    {
-        this.CurrentOperand_ExecuteInputMethod((Operand x) => x.AddDigit(digit));
-    }
+        => this.CurrentOperand_ExecuteInputMethod((Operand x) => x.AddDigit(digit));
 
     /// <summary>
-    /// Delete the last digit from the last operand of current expression.
+    /// Delete the last character of the last operand of current expression.
     /// </summary>
-    public void Operand_DeleteLastDigit()
-    {
-        this.CurrentOperand_ExecuteInputMethod((Operand x) => x.DeleteLastDigit());
-    }
+    public void Operand_Back()
+        => this.CurrentOperand_ExecuteInputMethod((Operand x) => x.Back());
 
     /// <summary>
     /// Add decimal point to the last operand of current expression.
     /// </summary>
     public void Operand_Decimal()
-    {
-        this.CurrentOperand_ExecuteInputMethod((Operand x) => x.Decimal());
-    }
+        => this.CurrentOperand_ExecuteInputMethod((Operand x) => x.Decimal());
 
     /// <summary>
     /// Convert the last operand of current expression to the negative one.
     /// </summary>
     public void Operand_ToNegative()
-    {
-        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.ToNegative());
-    }
+        => this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.ToNegative());
 
     /// <summary>
     /// Convert the last operand of current expression to percents.
     /// </summary>
     public void Operand_InPercents()
-    {
-        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.InPercents());
-    }
+        => this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.InPercents());
 
     /// <summary>
     /// Raise the last operand of the expression to the power of two.
     /// </summary>
     public void Operand_Square()
-    {
-        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.Square());
-    }
+        => this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.Square());
 
     /// <summary>
     /// Set the last operand of the expression as its square root.
     /// </summary>
     public void Operand_SquareRoot()
-    {
-        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.SquareRoot());
-    }
+        => this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.SquareRoot());
 
     /// <summary>
     /// Set the last operand of the expression to the inverse one.
     /// </summary>
     public void Operand_Inverse()
-    {
-        this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.Inverse());
-    }
+        => this.CurrentOperand_ExecuteUnaryOperationMethod((Operand x) => x.Inverse());
 
     private (string, float) GetResultOfOperation()
     {
@@ -199,9 +181,9 @@ public class Calculator : INotifyPropertyChanged
         }
         else
         {
-            string expression = this.operation.GetRepresentation(
+            var expression = this.operation.GetRepresentation(
                 this.firstOperand.Representation, this.secondOperand.Representation);
-            float result = this.operation.GetResult(
+            var result = this.operation.GetResult(
                 this.firstOperand.Value, this.secondOperand.Value);
 
             return (expression, result);
@@ -274,9 +256,7 @@ public class Calculator : INotifyPropertyChanged
     }
 
     private void NotifyPropertyChanged(string propertyName)
-    {
-        this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
+        => this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
     private void ChangePropertyAndNotify(
         ref string property, string newValue, string propertyName)

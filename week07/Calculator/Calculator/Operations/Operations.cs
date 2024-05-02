@@ -41,7 +41,7 @@ public static class Operations
     /// </summary>
     public static Operation InPercents
     {
-        get => new Operation(
+        get => new (
             (x, y) => $"{x}%",
             (x, y) => x / 100);
     }
@@ -51,7 +51,7 @@ public static class Operations
     /// </summary>
     public static Operation Square
     {
-        get => new Operation(
+        get => new (
             (x, y) => $"sqr({x})",
             (x, y) => (float)Math.Pow(x, 2));
     }
@@ -61,7 +61,7 @@ public static class Operations
     /// </summary>
     public static Operation SquareRoot
     {
-        get => new Operation(
+        get => new (
             (x, y) => $"sqrt({x})",
             (x, y) => (float)Math.Sqrt(x));
     }
@@ -71,35 +71,35 @@ public static class Operations
     /// </summary>
     public static Operation Inverse
     {
-        get => new Operation(
+        get => new (
             (x, y) => $"1/{x}",
             (x, y) => (x != 0) ? 1f / x : float.NaN);
     }
 
     private static Operation Addition
     {
-        get => new Operation(
+        get => new (
             (x, y) => $"{x} {(char)Binary.Addition} {y} =",
             (x, y) => x + y);
     }
 
     private static Operation Substraction
     {
-        get => new Operation(
+        get => new (
             (x, y) => $"{x} {(char)Binary.Substraction} {y} =",
             (x, y) => x - y);
     }
 
     private static Operation Multiplication
     {
-        get => new Operation(
+        get => new (
             (x, y) => $"{x} {(char)Binary.Multiplication} {y} =",
             (x, y) => x * y);
     }
 
     private static Operation Division
     {
-        get => new Operation(
+        get => new (
             (x, y) => $"{x} {(char)Binary.Division} {y} =",
             (x, y) => (y != 0) ? x / y : float.NaN);
     }

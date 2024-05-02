@@ -56,7 +56,7 @@ namespace CalculatorGUI
             Decimal_Button = new CustomButton();
             Calculate_Button = new CustomButton();
             One_Button = new CustomButton();
-            DeleteLastDigit_Button = new CustomButton();
+            Back_Button = new CustomButton();
             Clear_Button = new CustomButton();
             tableLayoutPanel2 = new TableLayoutPanel();
             Result_Box = new RichTextBox();
@@ -94,7 +94,7 @@ namespace CalculatorGUI
             tableLayoutPanel1.Controls.Add(Decimal_Button, 2, 5);
             tableLayoutPanel1.Controls.Add(Calculate_Button, 3, 5);
             tableLayoutPanel1.Controls.Add(One_Button, 0, 2);
-            tableLayoutPanel1.Controls.Add(DeleteLastDigit_Button, 3, 0);
+            tableLayoutPanel1.Controls.Add(Back_Button, 3, 0);
             tableLayoutPanel1.Controls.Add(Clear_Button, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 146);
@@ -125,8 +125,8 @@ namespace CalculatorGUI
             InPercents_Button.Size = new Size(94, 67);
             InPercents_Button.TabIndex = 0;
             InPercents_Button.TabStop = false;
-            InPercents_Button.Value = 0;
-            InPercents_Button.Click += InPercents_Button_Click;
+            InPercents_Button.Value = '%';
+            InPercents_Button.Click += CalculatorForm_ButtonClick;
             // 
             // ClearOperand_Button
             // 
@@ -142,8 +142,8 @@ namespace CalculatorGUI
             ClearOperand_Button.Size = new Size(94, 67);
             ClearOperand_Button.TabIndex = 2;
             ClearOperand_Button.TabStop = false;
-            ClearOperand_Button.Value = 0;
-            ClearOperand_Button.Click += ClearOperand_Button_Click;
+            ClearOperand_Button.Value = '\r';
+            ClearOperand_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Square_Button
             // 
@@ -160,8 +160,8 @@ namespace CalculatorGUI
             Square_Button.Size = new Size(94, 67);
             Square_Button.TabIndex = 4;
             Square_Button.TabStop = false;
-            Square_Button.Value = 0;
-            Square_Button.Click += Square_Button_Click;
+            Square_Button.Value = 'Q';
+            Square_Button.Click += CalculatorForm_ButtonClick;
             // 
             // SquareRoot_Button
             // 
@@ -177,8 +177,8 @@ namespace CalculatorGUI
             SquareRoot_Button.Size = new Size(94, 67);
             SquareRoot_Button.TabIndex = 5;
             SquareRoot_Button.TabStop = false;
-            SquareRoot_Button.Value = 0;
-            SquareRoot_Button.Click += SquareRoot_Button_Click;
+            SquareRoot_Button.Value = '@';
+            SquareRoot_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Inverse_Button
             // 
@@ -194,8 +194,8 @@ namespace CalculatorGUI
             Inverse_Button.Size = new Size(94, 67);
             Inverse_Button.TabIndex = 6;
             Inverse_Button.TabStop = false;
-            Inverse_Button.Value = 0;
-            Inverse_Button.Click += Inverse_Button_Click;
+            Inverse_Button.Value = 'R';
+            Inverse_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Division_Button
             // 
@@ -211,8 +211,8 @@ namespace CalculatorGUI
             Division_Button.Size = new Size(94, 67);
             Division_Button.TabIndex = 7;
             Division_Button.TabStop = false;
-            Division_Button.Value = 247;
-            Division_Button.Click += SetOperation_Button_Click;
+            Division_Button.Value = '÷';
+            Division_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Two_Button
             // 
@@ -228,8 +228,8 @@ namespace CalculatorGUI
             Two_Button.Size = new Size(94, 67);
             Two_Button.TabIndex = 9;
             Two_Button.TabStop = false;
-            Two_Button.Value = 50;
-            Two_Button.Click += AddDigit_Button_Click;
+            Two_Button.Value = '2';
+            Two_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Three_Button
             // 
@@ -245,8 +245,8 @@ namespace CalculatorGUI
             Three_Button.Size = new Size(94, 67);
             Three_Button.TabIndex = 10;
             Three_Button.TabStop = false;
-            Three_Button.Value = 51;
-            Three_Button.Click += AddDigit_Button_Click;
+            Three_Button.Value = '3';
+            Three_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Multiplication_Button
             // 
@@ -262,8 +262,8 @@ namespace CalculatorGUI
             Multiplication_Button.Size = new Size(94, 67);
             Multiplication_Button.TabIndex = 11;
             Multiplication_Button.TabStop = false;
-            Multiplication_Button.Value = 215;
-            Multiplication_Button.Click += SetOperation_Button_Click;
+            Multiplication_Button.Value = '×';
+            Multiplication_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Four_Button
             // 
@@ -279,8 +279,8 @@ namespace CalculatorGUI
             Four_Button.Size = new Size(94, 67);
             Four_Button.TabIndex = 12;
             Four_Button.TabStop = false;
-            Four_Button.Value = 52;
-            Four_Button.Click += AddDigit_Button_Click;
+            Four_Button.Value = '4';
+            Four_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Five_Button
             // 
@@ -296,8 +296,8 @@ namespace CalculatorGUI
             Five_Button.Size = new Size(94, 67);
             Five_Button.TabIndex = 13;
             Five_Button.TabStop = false;
-            Five_Button.Value = 53;
-            Five_Button.Click += AddDigit_Button_Click;
+            Five_Button.Value = '5';
+            Five_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Six_Button
             // 
@@ -313,8 +313,8 @@ namespace CalculatorGUI
             Six_Button.Size = new Size(94, 67);
             Six_Button.TabIndex = 14;
             Six_Button.TabStop = false;
-            Six_Button.Value = 54;
-            Six_Button.Click += AddDigit_Button_Click;
+            Six_Button.Value = '6';
+            Six_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Substraction_Button
             // 
@@ -330,8 +330,8 @@ namespace CalculatorGUI
             Substraction_Button.Size = new Size(94, 67);
             Substraction_Button.TabIndex = 15;
             Substraction_Button.TabStop = false;
-            Substraction_Button.Value = 45;
-            Substraction_Button.Click += SetOperation_Button_Click;
+            Substraction_Button.Value = '-';
+            Substraction_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Seven_Button
             // 
@@ -347,8 +347,8 @@ namespace CalculatorGUI
             Seven_Button.Size = new Size(94, 67);
             Seven_Button.TabIndex = 16;
             Seven_Button.TabStop = false;
-            Seven_Button.Value = 55;
-            Seven_Button.Click += AddDigit_Button_Click;
+            Seven_Button.Value = '7';
+            Seven_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Eight_Button
             // 
@@ -364,8 +364,8 @@ namespace CalculatorGUI
             Eight_Button.Size = new Size(94, 67);
             Eight_Button.TabIndex = 17;
             Eight_Button.TabStop = false;
-            Eight_Button.Value = 56;
-            Eight_Button.Click += AddDigit_Button_Click;
+            Eight_Button.Value = '8';
+            Eight_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Nine_Button
             // 
@@ -381,8 +381,8 @@ namespace CalculatorGUI
             Nine_Button.Size = new Size(94, 67);
             Nine_Button.TabIndex = 18;
             Nine_Button.TabStop = false;
-            Nine_Button.Value = 57;
-            Nine_Button.Click += AddDigit_Button_Click;
+            Nine_Button.Value = '9';
+            Nine_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Addition_Button
             // 
@@ -398,8 +398,8 @@ namespace CalculatorGUI
             Addition_Button.Size = new Size(94, 67);
             Addition_Button.TabIndex = 19;
             Addition_Button.TabStop = false;
-            Addition_Button.Value = 43;
-            Addition_Button.Click += SetOperation_Button_Click;
+            Addition_Button.Value = '+';
+            Addition_Button.Click += CalculatorForm_ButtonClick;
             // 
             // ToNegative_Button
             // 
@@ -415,8 +415,8 @@ namespace CalculatorGUI
             ToNegative_Button.Size = new Size(94, 69);
             ToNegative_Button.TabIndex = 20;
             ToNegative_Button.TabStop = false;
-            ToNegative_Button.Value = 0;
-            ToNegative_Button.Click += ToNegative_Button_Click;
+            ToNegative_Button.Value = '±';
+            ToNegative_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Zero_Button
             // 
@@ -432,8 +432,8 @@ namespace CalculatorGUI
             Zero_Button.Size = new Size(94, 69);
             Zero_Button.TabIndex = 21;
             Zero_Button.TabStop = false;
-            Zero_Button.Value = 48;
-            Zero_Button.Click += AddDigit_Button_Click;
+            Zero_Button.Value = '0';
+            Zero_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Decimal_Button
             // 
@@ -449,8 +449,8 @@ namespace CalculatorGUI
             Decimal_Button.Size = new Size(94, 69);
             Decimal_Button.TabIndex = 22;
             Decimal_Button.TabStop = false;
-            Decimal_Button.Value = 0;
-            Decimal_Button.Click += Decimal_Button_Click;
+            Decimal_Button.Value = ',';
+            Decimal_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Calculate_Button
             // 
@@ -466,8 +466,8 @@ namespace CalculatorGUI
             Calculate_Button.Size = new Size(94, 69);
             Calculate_Button.TabIndex = 23;
             Calculate_Button.TabStop = false;
-            Calculate_Button.Value = 0;
-            Calculate_Button.Click += Calculate_Button_Click;
+            Calculate_Button.Value = '=';
+            Calculate_Button.Click += CalculatorForm_ButtonClick;
             // 
             // One_Button
             // 
@@ -483,25 +483,25 @@ namespace CalculatorGUI
             One_Button.Size = new Size(94, 67);
             One_Button.TabIndex = 8;
             One_Button.TabStop = false;
-            One_Button.Value = 49;
-            One_Button.Click += AddDigit_Button_Click;
+            One_Button.Value = '1';
+            One_Button.Click += CalculatorForm_ButtonClick;
             // 
-            // DeleteLastDigit_Button
+            // Back_Button
             // 
-            DeleteLastDigit_Button.AutoValidate = AutoValidate.Disable;
-            DeleteLastDigit_Button.BackColor = Color.WhiteSmoke;
-            DeleteLastDigit_Button.ButtonColor = Color.LightGray;
-            DeleteLastDigit_Button.CausesValidation = false;
-            DeleteLastDigit_Button.Dock = DockStyle.Fill;
-            DeleteLastDigit_Button.Label = "<-";
-            DeleteLastDigit_Button.Location = new Point(282, 0);
-            DeleteLastDigit_Button.Margin = new Padding(0);
-            DeleteLastDigit_Button.Name = "DeleteLastDigit_Button";
-            DeleteLastDigit_Button.Size = new Size(94, 67);
-            DeleteLastDigit_Button.TabIndex = 3;
-            DeleteLastDigit_Button.TabStop = false;
-            DeleteLastDigit_Button.Value = 0;
-            DeleteLastDigit_Button.Click += DeleteLastDigit_Button_Click;
+            Back_Button.AutoValidate = AutoValidate.Disable;
+            Back_Button.BackColor = Color.WhiteSmoke;
+            Back_Button.ButtonColor = Color.LightGray;
+            Back_Button.CausesValidation = false;
+            Back_Button.Dock = DockStyle.Fill;
+            Back_Button.Label = "<-";
+            Back_Button.Location = new Point(282, 0);
+            Back_Button.Margin = new Padding(0);
+            Back_Button.Name = "Back_Button";
+            Back_Button.Size = new Size(94, 67);
+            Back_Button.TabIndex = 3;
+            Back_Button.TabStop = false;
+            Back_Button.Value = '\b';
+            Back_Button.Click += CalculatorForm_ButtonClick;
             // 
             // Clear_Button
             // 
@@ -517,8 +517,8 @@ namespace CalculatorGUI
             Clear_Button.Size = new Size(94, 67);
             Clear_Button.TabIndex = 1;
             Clear_Button.TabStop = false;
-            Clear_Button.Value = 0;
-            Clear_Button.Click += Clear_Button_Click;
+            Clear_Button.Value = '\n';
+            Clear_Button.Click += CalculatorForm_ButtonClick;
             // 
             // tableLayoutPanel2
             // 
@@ -599,7 +599,7 @@ namespace CalculatorGUI
         private CustomButton InPercents_Button;
         private CustomButton Clear_Button;
         private CustomButton ClearOperand_Button;
-        private CustomButton DeleteLastDigit_Button;
+        private CustomButton Back_Button;
         private CustomButton Square_Button;
         private CustomButton SquareRoot_Button;
         private CustomButton Inverse_Button;

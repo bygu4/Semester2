@@ -8,20 +8,16 @@ namespace CalculatorGUI
     /// <summary>
     /// Class of event arguments for the click of CustomButton.
     /// </summary>
-    public class CustomButtonClickArgs : EventArgs
+    /// <remarks>
+    /// Initializes a new instance of the <see cref="CustomButtonClickArgs"/> class.
+    /// </remarks>
+    /// <param name="value">Value to set for this instance.</param>
+    public class CustomButtonClickArgs(char value)
+        : EventArgs
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomButtonClickArgs"/> class.
-        /// </summary>
-        /// <param name="value">Value to set for this instance.</param>
-        public CustomButtonClickArgs(int value)
-        {
-            this.Value = value;
-        }
-
         /// <summary>
         /// Gets the value of this instance.
         /// </summary>
-        public int Value { get; private set; }
+        public char Value { get; private set; } = value;
     }
 }
