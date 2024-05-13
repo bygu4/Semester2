@@ -3,23 +3,22 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-namespace CalculatorGUI
+namespace CalculatorGUI;
+
+/// <summary>
+/// The main class of the application.
+/// </summary>
+public static class Program
 {
     /// <summary>
-    /// The main class of the application.
+    ///  The main entry point for the application.
     /// </summary>
-    public static class Program
+    [STAThread]
+    public static void Main()
     {
-        /// <summary>
-        ///  The main entry point for the application.
-        /// </summary>
-        [STAThread]
-        public static void Main()
-        {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new CalculatorForm());
-        }
+        // To customize application configuration such as set high DPI settings or default font,
+        // see https://aka.ms/applicationconfiguration.
+        ApplicationConfiguration.Initialize();
+        Application.Run(new CalculatorForm());
     }
 }

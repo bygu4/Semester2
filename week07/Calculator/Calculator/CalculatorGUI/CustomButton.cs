@@ -3,53 +3,52 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 // </copyright>
 
-namespace CalculatorGUI
+namespace CalculatorGUI;
+
+using System.ComponentModel;
+
+/// <summary>
+/// Button with specific char value.
+/// </summary>
+[DefaultEvent("Click")]
+public partial class CustomButton : UserControl
 {
-    using System.ComponentModel;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CustomButton"/> class.
+    /// </summary>
+    public CustomButton() => this.InitializeComponent();
 
     /// <summary>
-    /// Button with specific char value.
+    /// Handlers that are invoked when the button is clicked.
     /// </summary>
-    [DefaultEvent("Click")]
-    public partial class CustomButton : UserControl
+    public new event EventHandler<CustomButtonClickArgs>? Click;
+
+    /// <summary>
+    /// Gets or sets the value of the button.
+    /// </summary>
+    public char Value { get; set; }
+
+    /// <summary>
+    /// Gets or sets the label on the button.
+    /// </summary>
+    public string Label
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CustomButton"/> class.
-        /// </summary>
-        public CustomButton() => this.InitializeComponent();
+        get => this.Button.Text;
+        set => this.Button.Text = value;
+    }
 
-        /// <summary>
-        /// Handlers that are invoked when the button is clicked.
-        /// </summary>
-        public new event EventHandler<CustomButtonClickArgs>? Click;
+    /// <summary>
+    /// Gets or sets background color of the button.
+    /// </summary>
+    public Color ButtonColor
+    {
+        get => this.Button.BackColor;
+        set => this.Button.BackColor = value;
+    }
 
-        /// <summary>
-        /// Gets or sets the value of the button.
-        /// </summary>
-        public char Value { get; set; }
-
-        /// <summary>
-        /// Gets or sets the label on the button.
-        /// </summary>
-        public string Label
-        {
-            get => this.Button.Text;
-            set => this.Button.Text = value;
-        }
-
-        /// <summary>
-        /// Gets or sets background color of the button.
-        /// </summary>
-        public Color ButtonColor
-        {
-            get => this.Button.BackColor;
-            set => this.Button.BackColor = value;
-        }
-
-        private void Button_Click(object sender, EventArgs e)
-        {
-            this.Click?.Invoke(this, new CustomButtonClickArgs(this.Value));
-            this.ActiveControl = null;
-        }
+    private void Button_Click(object sender, EventArgs e)
+    {
+        this.Click?.Invoke(this, new CustomButtonClickArgs(this.Value));
+        this.ActiveControl = null;
     }
 }

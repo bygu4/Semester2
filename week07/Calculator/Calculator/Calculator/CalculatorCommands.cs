@@ -28,7 +28,7 @@ public static class CalculatorCommands
     public const char Delete = '\r';
 
     /// <summary>
-    /// Value of Operand_DeleteLastDigit command.
+    /// Value of Operand_Back command.
     /// </summary>
     public const char Back = '\b';
 
