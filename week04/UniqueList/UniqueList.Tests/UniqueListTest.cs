@@ -21,11 +21,6 @@ public class TestBase
 [TestFixture]
 public class TestForEmptyList : TestBase
 {
-    [SetUp]
-    public void EmptyListSetup()
-    {
-    }
-
     [Test]
     public void TestForAdd_AddToEmptyList_SizeHasChanged()
     {
