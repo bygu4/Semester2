@@ -16,11 +16,6 @@ public class ParsingTreeTest
         return Path.Join(testFilesDirectory, fileName);
     }
 
-    [SetUp]
-    public void Setup()
-    {
-    }
-
     [Test]
     public void TestForParsingTree_EmptyFile_ThrowException()
     {
