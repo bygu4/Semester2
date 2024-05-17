@@ -1,3 +1,8 @@
+// <copyright file="UtilityTest.cs" company="SPBU">
+// Copyright (c) Alexander Bugaev 2024. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
+// </copyright>
+
 namespace Utility.Tests;
 
 public static class Tests
@@ -9,6 +14,7 @@ public static class Tests
         new List<string> { "2321321", "", "aa", "1", "2" },
         new (int, int)[] { (1, 4), (6, 2), (7, 8), (0, 0), (-10, -1) },
         new List<float> { 5.5f, 5.5f, 5.5f },
+        new List<uint> { 77, 0, 32, 54, 1, 2, 3 },
         Array.Empty<double>(),
     ];
 
@@ -19,6 +25,7 @@ public static class Tests
         new Comparer<string>((x, y) => x.Length.CompareTo(y.Length)),
         new Comparer<(int, int)>((x, y) => x.Item2.CompareTo(y.Item2)),
         new Comparer<float>((x, y) => x.CompareTo(y)),
+        new Comparer<uint>((x, y) => (x % 7).CompareTo(y % 7)),
         new Comparer<double>((x, y) => x.CompareTo(y)),
     ];
 
@@ -29,6 +36,7 @@ public static class Tests
         new List<string> { "", "1", "2", "aa", "2321321" },
         new (int, int)[] { (-10, -1), (0, 0), (6, 2), (1, 4), (7, 8) },
         new List<float> { 5.5f, 5.5f, 5.5f },
+        new List<uint> { 77, 0, 1, 2, 3, 32, 54 },
         Array.Empty<double>(),
     ];
 
