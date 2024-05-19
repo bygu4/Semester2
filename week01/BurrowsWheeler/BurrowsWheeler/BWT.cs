@@ -21,9 +21,9 @@ public static class BWT
     public static (string, int) Transform(string inputString)
     {
         transformingString = inputString;
-        int[] shifts = Enumerable.Range(0, inputString.Length).ToArray();
+        var shifts = Enumerable.Range(0, inputString.Length).ToArray();
         Array.Sort(shifts, new RotationsComparer());
-        int position = Array.IndexOf(shifts, 0);
+        var position = Array.IndexOf(shifts, 0);
         return (GetResultString(inputString, shifts), (position >= 0) ? position : 0);
     }
 
@@ -42,8 +42,8 @@ public static class BWT
             throw new IndexOutOfRangeException();
         }
 
-        char[] result = new char[inputString.Length];
-        int[] shifts = GetShiftsArray(inputString);
+        var result = new char[inputString.Length];
+        var shifts = GetShiftsArray(inputString);
         for (int i = 0; i < inputString.Length; ++i)
         {
             result[inputString.Length - i - 1] = inputString[position];
@@ -55,7 +55,7 @@ public static class BWT
 
     private static string GetResultString(string inputString, int[] shifts)
     {
-        char[] result = new char[inputString.Length];
+        var result = new char[inputString.Length];
         for (int i = 0; i < inputString.Length; ++i)
         {
             result[i] = inputString[(shifts[i] + inputString.Length - 1)
@@ -67,18 +67,19 @@ public static class BWT
 
     private static int[] GetShiftsArray(string inputString)
     {
-        int[] result = new int[inputString.Length];
-        char[] sortedInput = inputString.ToArray();
+        var result = new int[inputString.Length];
+        var sortedInput = inputString.ToArray();
         Array.Sort(sortedInput);
-        Dictionary<char, List<int>> indices = new Dictionary<char, List<int>>();
+        var indices = new Dictionary<char, List<int>>();
         for (int i = 0; i < sortedInput.Length; ++i)
         {
-            if (!indices.ContainsKey(sortedInput[i]))
+            if (!indices.TryGetValue(sortedInput[i], out List<int>? value))
             {
-                indices.Add(sortedInput[i], new List<int>());
+                value = new List<int>();
+                indices.Add(sortedInput[i], value);
             }
 
-            indices[sortedInput[i]].Add(i);
+            value.Add(i);
         }
 
         for (int i = 0; i < inputString.Length; ++i)

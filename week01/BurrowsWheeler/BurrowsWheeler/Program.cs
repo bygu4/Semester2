@@ -7,7 +7,7 @@ using BurrowsWheeler;
 
 static string GetInputString()
 {
-    string? inputString = Console.ReadLine();
+    var inputString = Console.ReadLine();
     if (inputString is null)
     {
         throw new Exception("Failed to read a string from console");
@@ -30,7 +30,7 @@ static int GetCommand()
 
 static int GetReverseBWTPosition(int length)
 {
-    int position = int.Parse(GetInputString());
+    var position = int.Parse(GetInputString());
     if (position >= 0 && position < length)
     {
         return position;
@@ -45,7 +45,7 @@ Console.WriteLine("\n0 - Exit" +
     "\n2 - Reverse Transformation");
 
 Console.WriteLine("\nEnter a command: ");
-int command = GetCommand();
+var command = GetCommand();
 while (command != 0)
 {
     switch (command)
@@ -54,8 +54,8 @@ while (command != 0)
             continue;
         case 1:
             Console.WriteLine("\nEnter a string to transform: ");
-            string inputString = GetInputString();
-            (string, int) result = BWT.Transform(inputString);
+            var inputString = GetInputString();
+            var result = BWT.Transform(inputString);
             Console.WriteLine($"\nResult: {result.Item1}" +
                 $"\nPosition: {result.Item2}");
             break;
@@ -65,7 +65,7 @@ while (command != 0)
             Console.WriteLine("\nEnter the result position (integer): ");
             try
             {
-                int position = GetReverseBWTPosition(inputString.Length);
+                var position = GetReverseBWTPosition(inputString.Length);
                 Console.WriteLine($"\nResult: {BWT.ReverseTransform(inputString, position)}");
             }
             catch (IndexOutOfRangeException)
