@@ -113,8 +113,6 @@ public static class BWT
     private class RotationsComparer : IComparer<int>
     {
         int IComparer<int>.Compare(int number1, int number2)
-        {
-            return CompareRotations(transformingString, number1, number2);
-        }
+            => CompareRotations(transformingString, number1, number2);
     }
 }

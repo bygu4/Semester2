@@ -9,11 +9,6 @@ using BurrowsWheeler;
 
 public class BWTTest
 {
-    [SetUp]
-    public void Setup()
-    {
-    }
-
     [Test]
     public void TestForTransformation_EmptyString_GetEmptyStringAndZero()
     {
