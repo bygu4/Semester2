@@ -7,7 +7,7 @@ using LZWEncoder;
 
 if (args.Length != 2 || (args[1] != "-c" && args[1] != "-u"))
 {
-    Console.WriteLine("Incorrect format. Try: {path of the file} {-c | -u}\n" +
+    Console.WriteLine("Incorrect arguments. Try: {path of the file} {-c | -u}\n" +
         "c - compress file\n" +
         "u - decompress file");
     return;
@@ -17,9 +17,9 @@ try
 {
     if (args[1] == "-c")
     {
-        float ratio = Encoder.Compress(args[0]);
+        var ratio = Encoder.Compress(args[0]);
         Console.WriteLine("File was compressed");
-        Console.WriteLine("Compression ratio: " + ratio);
+        Console.WriteLine($"Compression ratio: {ratio}");
     }
     else if (args[1] == "-u")
     {
@@ -33,5 +33,5 @@ catch (IOException e) when (e is FileNotFoundException || e is DirectoryNotFound
 }
 catch (InvalidDataException e)
 {
-    Console.WriteLine("Error: " + e.Message);
+    Console.WriteLine($"Error: {e.Message}");
 }

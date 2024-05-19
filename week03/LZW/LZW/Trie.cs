@@ -34,7 +34,7 @@ public class Trie<Type>
     /// <returns>Returns true is the string was added, otherwise false.</returns>
     public bool Add(string element, Type? value)
     {
-        Vertex current = this.root;
+        var current = this.root;
         foreach (char character in element)
         {
             if (!current.Edges.ContainsKey(character))
@@ -63,9 +63,7 @@ public class Trie<Type>
     /// <param name="value">The value to set for the character.</param>
     /// <returns>Returns true is the character was added, otherwise false.</returns>
     public bool Add(char character, Type? value)
-    {
-        return this.Add(character.ToString(), value);
-    }
+        => this.Add(character.ToString(), value);
 
     /// <summary>
     /// Check if the string is the Trie.
@@ -86,7 +84,7 @@ public class Trie<Type>
     /// <exception cref="KeyNotFoundException">Given string was not found in the Trie.</exception>
     public Type? Value(string element)
     {
-        Vertex? foundVertex = this.GetVertex(element);
+        var foundVertex = this.GetVertex(element);
         if (foundVertex is null || !foundVertex.IsTerminal)
         {
             throw new KeyNotFoundException();
@@ -97,7 +95,7 @@ public class Trie<Type>
 
     private Vertex? GetVertex(string element)
     {
-        Vertex? current = this.root;
+        var current = this.root;
         foreach (char character in element)
         {
             current.Edges.TryGetValue(character, out current);

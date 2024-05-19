@@ -22,7 +22,7 @@ public static class Utility
     /// <returns>An array of red bytes.</returns>
     public static byte[] GetBytes(FileStream stream)
     {
-        byte[] buffer = new byte[stream.Length];
+        var buffer = new byte[stream.Length];
         stream.Read(buffer, 0, buffer.Length);
         stream.Close();
         return buffer;
@@ -53,9 +53,7 @@ public static class Utility
     /// If negative, the left bitwise shift is applied.</param>
     /// <returns>The number after shift.</returns>
     public static int RightBitShift(int number, int shift)
-    {
-        return LeftBitShift(number, -shift);
-    }
+        => LeftBitShift(number, -shift);
 
     /// <summary>
     /// Get the length of code for the given number of possible outcomes.

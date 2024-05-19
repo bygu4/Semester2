@@ -11,38 +11,6 @@ public class TrieTest
 {
     public Trie<int> testTrie;
 
-    private void AddElements(Trie<int> trie, string[] keys, int[] values)
-    {
-        for (int i = 0; i < keys.Length; ++i)
-        {
-            trie.Add(keys[i], values[i]);
-        }
-    }
-
-    private void TestContainment(Trie<int> trie, string[] keys, bool[] isInTrie)
-    {
-        for (int i = 0; i < keys.Length; ++i)
-        {
-            Assert.That(trie.Contains(keys[i]), Is.EqualTo(isInTrie[i]));
-        }
-    }
-
-    private void TestValues_KeysNotInTrie(Trie<int> trie, string[] keys)
-    {
-        for (int i = 0; i < keys.Length; ++i)
-        {
-            Assert.Throws<KeyNotFoundException>(() => { trie.Value(keys[i]); });
-        }
-    }
-
-    private void TestValues_KeysInTrie(Trie<int> trie, string[] keys, int[] values)
-    {
-        for (int i = 0; i < keys.Length; ++i)
-        {
-            Assert.That(trie.Value(keys[i]), Is.EqualTo(values[i]));
-        }
-    }
-
     [SetUp]
     public void Setup()
     {
@@ -89,5 +57,37 @@ public class TrieTest
         TestValues_KeysInTrie(testTrie, 
             ["мастер", "матме", "молоко", "матмех", "1"], 
             [0, -100, 2, 999, -999]);
+    }
+
+    private void AddElements(Trie<int> trie, string[] keys, int[] values)
+    {
+        for (int i = 0; i < keys.Length; ++i)
+        {
+            trie.Add(keys[i], values[i]);
+        }
+    }
+
+    private void TestContainment(Trie<int> trie, string[] keys, bool[] isInTrie)
+    {
+        for (int i = 0; i < keys.Length; ++i)
+        {
+            Assert.That(trie.Contains(keys[i]), Is.EqualTo(isInTrie[i]));
+        }
+    }
+
+    private void TestValues_KeysNotInTrie(Trie<int> trie, string[] keys)
+    {
+        for (int i = 0; i < keys.Length; ++i)
+        {
+            Assert.Throws<KeyNotFoundException>(() => { trie.Value(keys[i]); });
+        }
+    }
+
+    private void TestValues_KeysInTrie(Trie<int> trie, string[] keys, int[] values)
+    {
+        for (int i = 0; i < keys.Length; ++i)
+        {
+            Assert.That(trie.Value(keys[i]), Is.EqualTo(values[i]));
+        }
     }
 }

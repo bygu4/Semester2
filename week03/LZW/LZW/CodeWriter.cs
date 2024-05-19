@@ -33,18 +33,23 @@ public class CodeWriter
     public int LengthOfCode { get; set; }
 
     /// <summary>
+    /// Gets the length of stream in bytes.
+    /// </summary>
+    public long LengthOfStream { get => this.stream.Length; }
+
+    /// <summary>
     /// Write the given integer code of current length to the file stream.
     /// </summary>
     /// <param name="code">Integer code to write.</param>
     public void WriteCode(int code)
     {
-        int numberOfUnwrittenBits = this.LengthOfCode;
+        var numberOfUnwrittenBits = this.LengthOfCode;
         while (numberOfUnwrittenBits > 0)
         {
-            int bitsToAdd = Utility.LeftBitShift(
+            var bitsToAdd = Utility.LeftBitShift(
                 code, Utility.LengthOfByte - numberOfUnwrittenBits - this.shift);
-            int sum = this.buffer | bitsToAdd;
-            int addedBits = Utility.RightBitShift(
+            var sum = this.buffer | bitsToAdd;
+            var addedBits = Utility.RightBitShift(
                 sum - this.buffer, Utility.LengthOfByte - numberOfUnwrittenBits - this.shift);
             this.buffer = sum;
             this.shift += numberOfUnwrittenBits;
@@ -95,26 +100,13 @@ public class CodeWriter
     /// </summary>
     /// <param name="value">A number to write.</param>
     public void WriteNumber(int value)
-    {
-        this.stream.Write(BitConverter.GetBytes(value));
-    }
-
-    /// <summary>
-    /// Get a length of the file stream in bytes.
-    /// </summary>
-    /// <returns>The length of the stream in bytes.</returns>
-    public long GetLengthOfStream()
-    {
-        return this.stream.Length;
-    }
+        => this.stream.Write(BitConverter.GetBytes(value));
 
     /// <summary>
     /// Close the file stream.
     /// </summary>
     public void CloseStream()
-    {
-        this.stream.Close();
-    }
+        => this.stream.Close();
 
     private void WriteCurrentBuffer()
     {

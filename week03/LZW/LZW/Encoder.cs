@@ -41,11 +41,11 @@ public static class Encoder
         compressionInfo.NumberOfUniqueCharacters = words.Size;
 
         writer.LengthOfCode = Utility.GetLengthOfCode(words.Size);
-        string currentWord = string.Empty;
+        var currentWord = string.Empty;
         for (int i = 0; i < inputData.Length; ++i)
         {
-            string next = inputData[i].ToString();
-            string newWord = currentWord + next;
+            var next = inputData[i].ToString();
+            var newWord = currentWord + next;
             if (words.Contains(newWord))
             {
                 currentWord = newWord;
@@ -66,7 +66,7 @@ public static class Encoder
         }
 
         compressionInfo.Write(writer);
-        long resultFileLength = writer.GetLengthOfStream();
+        var resultFileLength = writer.LengthOfStream;
         writer.CloseStream();
         return (float)inputFileLength / resultFileLength;
     }
@@ -84,10 +84,10 @@ public static class Encoder
         var (compressionInfo, reader, words) = Decompress_Setup(filePath);
 
         reader.LengthOfCode = Utility.GetLengthOfCode(words.Count);
-        int currentCode = reader.ReadCode();
+        var currentCode = reader.ReadCode();
         try
         {
-            char[] encodedData = new char[compressionInfo.LengthOfEncodedData];
+            var encodedData = new char[compressionInfo.LengthOfEncodedData];
             int encodedDataIndex = 0;
             words[currentCode].CopyTo(encodedData);
             encodedDataIndex += words[currentCode].Length;
@@ -95,13 +95,13 @@ public static class Encoder
             {
                 reader.LengthOfCode = int.Max(
                     reader.LengthOfCode, Utility.GetLengthOfCode(words.Count + 1));
-                int next = reader.ReadCode();
+                var next = reader.ReadCode();
                 string output;
                 string wordToAdd;
-                if (words.ContainsKey(next))
+                if (words.TryGetValue(next, out string? value))
                 {
-                    output = words[next];
-                    wordToAdd = words[currentCode] + words[next][0];
+                    output = value;
+                    wordToAdd = words[currentCode] + value[0];
                 }
                 else
                 {
@@ -116,13 +116,13 @@ public static class Encoder
             }
 
             compressionInfo.ReadLastByteTrimmedInfo(reader);
-            string encodedString = new string(encodedData);
-            string result = BWT.ReverseTransform(encodedString, compressionInfo.BWTPosition);
+            var encodedString = new string(encodedData);
+            var result = BWT.ReverseTransform(encodedString, compressionInfo.BWTPosition);
 
-            FileStream resultStream = File.OpenWrite(
+            var resultStream = File.OpenWrite(
                 Path.Join(Path.GetDirectoryName(filePath), Path.GetFileNameWithoutExtension(filePath)));
-            CodeWriter writer = new CodeWriter(resultStream, LengthOfEncoding);
-            int lengthOfLastCode = compressionInfo.LastByteTrimmed ? LengthOfEncoding / 2 : LengthOfEncoding;
+            var writer = new CodeWriter(resultStream, LengthOfEncoding);
+            var lengthOfLastCode = compressionInfo.LastByteTrimmed ? LengthOfEncoding / 2 : LengthOfEncoding;
             writer.GetBytesAndWrite(result, lengthOfLastCode);
             writer.CloseStream();
         }
@@ -148,7 +148,7 @@ public static class Encoder
     {
         for (int i = 0; i < numberOfUniqueCharacters; ++i)
         {
-            char character = (char)reader.ReadCode();
+            var character = (char)reader.ReadCode();
             dictionary.Add(dictionary.Count, character.ToString());
         }
 
@@ -157,24 +157,24 @@ public static class Encoder
 
     private static (string, long, CompressionInfo, CodeWriter, Trie<int>) Compress_Setup(string filePath)
     {
-        FileStream inputStream = File.OpenRead(filePath);
-        string resultDirectory = Path.Join(Path.GetDirectoryName(filePath), "LZWCompression");
+        var inputStream = File.OpenRead(filePath);
+        var resultDirectory = Path.Join(Path.GetDirectoryName(filePath), "LZWCompression");
         Directory.CreateDirectory(resultDirectory);
-        FileStream resultStream = File.OpenWrite(
+        var resultStream = File.OpenWrite(
             Path.Join(resultDirectory, Path.GetFileName(filePath)) + ".zipped");
 
-        long inputFileLength = inputStream.Length;
-        byte[] inputBytes = Utility.GetBytes(inputStream);
-        CodeReader reader = new CodeReader(inputBytes, LengthOfEncoding);
-        string inputData = reader.GetString();
+        var inputFileLength = inputStream.Length;
+        var inputBytes = Utility.GetBytes(inputStream);
+        var reader = new CodeReader(inputBytes, LengthOfEncoding);
+        var inputData = reader.GetString();
 
-        CompressionInfo info = new CompressionInfo();
+        var info = new CompressionInfo();
         info.LastByteTrimmed = reader.LengthOfLastCode % LengthOfEncoding != 0;
         info.LengthOfEncodedData = inputData.Length;
         (inputData, info.BWTPosition) = BWT.Transform(inputData);
 
-        CodeWriter writer = new CodeWriter(resultStream, LengthOfEncoding);
-        Trie<int> dictionary = new Trie<int>();
+        var writer = new CodeWriter(resultStream, LengthOfEncoding);
+        var dictionary = new Trie<int>();
         WriteAndAddUniqueCharacters(writer, dictionary, inputData);
         return (inputData, inputFileLength, info, writer, dictionary);
     }
@@ -188,13 +188,13 @@ public static class Encoder
 
         try
         {
-            FileStream inputStream = File.OpenRead(filePath);
-            byte[] inputBytes = Utility.GetBytes(inputStream);
-            CompressionInfo info = new CompressionInfo();
+            var inputStream = File.OpenRead(filePath);
+            var inputBytes = Utility.GetBytes(inputStream);
+            var info = new CompressionInfo();
             info.Read(inputBytes);
 
-            CodeReader reader = new CodeReader(inputBytes, LengthOfEncoding);
-            Dictionary<int, string> dictionary = new Dictionary<int, string>();
+            var reader = new CodeReader(inputBytes, LengthOfEncoding);
+            var dictionary = new Dictionary<int, string>();
             ReadAndAddUniqueCharacters(reader, dictionary, info.NumberOfUniqueCharacters);
             return (info, reader, dictionary);
         }
@@ -206,10 +206,6 @@ public static class Encoder
 
     private class CompressionInfo
     {
-        public CompressionInfo()
-        {
-        }
-
         public bool LastByteTrimmed { get; set; }
 
         public int BWTPosition { get; set; }

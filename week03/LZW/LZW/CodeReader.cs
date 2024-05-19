@@ -43,7 +43,7 @@ public class CodeReader
     /// <returns>Integer code that was red.</returns>
     public int ReadCode()
     {
-        int numberOfUnreadBits = this.LengthOfCode;
+        var numberOfUnreadBits = this.LengthOfCode;
         int code = 0;
         while (numberOfUnreadBits > 0)
         {
@@ -53,11 +53,11 @@ public class CodeReader
                 return code >> numberOfUnreadBits;
             }
 
-            int currentByte = this.bytes[this.currentIndex];
-            int unreadBitsShift = int.Min(numberOfUnreadBits, Utility.LengthOfByte);
-            int bitsToAdd = (currentByte & (byte.MaxValue >> this.shift)) -
+            var currentByte = this.bytes[this.currentIndex];
+            var unreadBitsShift = int.Min(numberOfUnreadBits, Utility.LengthOfByte);
+            var bitsToAdd = (currentByte & (byte.MaxValue >> this.shift)) -
                 (currentByte & (byte.MaxValue >> (this.shift + unreadBitsShift)));
-            int addedBits = Utility.RightBitShift(
+            var addedBits = Utility.RightBitShift(
                 bitsToAdd, Utility.LengthOfByte - numberOfUnreadBits - this.shift);
             this.shift += numberOfUnreadBits;
             numberOfUnreadBits = this.shift - Utility.LengthOfByte;
@@ -82,7 +82,7 @@ public class CodeReader
     {
         this.currentIndex = 0;
         this.shift = 0;
-        char[] encodedData = new char[(int)Math.Ceiling(
+        var encodedData = new char[(int)Math.Ceiling(
             (float)this.bytes.Length * Utility.LengthOfByte / this.LengthOfCode)];
         for (int i = 0; this.currentIndex < this.bytes.Length; ++i)
         {
