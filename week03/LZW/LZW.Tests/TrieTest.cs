@@ -7,12 +7,12 @@ namespace LZW.Tests;
 
 using Trie;
 
-public class TrieTest
+public static class TrieTest
 {
-    public Trie<int> testTrie;
+    private static Trie<int> testTrie;
 
     [SetUp]
-    public void Setup()
+    public static void Setup()
     {
         testTrie = new Trie<int>();
         testTrie.Add('a', 432);
@@ -23,21 +23,21 @@ public class TrieTest
     }
 
     [Test]
-    public void TestForAdd_TryToAddElementThatIsInTrie_ReturnFalseAndSizeHasNotChanged()
+    public static void TestForAdd_TryToAddElementThatIsInTrie_ReturnFalseAndSizeHasNotChanged()
     {
         Assert.That(testTrie.Add("массив", 0), Is.False);
         Assert.That(testTrie.Size, Is.EqualTo(9));
     }
 
     [Test]
-    public void TestForAdd_AddElementThatIsNotInTrie_ReturnTrueAndSizeHasChanged()
+    public static void TestForAdd_AddElementThatIsNotInTrie_ReturnTrueAndSizeHasChanged()
     {
         Assert.That(testTrie.Add("маска", 0), Is.True);
         Assert.That(testTrie.Size, Is.EqualTo(10));
     }
 
     [Test]
-    public void TestForContains_SearchForSomeElements_FindElementsThatWereAdded()
+    public static void TestForContains_SearchForSomeElements_FindElementsThatWereAdded()
     {
         TestContainment(testTrie, 
             ["мат", "массивы", "матмех", "", "wqewqsd", "матме", "a"],
@@ -45,21 +45,21 @@ public class TrieTest
     }
 
     [Test]
-    public void TestForValue_KeysNotInTrie_ThrowException()
+    public static void TestForValue_KeysNotInTrie_ThrowException()
     {
         TestValues_KeysNotInTrie(testTrie, 
             ["", "масса", "мат", "мастера", "матрац"]);
     }
 
     [Test]
-    public void TestForValue_KeysInTrie_GetValues()
+    public static void TestForValue_KeysInTrie_GetValues()
     {
         TestValues_KeysInTrie(testTrie, 
             ["мастер", "матме", "молоко", "матмех", "1"], 
             [0, -100, 2, 999, -999]);
     }
 
-    private void AddElements(Trie<int> trie, string[] keys, int[] values)
+    private static void AddElements(Trie<int> trie, string[] keys, int[] values)
     {
         for (int i = 0; i < keys.Length; ++i)
         {
@@ -67,7 +67,7 @@ public class TrieTest
         }
     }
 
-    private void TestContainment(Trie<int> trie, string[] keys, bool[] isInTrie)
+    private static void TestContainment(Trie<int> trie, string[] keys, bool[] isInTrie)
     {
         for (int i = 0; i < keys.Length; ++i)
         {
@@ -75,7 +75,7 @@ public class TrieTest
         }
     }
 
-    private void TestValues_KeysNotInTrie(Trie<int> trie, string[] keys)
+    private static void TestValues_KeysNotInTrie(Trie<int> trie, string[] keys)
     {
         for (int i = 0; i < keys.Length; ++i)
         {
@@ -83,7 +83,7 @@ public class TrieTest
         }
     }
 
-    private void TestValues_KeysInTrie(Trie<int> trie, string[] keys, int[] values)
+    private static void TestValues_KeysInTrie(Trie<int> trie, string[] keys, int[] values)
     {
         for (int i = 0; i < keys.Length; ++i)
         {
