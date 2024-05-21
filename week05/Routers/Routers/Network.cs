@@ -20,8 +20,8 @@ public class Network
     public Network(string filePath)
     {
         this.Connections = new List<Connection>();
-        string[] lines = this.GetLines(filePath);
-        foreach (string line in lines)
+        var lines = this.GetLines(filePath);
+        foreach (var line in lines)
         {
             this.AddConnections(line);
         }
@@ -40,7 +40,7 @@ public class Network
     {
         var adjacentRouters = this.GetAdjacencyDict();
         using StreamWriter writer = new StreamWriter(filePath, false);
-        foreach (int router in adjacentRouters.Keys)
+        foreach (var router in adjacentRouters.Keys)
         {
             writer.Write($"{router}:");
             for (int i = 0; i < adjacentRouters[router].Count; ++i)
@@ -63,15 +63,15 @@ public class Network
     /// <returns>True if the network is connected, otherwise false.</returns>
     public bool Configure()
     {
-        int[] adjacencyComponent = Enumerable.Range(0, this.numberOfRouters).ToArray();
+        var adjacencyComponent = Enumerable.Range(0, this.numberOfRouters).ToArray();
         this.Connections.Sort(
             (Connection x, Connection y) => { return (-x.Capacity).CompareTo(-y.Capacity); });
 
         for (int i = 0; i < this.Connections.Count; ++i)
         {
             var connection = this.Connections[i];
-            int component1 = adjacencyComponent[connection.Routers.Item1 - 1];
-            int component2 = adjacencyComponent[connection.Routers.Item2 - 1];
+            var component1 = adjacencyComponent[connection.Routers.Item1 - 1];
+            var component2 = adjacencyComponent[connection.Routers.Item2 - 1];
 
             if (component1 == component2)
             {
@@ -89,12 +89,8 @@ public class Network
 
     private string[] GetLines(string filePath)
     {
-        string data;
-        using (StreamReader reader = File.OpenText(filePath))
-        {
-            data = reader.ReadToEnd();
-        }
-
+        using StreamReader reader = File.OpenText(filePath);
+        var data = reader.ReadToEnd();
         return data.Split('\n', StringSplitOptions.RemoveEmptyEntries);
     }
 
@@ -102,25 +98,25 @@ public class Network
     {
         line = line.Replace('(', ' ');
         line = line.Replace(')', ' ');
-        string[] elements = line.Split(':', StringSplitOptions.TrimEntries);
+        var elements = line.Split(':', StringSplitOptions.TrimEntries);
         if (elements.Length != 2)
         {
             throw new InvalidDataException("Invalid file format");
         }
 
-        int router1 = int.Parse(elements[0]);
+        var router1 = int.Parse(elements[0]);
         this.numberOfRouters = int.Max(this.numberOfRouters, router1);
 
-        foreach (string element in elements[1].Split(',', StringSplitOptions.RemoveEmptyEntries))
+        foreach (var element in elements[1].Split(',', StringSplitOptions.RemoveEmptyEntries))
         {
-            string[] split = element.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            var split = element.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             if (split.Length != 2)
             {
                 throw new InvalidDataException("Invalid file format");
             }
 
-            int router2 = int.Parse(split[0]);
-            int capacity = int.Parse(split[1]);
+            var router2 = int.Parse(split[0]);
+            var capacity = int.Parse(split[1]);
             this.Connections.Add(new Connection(capacity, (router1, router2)));
             this.numberOfRouters = int.Max(this.numberOfRouters, router2);
         }
@@ -129,10 +125,10 @@ public class Network
     private Dictionary<int, List<(int, int)>> GetAdjacencyDict()
     {
         var adjacentRouters = new Dictionary<int, List<(int, int)>>();
-        foreach (Connection connection in this.Connections)
+        foreach (var connection in this.Connections)
         {
             var routers = connection.Routers;
-            int capacity = connection.Capacity;
+            var capacity = connection.Capacity;
             if (adjacentRouters.TryGetValue(routers.Item1, out List<(int, int)>? elements))
             {
                 elements.Add((routers.Item2, capacity));

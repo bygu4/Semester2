@@ -7,43 +7,9 @@ namespace Routers.Tests;
 
 using Routers;
 
-public class NetworkTest
+public static class NetworkTest
 {
-    private string testFilesDirectory = Path.Join("../../..", "TestFiles");
-
-    [SetUp]
-    public void Setup()
-    {
-    }
-
-    [TestCaseSource(nameof(CorrectCases))]
-    public bool TestForNetwork_CorrectFile_CheckConnectionsAndGetResult(
-        string fileName, string connections)
-    {
-        Network testNetwork = new Network(GetTestFilePath(fileName));
-        bool isConnected = testNetwork.Configure();
-        AssertThatConnectionsAreEqual(testNetwork, ParseTestCaseArgument(connections));
-        return isConnected;
-    }
-
-    [TestCase("IncorrectFormat.txt")]
-    [TestCase("MissingCapacity.txt")]
-    public void TestForNetwork_InvalidFileFormat_ThrowException(string fileName)
-    {
-        Assert.Throws<InvalidDataException>(() => { new Network(GetTestFilePath(fileName)); });
-    }
-
-    [TestCase("NegativeCapacity.txt")]
-    [TestCase("IncorrectNumber.txt")]
-    public void TestForNetwork_IncorrectData_ThrowException(string fileName)
-    {
-        Assert.Throws<ArgumentException>(() => { new Network(GetTestFilePath(fileName)); });
-    }
-
-    private string GetTestFilePath(string fileName)
-    {
-        return Path.Join(testFilesDirectory, fileName);
-    }
+    private static string testFilesDirectory = Path.Join("../../..", "TestFiles");
 
     private static IEnumerable<TestCaseData> CorrectCases
     {
@@ -67,7 +33,34 @@ public class NetworkTest
         }
     }
 
-    private (int, (int, int))[] ParseTestCaseArgument(string argument)
+    [TestCaseSource(nameof(CorrectCases))]
+    public static bool TestForNetwork_CorrectFile_CheckConnectionsAndGetResult(
+        string fileName, string connections)
+    {
+        Network testNetwork = new Network(GetTestFilePath(fileName));
+        bool isConnected = testNetwork.Configure();
+        AssertThatConnectionsAreEqual(testNetwork, ParseTestCaseArgument(connections));
+        return isConnected;
+    }
+
+    [TestCase("IncorrectFormat.txt")]
+    [TestCase("MissingCapacity.txt")]
+    public static void TestForNetwork_InvalidFileFormat_ThrowException(string fileName)
+    {
+        Assert.Throws<InvalidDataException>(() => { new Network(GetTestFilePath(fileName)); });
+    }
+
+    [TestCase("NegativeCapacity.txt")]
+    [TestCase("IncorrectNumber.txt")]
+    public static void TestForNetwork_IncorrectData_ThrowException(string fileName)
+    {
+        Assert.Throws<ArgumentException>(() => { new Network(GetTestFilePath(fileName)); });
+    }
+
+    private static string GetTestFilePath(string fileName)
+        => Path.Join(testFilesDirectory, fileName);
+
+    private static (int, (int, int))[] ParseTestCaseArgument(string argument)
     {
         string[] elements = argument.Split("; ", StringSplitOptions.RemoveEmptyEntries);
         (int, (int, int))[] connections = new (int, (int, int))[elements.Length];
@@ -78,10 +71,11 @@ public class NetworkTest
             (int, int) routers = (int.Parse(split[1]), int.Parse(split[2]));
             connections[i] = (capacity, routers);
         }
+
         return connections;
     }
 
-    private void AssertThatConnectionsAreEqual(Network network, (int, (int, int))[] connections)
+    private static void AssertThatConnectionsAreEqual(Network network, (int, (int, int))[] connections)
     {
         Assert.That(network.Connections.Count, Is.EqualTo(connections.Length));
         for (int i = 0; i < connections.Length; ++i)

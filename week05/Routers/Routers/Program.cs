@@ -13,8 +13,8 @@ if (args.Length != 2)
 
 try
 {
-    Network network = new (args[0]);
-    bool isConnected = network.Configure();
+    var network = new Network(args[0]);
+    var isConnected = network.Configure();
     if (!isConnected)
     {
         Console.Error.Write("Error: Network is not connected\n");
