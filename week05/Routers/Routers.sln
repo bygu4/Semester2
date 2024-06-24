@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routers", "Routers\Routers.csproj", "{C1EDEF4E-E181-4343-A8A4-34DF7834C351}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Routers.Tests", "Routers.Tests\Routers.Tests.csproj", "{11B9D7C7-CEE3-49F4-AC31-E402A826BC93}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C1EDEF4E-E181-4343-A8A4-34DF7834C351}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1EDEF4E-E181-4343-A8A4-34DF7834C351}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1EDEF4E-E181-4343-A8A4-34DF7834C351}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1EDEF4E-E181-4343-A8A4-34DF7834C351}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11B9D7C7-CEE3-49F4-AC31-E402A826BC93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11B9D7C7-CEE3-49F4-AC31-E402A826BC93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11B9D7C7-CEE3-49F4-AC31-E402A826BC93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11B9D7C7-CEE3-49F4-AC31-E402A826BC93}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
