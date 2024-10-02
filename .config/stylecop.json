@@ -7,14 +7,8 @@
         },
 
         "documentationRules": {
-            "companyName": "SPBU",
-            "copyrightText": "Copyright (c) {authorName} {year}. All rights reserved.\nLicensed under the {licenseName} license. See {licenseFile} file in the project root for full license information.",
-            "variables": {
-                "authorName": "Alexander Bugaev",
-                "year": "2024",
-                "licenseName": "MIT",
-                "licenseFile": "LICENSE"
-            }
+            "copyrightText": "Copyright (c) 2024\n\nUse of this source code is governed by an MIT license\nthat can be found in the LICENSE file or at\nhttps://opensource.org/licenses/MIT.",
+            "xmlHeader": false
         }
     }
 }
