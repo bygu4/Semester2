@@ -4,7 +4,7 @@
 
 This repository contains tasks for the educational practice in programming.
 
-This semester includes the basics of object-oriented programming in C# programming language, unit testing,
+Second semester includes the basics of object-oriented programming in C# programming language, unit testing,
 generics, event-driven programming and desktop application development.
 
 ### Requirements
